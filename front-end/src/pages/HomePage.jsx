@@ -13,7 +13,7 @@ export default function HomePage() {
 
   return (
     <div>{result && result.map((u)=>(
-      u.name
+      <p>{u.name}</p>
     ))}</div>
   )
 }

@@ -19,7 +19,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect('/');
+        //return redirect('/');
+        return response(['message' => 'utente loggato'], Response::HTTP_OK);
     }
 
     /**
@@ -33,6 +34,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return response()->noContent();
+        return response(['message' => 'utente sloggato'], Response::HTTP_OK);
     }
 }

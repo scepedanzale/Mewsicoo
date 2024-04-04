@@ -13,7 +13,7 @@ export default function Navbar() {
             <Link to={'/login'}>Login</Link>
           </div>
           <div className="ml-2">
-          <Link to={'/register'}>Register</Link>
+          <Link to={'/registerpage'}>Register</Link>
           </div>
           
         </div>

@@ -14,12 +14,24 @@ export default function RegisterPage() {
     const [biography, setBiography] = useState('')
     const [profile_img, setProfile_img] = useState('')
 
+    const token = async () => await axios.get('/sanctum/csrf-cookie');
+
     const handleRegister = async (event) => {
-        event.preventDefault();
-        try{
-          //await axios.get('/sanctum/csrf-cookie')
-          axios.post('/register', {name, username, email, password, birth_day, biography, profile_img})
-          .then(response => console.log(response))
+      event.preventDefault();
+      try{
+          await token()
+          await axios.post('/register', {
+            name : name, 
+            username : username, 
+            email : email, 
+            password : password,
+            password_confirmation : password_confirmation,
+            birth_day : birth_day,
+            biography : biography,
+            profile_img : profile_img
+          })
+          .then(response=>console.log(response))
+
           setName('')
           setUsername('')
           setEmail('')
@@ -28,11 +40,11 @@ export default function RegisterPage() {
           setBiography('')
           setProfile_img('')
 
-          //navigate('/')
-        }catch(e){
-          console.log(e)
-        }
+          navigate('/login')
+      }catch(e){
+        console.log(e)
       }
+    }
 
   return (
     <div className="container-fluid m-4">
@@ -96,7 +108,19 @@ export default function RegisterPage() {
           </div>
         </div>
         {/* password_confirmation */}
-        
+        <div className="mb-4">
+          <label for="password_confirmation" className="block text-sm font-medium leading-6 text-gray-900">Password Confirm</label>
+          <div className="mt-2">
+            <input 
+            id="password_confirmation" 
+            name="password_confirmation" 
+            type="password"
+            value={password_confirmation}
+            onChange={(e)=>setPassword_confirmation(e.target.value)}
+            required
+            className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 text-sm"/>
+          </div>
+        </div>
         {/* birth_day */}
         <div className="mb-4">
           <label for="birth_day" className="block text-sm font-medium leading-6 text-gray-900">Birth Date</label>

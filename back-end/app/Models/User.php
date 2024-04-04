@@ -23,7 +23,6 @@ class User extends Authenticatable
         'password',
         'birth_day',
         'biography',
-        'is_admin',
         'profile_img'
     ];
 

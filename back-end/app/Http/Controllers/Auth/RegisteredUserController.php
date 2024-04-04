@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Carbon\Carbon;
 
 class RegisteredUserController extends Controller
 {
@@ -19,15 +20,12 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): Response
-    {/* 
+    {
         $request->validate([
             'name' => ['string', 'max:255', 'nullable'],
             'username' => ['required', 'string', 'lowercase', 'max:50', 'unique:'.User::class],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'birth_day' => ['nullable', 'date'],
-            'biography' => ['nullable', 'string'],
-            'profile_img' => ['nullable', 'image', 'max:2048'],
         ]);
 
         $user = User::create([
@@ -37,13 +35,12 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'birth_day' => $request->birth_day,
             'biography' => $request->biography,
-            'is_admin' => false,
-            'profile_img' => $request->profile_img
+            'profile_img' => 'https://png.pngtree.com/png-clipart/20210915/ourmid/pngtree-user-avatar-login-interface-abstract-blue-icon-png-image_3917504.jpg',
         ]); 
 
         event(new Registered($user));
 
-        Auth::login($user); */
+        Auth::login($user);
 
         return response(['message' => 'utente registrato'], Response::HTTP_OK);
     }
