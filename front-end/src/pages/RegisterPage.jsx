@@ -40,7 +40,9 @@ export default function RegisterPage() {
 
   return (
     <div className="container-fluid m-10 ">
-      <h2 className="text-base font-semibold text-3xl text-gray-900">Register</h2>
+     <div className='w-full text-center my-20'>
+        <h2 className="font-semibold text-6xl text-gray-900">Mewsikoo</h2>
+      </div>
 
       <form onSubmit={handleRegister} className="mt-6 px-2 sm:px-20 md:px-40 lg:px-64 xl:px-96">
         {/* name */}
@@ -69,6 +71,7 @@ export default function RegisterPage() {
             value={username}
             onChange={(e)=>setUsername(e.target.value)}
             minLength="2"
+            required
             className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 "/>
           </div>
           {errors.username && <div className='text-red-500 text-xs mt-1'>{errors.username}</div>}
@@ -99,6 +102,7 @@ export default function RegisterPage() {
             value={password}
             onChange={(e)=>setPassword(e.target.value)}
             minLength="8"
+            required
             className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 "/>
           </div>
           {errors.password && <div className='text-red-500 text-xs mt-1'>{errors.password}</div>}
@@ -114,6 +118,7 @@ export default function RegisterPage() {
             value={password_confirmation}
             onChange={(e)=>setPassword_confirmation(e.target.value)}
             minLength="8"
+            required
             className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 "/>
           </div>
           {errors.password_confirmation && <div className='text-red-500 text-xs mt-1'>{errors.password_confirmation}</div>}
@@ -128,6 +133,7 @@ export default function RegisterPage() {
             type="date"
             value={birth_day}
             onChange={handleBirthDayChange}
+            required
             className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 "/>
           </div>
           {errorAge && <div className='text-red-500 text-xs mt-1'>{errorAge}</div>}
@@ -165,7 +171,7 @@ export default function RegisterPage() {
       <div className='mt-8 text-gray-500 hover:text-gray-700 mx-auto max-w-max'>
           Hai già un account?
         <Link to={'/login'}>
-           <span className='text-lg text-sky-600 uppercase'> Accedi</span> 
+           <span className='text-lg text-sky-600 font-bold'> Accedi</span> 
         </Link>
       </div>
     </div>
