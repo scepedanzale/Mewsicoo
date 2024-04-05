@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import axios from '../api/axios'
+import useAuthContext from '../context/AuthContext'
+
 
 export default function RegisterPage() {
-    const navigate = useNavigate()
-    
+    const [errorAge, setErrorAge] = useState('')  
+
     const [name, setName] = useState('')
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
@@ -14,36 +14,28 @@ export default function RegisterPage() {
     const [biography, setBiography] = useState('')
     const [profile_img, setProfile_img] = useState('')
 
-    const token = async () => await axios.get('/sanctum/csrf-cookie');
+    const { register, errors } = useAuthContext()
+
+    const handleBirthDayChange = (e) => {
+        const selectedDate = new Date(e.target.value);
+        const currentDate = new Date();
+        const ageDiff = currentDate.getFullYear() - selectedDate.getFullYear();
+        const birthDayPassed = currentDate.getMonth() > selectedDate.getMonth() || 
+                              (currentDate.getMonth() === selectedDate.getMonth() && currentDate.getDate() >= selectedDate.getDate());
+        const isOver14 = ageDiff > 14 || (ageDiff === 14 && birthDayPassed);
+    
+        if (!isOver14) {
+          setErrorAge('Devi avere almeno 14 anni')
+            setBirth_day(''); // o un altro valore di default
+        } else {
+          setErrorAge('')
+          setBirth_day(e.target.value);
+        }
+    };
 
     const handleRegister = async (event) => {
       event.preventDefault();
-      try{
-          await token()
-          await axios.post('/register', {
-            name : name, 
-            username : username, 
-            email : email, 
-            password : password,
-            password_confirmation : password_confirmation,
-            birth_day : birth_day,
-            biography : biography,
-            profile_img : profile_img
-          })
-          .then(response=>console.log(response))
-
-          setName('')
-          setUsername('')
-          setEmail('')
-          setPassword('')
-          setBirth_day('')
-          setBiography('')
-          setProfile_img('')
-
-          navigate('/login')
-      }catch(e){
-        console.log(e)
-      }
+      register({name, username, email, password, password_confirmation, birth_day, biography, profile_img})
     }
 
   return (
@@ -62,6 +54,7 @@ export default function RegisterPage() {
             value={name}
             onChange={(e)=>setName(e.target.value)}
             autoFocus 
+            minlength="2"
             className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 text-sm"/>
           </div>
         </div>
@@ -75,9 +68,10 @@ export default function RegisterPage() {
             type="text"
             value={username}
             onChange={(e)=>setUsername(e.target.value)}
-            required
+            minlength="2"
             className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 text-sm"/>
           </div>
+          {errors.username && <div className='text-red-500 text-xs mt-1'>{errors.username}</div>}
         </div>
         {/* email */}
         <div className="mb-4">
@@ -92,6 +86,7 @@ export default function RegisterPage() {
             required
             className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 text-sm"/>
           </div>
+          {errors.email && <div className='text-red-500 text-xs mt-1'>{errors.email}</div>}
         </div>
         {/* password */}
         <div className="mb-4">
@@ -103,9 +98,10 @@ export default function RegisterPage() {
             type="password"
             value={password}
             onChange={(e)=>setPassword(e.target.value)}
-            required
+            minlength="8"
             className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 text-sm"/>
           </div>
+          {errors.password && <div className='text-red-500 text-xs mt-1'>{errors.password}</div>}
         </div>
         {/* password_confirmation */}
         <div className="mb-4">
@@ -117,9 +113,10 @@ export default function RegisterPage() {
             type="password"
             value={password_confirmation}
             onChange={(e)=>setPassword_confirmation(e.target.value)}
-            required
+            minlength="8"
             className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 text-sm"/>
           </div>
+          {errors.password_confirmation && <div className='text-red-500 text-xs mt-1'>{errors.password_confirmation}</div>}
         </div>
         {/* birth_day */}
         <div className="mb-4">
@@ -130,9 +127,10 @@ export default function RegisterPage() {
             name="birth_day" 
             type="date"
             value={birth_day}
-            onChange={(e)=>setBirth_day(e.target.value)}
+            onChange={handleBirthDayChange}
             className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 text-sm"/>
           </div>
+          {errorAge && <div className='text-red-500 text-xs mt-1'>{errorAge}</div>}
         </div>
         {/* biography */}
         <div className="mb-4">
