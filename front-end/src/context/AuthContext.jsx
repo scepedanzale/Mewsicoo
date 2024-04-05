@@ -15,16 +15,20 @@ export function AuthProvider({children}) {
       };
 
     const getUser = async () => {
-        const { data } = await axios.get('api/user')
-        setUser(data)
+      try {
+        const { data } = await axios.get('api/user');
+        setUser(data);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
     }
 
     const login = async ({ ...data }) => {
         setErrors([]);
         await csrf()
         try{
-            await axios.post('/login', {data})
-            //getUser();
+            await axios.post('/login', data)
+            await getUser();
             navigate('/')
           }catch(e){
             if(e.response.status == 422)
@@ -37,7 +41,7 @@ export function AuthProvider({children}) {
         await csrf()
         try{
             await axios.post('/register', data)
-            //getUser();
+            await getUser();
             navigate('/')
           }catch(e){
             if(e.response.status === 422)
@@ -53,8 +57,14 @@ export function AuthProvider({children}) {
       })
     }
 
+    useEffect(()=>{
+      if(!user){
+        getUser();
+      }
+    }, [])
+
   return (
-    <AuthContext.Provider value={{user, errors, getUser, login, register}}>
+    <AuthContext.Provider value={{user, errors, getUser, login, register, logout}}>
         {children}
     </AuthContext.Provider>
   )

@@ -2,20 +2,26 @@ import './App.css'
 import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
-import Navbar from './components/Navbar';
 import RegisterPage from './pages/RegisterPage';
+import NotFoundPage from './pages/NotFoundPage';
+import AuthLayout from './layouts/AuthLayout';
+import GuestLayout from './layouts/GuestLayout';
 
 function App() {
 
   return (
     <>
       
-        <Navbar/>
-        <Routes>
+      <Routes>
+        <Route path='*' element={<NotFoundPage/>}/>
+        <Route element={<AuthLayout/>}>
           <Route path='/' element={<HomePage/>}/>
+        </Route>
+        <Route element={<GuestLayout/>}>
           <Route path='/login' element={<LoginPage/>}/>
-          <Route path='/registerpage' element={<RegisterPage/>}/>
-        </Routes>
+          <Route path='/register' element={<RegisterPage/>}/>
+        </Route>
+      </Routes>
     </>
   )
 }

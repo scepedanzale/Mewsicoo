@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import axios from '../api/axios'
+import useAuthContext from '../context/AuthContext'
 
 export default function HomePage() {
 
-  const [result, setResult] = useState([])
-
-  useEffect(()=>{
-    axios('api/user')
-    .then(response => setResult(response.data))
-
-  }, [])
+  const {user} = useAuthContext([])
 
   return (
-    <div>{result && result.map((u)=>(
-      <p>{u.name}</p>
-    ))}</div>
+    <div>{user?.name}</div>
   )
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import useAuthContext  from '../context/AuthContext'
+import { Link } from 'react-router-dom';
 
 export default function LoginPage() {
 
@@ -13,13 +14,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="container-fluid m-4">
-      <h2 className="text-base font-semibold leading-7 text-gray-900">Login</h2>
+    <div className="container-fluid m-10">
+      <h2 className="text-base font-semibold text-3xl text-gray-900">Login</h2>
 
-      <form onSubmit={handleLogin} className='mt-3'>
+      <form onSubmit={handleLogin} className='mt-6 px-2 sm:px-20 md:px-40 lg:px-64 xl:px-96'>
         {/* email */}
         <div className="mb-4">
-          <label for="email" className="block text-sm font-medium leading-6 text-gray-900">Email address</label>
+          <label htmlFor="email" className="block font-medium leading-6 text-gray-900">Email address</label>
           <div className="mt-2">
             <input 
             id="email" 
@@ -34,7 +35,7 @@ export default function LoginPage() {
         </div>
         {/* password */}
         <div className="mb-4">
-          <label for="password" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
+          <label htmlFor="password" className="block font-medium leading-6 text-gray-900">Password</label>
           <div className="mt-2">
             <input 
             id="password" 
@@ -50,6 +51,12 @@ export default function LoginPage() {
             <button type='submit' className='bg-sky-700 text-neutral-100 p-2 rounded-md w-1/2 hover:bg-sky-600'>Accedi</button>
         </div>
       </form>
+      <div className='mt-8 text-gray-500 hover:text-gray-700 mx-auto max-w-max'>
+          Non sei ancora registrato?
+        <Link to={'/register'}>
+           <span className='text-lg text-sky-600 uppercase'> Iscriviti</span> 
+        </Link>
+      </div>
     </div>
   )
 }
