@@ -1,5 +1,4 @@
-
-$main-color : #339a9a;
+@import '_variables';
 
 body{
     user-select: none;
@@ -7,4 +6,19 @@ body{
 
 h2{
     color: $main-color !important;
+}
+
+
+/* colore principale */
+.main-color{
+    color: $main-color !important;
+}
+.main-color-bg{
+    background-color: $main-color !important;
+}
+.main-color:hover{
+    color: $main-color-hover !important;
+}
+.main-color-bg:hover{
+    background-color: $main-color-hover !important;
 }
