@@ -24,7 +24,7 @@ export default function LoginPage() {
         </div>
 
         <div className='border-2 rounded-xl p-6'>
-          <form onSubmit={handleLogin} className='px-2 sm:px-20 md:px-40 lg:px-64 xl:px-96'>
+          <form onSubmit={handleLogin} className='px-2'>
             {/* email */}
             <div className="mb-4">
               <label htmlFor="email" className="block font-medium leading-6 text-gray-900">Email address</label>
@@ -71,7 +71,7 @@ export default function LoginPage() {
               </div>
             </div>
             <div className="mt-10 w-full flex justify-center">
-                <button type='submit' className='main-color-bg text-neutral-100 p-2 rounded-md w-1/2'>Accedi</button>
+                <button type='submit' className='main-color-btn text-neutral-100 p-2 rounded-md w-1/2'>Accedi</button>
             </div>
           </form>
           <div className='text-lg mt-8 text-gray-500 mx-auto max-w-max'>

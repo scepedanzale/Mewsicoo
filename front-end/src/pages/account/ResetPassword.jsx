@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import useAuthContext from '../../context/AuthContext';
-import axios from '../../api/axios';
+import {server} from '../../api/axios';
 
 
 export default function ResetPassword() {
@@ -30,7 +30,7 @@ export default function ResetPassword() {
             setStatus({msg: "Passwords don't match."})
         }else{
             try{
-                const response = await axios.post('/reset-password', {email, password, password_confirmation,token})
+                const response = await server.post('/reset-password', {email, password, password_confirmation,token})
                 console.log(response)
                 setStatus({
                     code: response.status,
@@ -92,7 +92,7 @@ export default function ResetPassword() {
                         {status?.code === 200 ?
                         <Link to={'/login'} className='main-color font-bold text-lg'>Vai al login</Link>
                         :
-                        <button type='submit' className='main-color-bg text-neutral-100 p-2 rounded-md w-1/2'>Conferma</button>
+                        <button type='submit' className='main-color-btn text-neutral-100 p-2 rounded-md w-1/2'>Conferma</button>
                         }
                     </div>
                 </form>

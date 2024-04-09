@@ -1,0 +1,23 @@
+
+/* colore principale */
+
+// testo
+.main-color{
+    color: $main-color !important;
+}
+.main-color:hover{
+    color: $main-color-hover !important;
+}
+
+// sfondo
+.main-color-bg{
+    background-color: $main-color !important;
+}
+
+// bottoni
+.main-color-btn{
+    background-color: $main-color !important;
+}
+.main-color-btn:hover{
+    background-color: $main-color-hover !important;
+}

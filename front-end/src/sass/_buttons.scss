@@ -1,0 +1,41 @@
+
+/* player track */
+
+// track cover
+.cover {
+    width: 100%;
+    z-index: 100;
+    cursor: pointer;
+
+    &:hover {
+        filter: brightness(60%);
+        z-index: 40;
+        + .wave {
+            z-index: 0;
+        }
+    }
+}
+
+.filter-cover{
+    filter: brightness(60%);
+}
+// play/pause button
+.play {
+    z-index: 50;
+    &:hover {
+        z-index: 200;
+        + .cover {
+            filter: brightness(60%);
+        }
+        ~ .wave {
+            z-index: 0;
+        }
+    }
+}
+// animation
+.wave{
+    z-index: 150;
+    &:hover{
+        z-index: 45;
+    }
+}

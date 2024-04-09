@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import useAuthContext from '../../context/AuthContext';
-import axios from '../../api/axios';
+import {server} from '../../api/axios';
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState('');
@@ -15,7 +15,7 @@ export default function ForgotPasswordPage() {
         setErrors([])
         setStatus(null)
         try{
-            const response = await axios.post('/forgot-password', {email})
+            const response = await server.post('/forgot-password', {email})
             setStatus(response.data.status)
         }catch(e){
             if(e.response.status === 422)
@@ -55,7 +55,7 @@ export default function ForgotPasswordPage() {
                             {status &&  <div className="mt-10 w-full justify-center ">{status}</div>}
                         </div>
                         <div className="mt-10 w-full flex justify-center">
-                            <button type='submit' className='main-color-bg text-neutral-100 p-2 rounded-md w-1/2'>Invia Link</button>
+                            <button type='submit' className='main-color-btn text-neutral-100 p-2 rounded-md w-1/2'>Invia Link</button>
                         </div>
                     </form>
                     <div className='mt-8 text-lg text-center text-gray-500 mx-auto w-full'>

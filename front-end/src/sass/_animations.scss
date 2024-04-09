@@ -1,0 +1,32 @@
+/* wave animation */
+.wave {
+    background: url(./imgs/wavesvg.svg );
+    z-index: 200;
+    position: absolute;
+    width: 6400px;
+    height: 50%;
+    bottom: 0;
+    animation: wave 28s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
+    transform: translate3d(0, 0, 0);
+  }
+  
+  @keyframes wave {
+    0% {
+      margin-left: 0;
+    }
+    100% {
+      margin-left: -1600px;
+    }
+  }
+  @keyframes swell {
+    0%,
+    100% {
+      transform: translate3d(0, -25px, 0);
+    }
+    50% {
+      transform: translate3d(0, 5px, 0);
+    }
+  }
+  .endWave{
+    display:none;
+  }

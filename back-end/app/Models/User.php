@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use App\Models\Follower;
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -48,4 +50,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function followers(){
+        return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id');
+    }
+
 }

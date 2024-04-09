@@ -6,12 +6,12 @@ export default function Navbar() {
   const {user, logout} = useAuthContext()
 
   return (
-    <nav className="bg-gray-300 my-auto">
-      <div className="container-fluid p-4 flex">
-        <div className="basis-1/2">
+    <nav className="main-color-bg m-5 rounded-3xl sticky top-4">
+      <div className="container-fluid p-3 flex justify-center gap-4">
+        <div className="">
           <Link to={'/'}>Home</Link>
         </div>
-        <div className="basis-1/2 flex justify-end">
+        <div className="flex ">
           {user ? 
           <div className="ml-2">
             <button onClick={logout}>Logout</button>

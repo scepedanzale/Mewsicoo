@@ -14,8 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-       //User::factory(10)->create();
-
         User::factory()->create([
             'name' => 'Test User',
             'username' => 'admin',
@@ -25,5 +23,13 @@ class DatabaseSeeder extends Seeder
             'profile_img'=>'https://source.unsplash.com/random/?person='.fake()->numberBetween(1,10),
             'created_at' => now()
         ]);
+       
+        User::factory(10)->create();
+
+        $this->call([
+            PostSeeder::class,
+            FollowerSeeder::class
+        ]);
+
     }
 }

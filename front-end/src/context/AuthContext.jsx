@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import axios from '../api/axios';
+import {server} from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
@@ -11,12 +11,12 @@ export function AuthProvider({children}) {
     const navigate = useNavigate();
 
     const csrf = async () => {
-        await axios.get("/sanctum/csrf-cookie");
+        await server.get("/sanctum/csrf-cookie");
       };
 
     const getUser = async () => {
       try {
-        const { data } = await axios.get('api/user');
+        const { data } = await server.get('api/user-auth');
         setUser(data);
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -27,7 +27,7 @@ export function AuthProvider({children}) {
         setErrors([]);
         await csrf()
         try{
-            await axios.post('/login', data)
+            await server.post('/login', data)
             await getUser();
             navigate('/')
           }catch(e){
@@ -40,7 +40,7 @@ export function AuthProvider({children}) {
       setErrors([]);
         await csrf()
         try{
-            await axios.post('/register', data)
+            await server.post('/register', data)
             await getUser();
             navigate('/')
           }catch(e){
@@ -50,7 +50,7 @@ export function AuthProvider({children}) {
     }
 
     const logout = async () => {
-      axios.post('/logout')
+      server.post('/logout')
       .then(()=>{
         setUser(null)
         navigate('/')

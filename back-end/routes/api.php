@@ -5,6 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/user', function (Request $request) {
-    return Auth::user();
-});
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\PostController;
+
+
+Route::resource('/user', UserController::class);
+Route::get('/user-auth', [UserController::class, 'user_auth']);
+
+Route::resource('/post', PostController::class);

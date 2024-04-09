@@ -40,13 +40,13 @@ export default function RegisterPage() {
 
   return (
     <div className="container-fluid m-10 ">
-      <div className="container-fluid m-10">
+      <div className="sm:px-20 md:px-40 lg:px-64 xl:px-96">
         <div className='w-full text-center my-20'>
           <h2 className="font-semibold text-6xl text-gray-900">Mewsikoo</h2>
         </div>
 
         <div className='border-2 rounded-xl p-6'>
-          <form onSubmit={handleRegister} className="mt-6 px-2 sm:px-20 md:px-40 lg:px-64 xl:px-96">
+          <form onSubmit={handleRegister} className="px-2">
             {/* name */}
             <div className="mb-4">
               <label htmlFor="name" className="block font-medium leading-6 text-gray-900">Name</label>
@@ -142,7 +142,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="mt-10 w-full flex justify-center">
-                <button type='submit' className='text-neutral-100 p-2 rounded-md w-1/2 main-color-bg'>Registrati</button>
+                <button type='submit' className='text-neutral-100 p-2 rounded-md w-1/2 main-color-btn'>Registrati</button>
             </div>
           </form>
           <div className='mt-8 text-gray-500 mx-auto max-w-max'>

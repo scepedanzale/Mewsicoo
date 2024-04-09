@@ -1,4 +1,7 @@
 @import '_variables';
+@import '_buttons';
+@import '_colors';
+@import '_animations';
 
 body{
     user-select: none;
@@ -8,17 +11,10 @@ h2{
     color: $main-color !important;
 }
 
+label{
+    color: rgb(95, 93, 93) !important;
+}
+nav{
+    z-index: 500;
+}
 
-/* colore principale */
-.main-color{
-    color: $main-color !important;
-}
-.main-color-bg{
-    background-color: $main-color !important;
-}
-.main-color:hover{
-    color: $main-color-hover !important;
-}
-.main-color-bg:hover{
-    background-color: $main-color-hover !important;
-}
