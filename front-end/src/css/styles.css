@@ -11,6 +11,9 @@
 .cover:hover + .wave {
   z-index: 0;
 }
+.cover:hover ~ .track-name {
+  display: block;
+}
 
 .filter-cover {
   filter: brightness(60%);
@@ -23,17 +26,25 @@
   z-index: 200;
 }
 .play:hover + .cover {
+  z-index: 40;
   filter: brightness(60%);
 }
 .play:hover ~ .wave {
   z-index: 0;
 }
-
-.wave {
-  z-index: 150;
+.play:hover ~ .track-name {
+  display: block;
 }
-.wave:hover {
+
+.track-name {
   z-index: 45;
+  bottom: 0.5em;
+  left: 0.5em;
+  text-shadow: 2px 2px 10px black;
+}
+
+.noHover {
+  pointer-events: none;
 }
 
 /* colore principale */
@@ -103,4 +114,6 @@ label {
 
 nav {
   z-index: 500;
+  background-color: rgba(0, 0, 0, 0.549);
+  color: white;
 }/*# sourceMappingURL=styles.css.map */

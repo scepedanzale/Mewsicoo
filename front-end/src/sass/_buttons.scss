@@ -13,6 +13,9 @@
         + .wave {
             z-index: 0;
         }
+        ~ .track-name{
+            display: block;
+        }
     }
 }
 
@@ -25,17 +28,30 @@
     &:hover {
         z-index: 200;
         + .cover {
+            z-index: 40;
             filter: brightness(60%);
         }
         ~ .wave {
             z-index: 0;
         }
+        ~ .track-name{
+            display: block;
+        }
     }
 }
-// animation
-.wave{
-    z-index: 150;
-    &:hover{
-        z-index: 45;
-    }
+
+
+// track name
+.track-name{
+    z-index: 45;
+    bottom: 0.5em;
+    left: 0.5em;
+    text-shadow: 2px 2px 10px black;
+
+}
+
+
+
+.noHover{
+    pointer-events: none;
 }

@@ -67,16 +67,21 @@ export default function SingleTrackComponent({track_id, post_id}) {
 
 
   return (
-    track?.album?.cover &&
-        <div className='flex flex-col justify-center relative rounded-md'>
-            <div className='flex flex-col justify-center items-center relative rounded-md overflow-hidden'>
-                <button className='play absolute text-white max-w-max text-4xl' onClick={player}>
+    track?.album?.cover_big &&
+        <div className='col-span-3 sm:col-span-1 flex flex-col justify-center relative rounded-md'>
+            <div className='order-2 sm:order-1 flex flex-col justify-center items-center relative rounded-md overflow-hidden'>
+                <button className='play absolute text-white max-w-max text-6xl sm:text-4xl' onClick={player}>
                     {play && trackPlaying?.post_id === post_id ? <FaPause /> : <FaPlay />}
                 </button>
-                <img src={track.album.cover} alt="" className={`cover rounded-md ${play && 'filter-cover'}`}/>
+                <img src={track.album.cover_big} alt="" className={`cover rounded-md ${play && 'filter-cover'}`}/>
                 {/* animation */}
-                {play && <div class="wave"></div>}
+                {play && <div class="wave noHover"></div>}
+                <div class="track-name hidden noHover absolute text-white font-extralight text-5xl sm:text-lg flex justify-center ">{track.title}</div>
             </div>
+            <div className="order-1 sm:order-2 text-center sm:mt-2 mb-2 text-gray-500">
+                {track.artist.name} - {track.album.title}
+            </div>
+
         </div>
   )
 }

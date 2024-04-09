@@ -6,7 +6,7 @@ export default function Navbar() {
   const {user, logout} = useAuthContext()
 
   return (
-    <nav className="main-color-bg m-5 rounded-3xl sticky top-4">
+    <nav className="main-color-border m-5 rounded-3xl sticky top-4">
       <div className="container-fluid p-3 flex justify-center gap-4">
         <div className="">
           <Link to={'/'}>Home</Link>
