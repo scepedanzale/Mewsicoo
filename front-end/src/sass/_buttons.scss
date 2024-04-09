@@ -19,9 +19,6 @@
     }
 }
 
-.filter-cover{
-    filter: brightness(60%);
-}
 // play/pause button
 .play {
     z-index: 50;
@@ -40,7 +37,6 @@
     }
 }
 
-
 // track name
 .track-name{
     z-index: 45;
@@ -50,8 +46,6 @@
 
 }
 
-
-
-.noHover{
-    pointer-events: none;
+.filter-cover{
+    filter: brightness(60%);
 }

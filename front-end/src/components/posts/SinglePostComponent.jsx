@@ -1,5 +1,5 @@
 import React from 'react'
-import SingleTrackComponent from '../SingleTrackComponent'
+import SingleTrackComponent from '../music/SingleTrackComponent'
 
 export default function SinglePostComponent({post}) {
   return (

@@ -3,7 +3,7 @@ import useAuthContext from '../context/AuthContext'
 import {server} from '../api/axios'
 import axios from 'axios'
 import { apiKey, urlTrack } from '../api/config'
-import SingleTrackComponent from '../components/SingleTrackComponent'
+import SingleTrackComponent from './music/SingleTrackComponent'
 import SinglePostComponent from './posts/SinglePostComponent'
 
 export default function HomepageComponent() {

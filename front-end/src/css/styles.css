@@ -15,10 +15,6 @@
   display: block;
 }
 
-.filter-cover {
-  filter: brightness(60%);
-}
-
 .play {
   z-index: 50;
 }
@@ -43,8 +39,8 @@
   text-shadow: 2px 2px 10px black;
 }
 
-.noHover {
-  pointer-events: none;
+.filter-cover {
+  filter: brightness(60%);
 }
 
 /* colore principale */
@@ -116,4 +112,8 @@ nav {
   z-index: 500;
   background-color: rgba(0, 0, 0, 0.549);
   color: white;
+}
+
+.noHover {
+  pointer-events: none;
 }/*# sourceMappingURL=styles.css.map */

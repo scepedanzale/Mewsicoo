@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import { FaPlay, FaPause } from "react-icons/fa";
-import { apiKey, urlTrack } from '../api/config'
-import { setTrackPlaying } from '../redux/actions/actions';
+import { apiKey, urlTrack } from '../../api/config'
+import { setTrackPlaying } from '../../redux/actions/actions';
+import { Link } from 'react-router-dom';
 
 export default function SingleTrackComponent({track_id, post_id}) {
     const dispatch = useDispatch();
@@ -76,12 +77,13 @@ export default function SingleTrackComponent({track_id, post_id}) {
                 <img src={track.album.cover_big} alt="" className={`cover rounded-md ${play && 'filter-cover'}`}/>
                 {/* animation */}
                 {play && <div class="wave noHover"></div>}
-                <div class="track-name hidden noHover absolute text-white font-extralight text-5xl sm:text-lg flex justify-center ">{track.title}</div>
+                <div class="track-name hidden noHover absolute text-white font-extralight text-3xl sm:text-lg flex justify-center ">{track.title}</div>
             </div>
+            {/* artist - album */}
             <div className="order-1 sm:order-2 text-center sm:mt-2 mb-2 text-gray-500">
-                {track.artist.name} - {track.album.title}
+                <Link to={'artist/'+track.artist.id} className='hover:font-semibold'>{track.artist.name} - </Link>
+                <Link to={'album/'+track.album.id} className='hover:font-semibold'>{track.album.title}</Link>
             </div>
-
         </div>
   )
 }

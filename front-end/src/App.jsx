@@ -8,6 +8,8 @@ import NotFoundPage from './pages/NotFoundPage';
 import AuthLayout from './layouts/AuthLayout';
 import GuestLayout from './layouts/GuestLayout';
 import ResetPassword from './pages/account/ResetPassword';
+import AlbumPage from './pages/music/AlbumPage';
+import ArtistPage from './pages/music/ArtistPage';
 
 function App() {
 
@@ -18,6 +20,8 @@ function App() {
         <Route path='*' element={<NotFoundPage/>}/>
         <Route element={<AuthLayout/>}>
           <Route path='/' element={<HomePage/>}/>
+          <Route path='/album/:id' element={<AlbumPage/>}/>
+          <Route path='/artist/:id' element={<ArtistPage/>}/>
         </Route>
         <Route element={<GuestLayout/>}>
           <Route path='/register' element={<RegisterPage/>}/>
