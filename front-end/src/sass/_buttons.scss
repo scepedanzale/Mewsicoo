@@ -24,6 +24,7 @@
     z-index: 50;
     &:hover {
         z-index: 200;
+        filter: brightness(60%);
         + .cover {
             z-index: 40;
             filter: brightness(60%);

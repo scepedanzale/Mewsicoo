@@ -3,6 +3,9 @@
 @import '_colors';
 @import '_animations';
 
+html, #root, body{
+    height: fit-content;
+}
 body{
     user-select: none;
 }
@@ -16,10 +19,23 @@ label{
 }
 nav{
     z-index: 500;
-    background-color: rgba(0, 0, 0, 0.549);
     color: white;
 }
 
 .noHover{
     pointer-events: none;
+}
+
+
+.profile_img{
+    width: 6em;
+    height: 6em;
+    img{
+        width: 100%;
+
+    }
+}
+
+button{
+    border: 0 !important;
 }

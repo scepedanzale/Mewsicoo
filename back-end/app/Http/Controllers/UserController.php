@@ -14,12 +14,12 @@ class UserController extends Controller
      */
     public function user_auth()
     {
-        return Auth::user();
+        return Auth::user()->load('followers', 'followings', 'posts');;
     }
 
     public function index()
     {
-        return User::with('followers')->get();
+        return User::with('followers')->with('posts')->get();
     }
 
     /**
