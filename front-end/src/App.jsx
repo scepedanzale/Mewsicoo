@@ -10,19 +10,21 @@ import GuestLayout from './layouts/GuestLayout';
 import ResetPassword from './pages/account/ResetPassword';
 import AlbumPage from './pages/music/AlbumPage';
 import ArtistPage from './pages/music/ArtistPage';
-import ProfilePage from './pages/profile/ProfilePage';
+import FollowsPage from './pages/FollowsPage';
+import ProfilePage from './pages/users/ProfilePage';
 
 function App() {
 
   return (
-    <>
+    <>    
       <Routes>
         <Route path='*' element={<NotFoundPage/>}/>
         <Route element={<AuthLayout/>}>
           <Route path='/' element={<HomePage/>}/>
           <Route path='/album/:id' element={<AlbumPage/>}/>
           <Route path='/artist/:id' element={<ArtistPage/>}/>
-          <Route path='/profile' element={<ProfilePage/>}/>
+          <Route path='/:username' element={<ProfilePage/>}/>
+          <Route path='/:username/:follows' element={<FollowsPage/>}/>
         </Route>
         <Route element={<GuestLayout/>}>
           <Route path='/register' element={<RegisterPage/>}/>

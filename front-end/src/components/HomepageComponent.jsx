@@ -26,7 +26,7 @@ export default function HomepageComponent() {
   
 
   return (
-    <div className='container mx-auto m-3 md:px-32 lg:px-52 text-sm md:text-md lg:text-lg'>
+    <div className='container mx-auto p-3 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5'>
         {postLoading && 
        <div className="loader mx-auto mb-5"></div>
       }

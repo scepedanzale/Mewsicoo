@@ -16,7 +16,7 @@ export default function Navbar() {
             <Link to={'/'}>Search</Link>
           </div>
           <div>
-            <Link to={'/profile'}>Profile</Link>
+            <Link to={`/${user.username}`}>Profile</Link>
           </div>
           <div>
             <button onClick={logout}>Logout</button>

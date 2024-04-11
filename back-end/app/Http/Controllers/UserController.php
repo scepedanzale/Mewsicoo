@@ -14,12 +14,26 @@ class UserController extends Controller
      */
     public function user_auth()
     {
-        return Auth::user()->load('followers', 'followings', 'posts');;
+        return Auth::user()->load('followers', 'followings', 'posts');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return User::with('followers')->with('posts')->get();
+        $query = User::with('followers')
+                ->with('posts')
+                ->with('followings');
+
+        if ($request->has('username')) {
+            $query->where("username", "=", $request->input('username'));
+        }
+
+        $users = $query->get();
+        $authenticatedUser = Auth::user();
+        $users->each(function ($user) use ($authenticatedUser) {
+            $user->is_following = $authenticatedUser->isFollowing($user->id);
+        });
+
+        return $users;
     }
 
     /**
@@ -41,9 +55,20 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $username)
     {
-        //
+        $users = User::with('followers')
+        ->with('posts')
+        ->with('followings')
+        ->where("username", "=", $username)
+        ->get();
+
+        $authenticatedUser = Auth::user();
+        $users->each(function ($user) use ($authenticatedUser) {
+            $user->is_following = $authenticatedUser->isFollowing($user->id);
+        });
+
+        return $users;
     }
 
     /**
@@ -68,5 +93,29 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    // check follow
+    public function isFollowing($followerId)
+    {
+        $user = Auth::user();
+        $isFollowing = $user->followings()->where('user_id', $followerId)->exists();
+        return response()->json(['is_following' => $isFollowing]);
+    }
+
+    // follow a user
+    public function follow($userId)
+    {
+        $user = Auth::user();
+        $user->followings()->attach($userId);
+        return response()->json(['message' => 'Successfully followed user']);
+    }
+
+    // unfollow a user
+    public function unfollow($userId)
+    {
+        $user = Auth::user();
+        $user->followings()->detach($userId);
+        return response()->json(['message' => 'Successfully unfollowed user']);
     }
 }

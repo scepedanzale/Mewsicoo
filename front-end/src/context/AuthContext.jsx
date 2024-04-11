@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import {server} from '../api/axios';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setLoggedUserFollowers, setLoggedUserFollowings } from '../redux/actions/actions';
 
 const AuthContext = createContext();
 
@@ -9,6 +11,7 @@ export function AuthProvider({children}) {
     const [user, setUser] = useState(null);
     const [errors, setErrors] = useState([]);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const csrf = async () => {
         await server.get("/sanctum/csrf-cookie");
@@ -18,6 +21,8 @@ export function AuthProvider({children}) {
       try {
         const { data } = await server.get('api/user-auth');
         setUser(data);
+        dispatch(setLoggedUserFollowers(data.followers))
+        dispatch(setLoggedUserFollowings(data.followings))
       } catch (error) {
         console.error("Error fetching user:", error);
       }

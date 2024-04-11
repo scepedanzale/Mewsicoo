@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 
 export default function SinglePostComponent({post}) {
   const [date, setDate] = useState('')
-  const nChars = 300
-
+  
+  /* formatting data */
   useEffect(()=>{
     if(post?.created_at){
       const date = new Date(post.created_at)
@@ -15,7 +15,9 @@ export default function SinglePostComponent({post}) {
       setDate(formattedDate);
     }
   }, [post])
-
+  
+  /* cutting text */
+  const nChars = 300
   function truncateText(text) {
     if (text.length > nChars) {
         return text.slice(0, nChars);
@@ -25,14 +27,14 @@ export default function SinglePostComponent({post}) {
 
   return (
     <div className='row post border-2 rounded-lg m-0 mb-4 py-2 h-100'>
-      <div className='h-100 col-12 col-sm-4 flex flex-col justify-center relative rounded-md'>
+      <div className='h-100 col-12 col-sm-4 col-lg-3 flex flex-col justify-center relative rounded-md'>
         <SingleTrackComponent track_id={post.track_id} post_id={post.id}/>
       </div>
 
       {/* text */}
-      <div className='h-100 col-12 col-sm-6 my-2'>
+      <div className='h-100 col-12 col-sm-6 col-lg-7 my-2'>
         <div className='flex justify-between'>
-          <p className='font-bold mb-2'>{post?.user?.username}</p>
+          {post?.user?.username && <p className='font-bold mb-2'>{post.user.username}</p>}
           <p className='text-gray-400'>{date}</p>
         </div>
         <div className=''>
@@ -46,7 +48,7 @@ export default function SinglePostComponent({post}) {
       </div>
       
       {/* icons */}
-      <div className="h-100 col-12 col-sm-1 col-md-2 my-1 p-0 flex flex-sm-column justify-between justify-content-xl-start gap-xl-3 items-center text-center">
+      <div className="col-12 col-sm-1 col-md-2 my-1 p-0 flex flex-sm-column justify-between gap-xl-3 items-center text-center">
         <div className="col-4">
           <button className='btn text-2xl hover:text-red-800'><LuHeart /></button>
         </div>
