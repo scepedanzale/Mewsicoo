@@ -1,13 +1,18 @@
 import { applyMiddleware, combineReducers, createStore } from "redux"
 import { thunk } from "redux-thunk"
 import musicReducer from "../reducers/musicReducer"
+import followsReducer from "../reducers/followsReducer"
 import usersReducer from "../reducers/usersReducer"
 
 const initialstate = {
     music : {
         trackPlaying : {}
     },
-    users : {
+    loggedUser:{
+        info : {},
+        posts : []
+    },
+    follows : {
         loggedUserFollowers : [],
         loggedUserFollowings : [],
 
@@ -18,7 +23,8 @@ const initialstate = {
 
 const bigReducer = combineReducers({
     music : musicReducer,
-    users : usersReducer
+    loggedUser : usersReducer,
+    follows : followsReducer
 })
 
 export const store = createStore(bigReducer, initialstate);

@@ -12,6 +12,7 @@ import AlbumPage from './pages/music/AlbumPage';
 import ArtistPage from './pages/music/ArtistPage';
 import FollowsPage from './pages/FollowsPage';
 import ProfilePage from './pages/users/ProfilePage';
+import EditProfilePage from './pages/users/EditProfilePage';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
           <Route path='/artist/:id' element={<ArtistPage/>}/>
           <Route path='/:username' element={<ProfilePage/>}/>
           <Route path='/:username/:follows' element={<FollowsPage/>}/>
+          <Route path='/account/edit' element={<EditProfilePage/>}/>
         </Route>
         <Route element={<GuestLayout/>}>
           <Route path='/register' element={<RegisterPage/>}/>

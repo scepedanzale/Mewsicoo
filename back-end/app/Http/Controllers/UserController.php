@@ -82,9 +82,42 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        if ($request->has('name')) {
+            $user->name = $request->name;
+        }
+        if ($request->has('username')) {
+            $user->username = $request->username;
+        }
+        if ($request->has('birth_day')) {
+            $user->birth_day = $request->birth_day;
+        }
+        if ($request->has('biography')) {
+            $user->biography = $request->biography;
+        }
+        if ($request->has('profile_img')) {
+            $user->profile_img = $request->profile_img;
+        }
+        if ($request->has('email')) {
+            $user->email = $request->email;
+        }
+        if ($request->has('password')) {
+            $user->password = bcrypt($request->password);
+        }
+        if ($request->has('password_confirmation')) {
+            // Verifica se la password di conferma corrisponde
+            if ($request->password === $request->password_confirmation) {
+                $user->password = bcrypt($request->password);
+            } else {
+                // Se la password di conferma non corrisponde, gestisci l'errore qui
+                return response()->json(['error' => 'Le password non corrispondono'], 422);
+            }
+        }
+    
+        $user->update();
+
+        return $user;
     }
 
     /**

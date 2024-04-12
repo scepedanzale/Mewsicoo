@@ -10,18 +10,22 @@ import { addFollower, addFollowing, removeFollower, removeFollowing, setOtherUse
 export default function ProfileComponent() {
     const dispatch = useDispatch();
     
-    const {user} = useAuthContext();
     const {username} = useParams()
+    const {user} = useAuthContext();
+    const loggedUser = useSelector(state => state.loggedUser.info)
+    const loggedUserPosts = useSelector(state => state.loggedUser.posts)
 
     const [profileUser, setProfileUser] = useState({})
-    const [isFollowing, setIsFollowing] = useState()
 
-    const followers = useSelector(state => username === user.username ? state.users.loggedUserFollowers : state.users.otherUsersFollowers)
-    const followings = useSelector(state => username === user.username ? state.users.loggedUserFollowings : state.users.otherUsersFollowings)
+    const followers = useSelector(state => username === user.username ? state.follows.loggedUserFollowers : state.follows.otherUsersFollowers)
+    const followings = useSelector(state => username === user.username ? state.follows.loggedUserFollowings : state.follows.otherUsersFollowings)
 
     useEffect(()=>{
         if(username === user.username){
-            setProfileUser(user)
+            setProfileUser(prevState => ({
+                ...loggedUser,
+                posts: loggedUserPosts
+            }));
         }else{
             server(`api/user/${username}`)
             .then(response => {
@@ -34,21 +38,23 @@ export default function ProfileComponent() {
     
     const unfollow = () => {
         server('api/user/unfollow/'+profileUser.id)
-        setIsFollowing(false)
         dispatch(removeFollower(user))
         dispatch(removeFollowing(profileUser))
     }
     const follow = () => {
         server('api/user/follow/'+profileUser.id)
-        setIsFollowing(true)
         dispatch(addFollower(user))
         dispatch(addFollowing(profileUser))
     }
     
     useEffect(()=>{
+        console.log(loggedUser)
+        console.log(loggedUserPosts)
+        console.log(profileUser)
+        console.log(user)
         console.log(followers)
         console.log(followings)
-    }, [followers, followings])
+    }, [followers, followings, profileUser, loggedUser, user, loggedUserPosts])
 
 
     return (
@@ -66,11 +72,11 @@ export default function ProfileComponent() {
                     <div className="col md:text-lg">
                         <p className='font-bold text-gray-400'>{profileUser?.username}</p>
                         <p>{profileUser?.name}</p>
-                        {profileUser?.username === user.username ?
-                            <Link to={'/profile'} className='main-color-btn text-white btn btn-sm mt-3 w-1/3'>modifica </Link>
+                        {profileUser?.username === loggedUser.username ?
+                            <Link to={'/account/edit'} className='main-color-btn text-white btn btn-sm mt-3 w-1/3'>modifica </Link>
                             :
                             <>
-                                {followers?.some(f => f.username === user.username) ?
+                                {followers?.some(f => f.username === loggedUser.username) ?
                                    <button className='btn btn-sm bg-gray-400 hover:bg-gray-500 text-white mt-3 w-2/3' onClick={unfollow}>
                                         rimuovi
                                     </button>
@@ -113,7 +119,7 @@ export default function ProfileComponent() {
             </div>
 
             {/* post */}
-            {user?.posts.length>0 &&
+            {user.posts.length>0 &&
             <div className="container-fluid order-2 p-0 mt-3">
                 {profileUser?.posts && profileUser.posts.map((p)=>(
                     <SinglePostComponent key={p.id} post={p}/>

@@ -26,6 +26,8 @@ nav{
     pointer-events: none;
 }
 
+
+/* profile img */
 .profile_img{
     width: 6em;
     height: 6em;
@@ -35,6 +37,26 @@ nav{
     }
 }
 
-button{
-    border: 0 !important;
+.icon_edit{
+    cursor: pointer;
+    font-size: 2em;
+    position: absolute;
+    top: 45%;
+    z-index: 70;
+    color: white;
+    text-shadow: 2px 2px 10px black;
+    &:hover{
+        + .edit_profile_img{
+            z-index: 50;
+            filter: brightness(60%);
+        }
+    }
 }
+.edit_profile_img{
+    z-index: 100;
+    &:hover{
+        filter: brightness(60%);
+        z-index: 50;
+    }
+}
+
