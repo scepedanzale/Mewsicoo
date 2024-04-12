@@ -128,18 +128,6 @@ class UserController extends Controller
         if ($request->has('email')) {
             $user->email = $request->email;
         }
-        if ($request->has('password')) {
-            $user->password = bcrypt($request->password);
-        }
-        if ($request->has('password_confirmation')) {
-            // Verifica se la password di conferma corrisponde
-            if ($request->password === $request->password_confirmation) {
-                $user->password = bcrypt($request->password);
-            } else {
-                // Se la password di conferma non corrisponde, gestisci l'errore qui
-                return response()->json(['error' => 'Le password non corrispondono'], 422);
-            }
-        }
     
         $user->update();
 

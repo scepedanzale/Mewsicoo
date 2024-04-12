@@ -1,6 +1,8 @@
 export const SET_TRACK_PLAYING = 'SET_TRACK_PLAYING';
 
 export const UPDATE_INFO = 'UPDATE_INFO';
+export const UPDATE_BIRTHDAY = 'UPDATE_BIRTHDAY';
+export const UPDATE_EMAIL = 'UPDATE_EMAIL';
 export const SET_POSTS = 'SET_POSTS';
 
 export const SET_LOGGED_USER_FOLLOWERS = 'SET_LOGGED_USER_FOLLOWERS';
@@ -22,6 +24,12 @@ export const setTrackPlaying = (value) => {
 
 export const updateInfo = (data) => {
     return ({type: UPDATE_INFO, payload: data})
+}
+export const updateBirthDay = (birthDay) => {
+    return ({type: UPDATE_BIRTHDAY, payload: birthDay})
+}
+export const updateEmail = (email) => {
+    return ({type: UPDATE_EMAIL, payload: email})
 }
 export const setPosts = (data) => {
     return ({type: SET_POSTS, payload: data})

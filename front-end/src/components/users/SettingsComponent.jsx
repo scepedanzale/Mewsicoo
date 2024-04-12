@@ -3,38 +3,54 @@ import useAuthContext from '../../context/AuthContext'
 import { server } from '../../api/axios';
 import { Alert } from 'react-bootstrap';
 import { FaCheck } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateBirthDay, updateEmail } from '../../redux/actions/actions';
 
 export default function SettingsComponent() {
 
-    const {user, csrf, logout, destroy} = useAuthContext();
+    const dispatch = useDispatch()
 
+    const {user, csrf, logout, destroy} = useAuthContext();
+    const loggedBirthDay = useSelector(state => state.loggedUser.birthDay)
+    const loggedEmail = useSelector(state => state.loggedUser.email)
+
+    const [errorAge, setErrorAge] = useState('')
     const [errors, setErrors] = useState([])
     const [alertMsg, setAlertMsg] = useState('')
     const [showAlert, setShowAlert] = useState(false)
 
+    const [birth_day, setBirth_day] = useState(loggedBirthDay)
+    const [email, setEmail] = useState(loggedEmail)
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [newPassword_confirmation, setNewPassword_confirmation] = useState('')
 
-    useEffect(() => {
-        const modals = document.querySelectorAll('.modal');
-        const modalInstances = Array.from(modals).map(modal => new bootstrap.Modal(modal));
-        
-        return () => {
-            modalInstances.forEach(modal => modal.hide()); // Chiude tutti i modali prima dello smontaggio del componente
-        };
-    }, []);
+    /* controllo età */
+    const handleBirthDayChange = (e) => {
+        const selectedDate = new Date(e.target.value);
+        const currentDate = new Date();
+        const ageDiff = currentDate.getFullYear() - selectedDate.getFullYear();
+        const birthDayPassed = currentDate.getMonth() > selectedDate.getMonth() || 
+                              (currentDate.getMonth() === selectedDate.getMonth() && currentDate.getDate() >= selectedDate.getDate());
+        const isOver14 = ageDiff > 14 || (ageDiff === 14 && birthDayPassed);
+    
+        if (!isOver14) {
+          setErrorAge('Devi avere almeno 14 anni')
+          setBirth_day('');
+        } else {
+          setErrorAge('')
+          setBirth_day(e.target.value);
+        }
+    };
 
-
-    const handleSubmit = async (e) => {
+    /* modifica password */
+    const handlePassword = async (e) => {
         e.preventDefault();
         setErrors([]);
         await csrf();
-    
         try {
             const response = await server.post('/api/change-password', { old_password: oldPassword, password: newPassword, password_confirmation: newPassword_confirmation });
             if(response.status === 200){
-                console.log(response)
                 setAlertMsg(response.data.message)
                 setShowAlert(true)
             }
@@ -44,10 +60,44 @@ export default function SettingsComponent() {
               setErrors(e.response.data.error)
         }
     }
-
-    useEffect(()=>{
-        console.log(errors)
-    } ,[errors])
+    /* modifica data di nascita */
+    const handleBirthDay = async (event) => {
+        event.preventDefault();
+        setErrors([]);
+        await csrf()
+        try{
+            const response = await server.patch('api/user/'+user.id, {birth_day})
+            if(response.status === 200){
+                dispatch(updateBirthDay(birth_day))
+                setAlertMsg('Data di nascita aggiornata!')
+                setShowAlert(true)
+            }
+        }catch(e){
+            console.error(e)
+        }
+      }
+      /* modifica email */
+    const handleEmail = async (event) => {
+        event.preventDefault();
+        setErrors([]);
+        await csrf()
+        try{
+            const response = await server.patch('api/user/'+user.id, {email})
+            if(response.status === 200){
+                dispatch(updateEmail(email))
+                setAlertMsg('Email aggiornata!')
+                setShowAlert(true)
+            }
+        }catch(e){
+            if(e.response.status === 500){
+                if (e.response.data.message.includes('Duplicate entry')) {
+                    setErrors('Questo email è già registrata.');
+                } else {
+                    setErrors('Si è verificato un errore durante l\'aggiornamento del profilo.');
+                }
+               }
+        }
+      }
 
   return (
     <div className="container-fluid md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5 h-100">
@@ -60,82 +110,148 @@ export default function SettingsComponent() {
             <div className="row mb-4">
                 <p className='font-bold text-xl text-gray-500'>Informazioni personali</p>
                 <div className='mt-1 ml-2'>
-                    <p>Data di nascita</p>
-                    <p>Email</p>
+                    {/* data di nascita */}
+                    <p type="button" data-bs-toggle="modal" data-bs-target="#birth_day_modal" className='max-w-max hover:font-semibold'>Data di nascita</p>
+                    <div class="modal fade" id="birth_day_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cambia data di nascita</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form onSubmit={handleBirthDay}>
+                                        <div className="mb-4">
+                                            <label htmlFor="birth_day" className="block  font-medium leading-6 text-gray-900">Data di nascita</label>
+                                            <div className="mt-2">
+                                                <input 
+                                                id="birth_day" 
+                                                name="birth_day" 
+                                                type="date"
+                                                value={birth_day}
+                                                onChange={handleBirthDayChange}
+                                                required
+                                                className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 "/>
+                                            </div>
+                                            {errorAge && <div className='text-red-500 text-xs mt-1'>{errorAge}</div>}
+                                        </div>
+                                        <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                        <button type="submit" class="btn main-color-btn" data-bs-dismiss="modal" aria-label="Close">Modifica</button>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* email */}
+                    <p type="button" data-bs-toggle="modal" data-bs-target="#email_modal" className='max-w-max hover:font-semibold'>Email</p>
+                    <div class="modal fade" id="email_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cambia email</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form onSubmit={handleEmail}>
+                                        <div className="mb-4">
+                                            <label htmlFor="email" className="block  font-medium leading-6 text-gray-900">Email</label>
+                                            <div className="mt-2">
+                                                <input 
+                                                id="email" 
+                                                name="email" 
+                                                type="email"
+                                                value={email}
+                                                onChange={(e)=>setEmail(e.target.value)}
+                                                required
+                                                className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 "/>
+                                            </div>
+                                            {errors && <div className='text-red-500 text-xs mt-1'>{errors}</div>}
+
+                                        </div>
+                                        <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                        <button type="submit" class="btn main-color-btn" data-bs-dismiss="modal" aria-label="Close">Modifica</button>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             {/* password */}
             <div className="row mb-4">
                 <p className='font-bold text-xl text-gray-500'>Sicurezza</p>
                 <div className='mt-1 ml-2'>
-                    <p type="button" data-bs-toggle="modal" data-bs-target="#password_modal" className='max-w-max'>Modifica password</p>
+                    <p type="button" data-bs-toggle="modal" data-bs-target="#password_modal" className='max-w-max hover:font-semibold'>Modifica password</p>
                     <div class="modal fade" id="password_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Cambia immagine profilo</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form onSubmit={handleSubmit}>
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cambia password</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form onSubmit={handlePassword}>
 
-                                {/* old password */}
-                                <div className="mb-4">
-                                    <label htmlFor="old_password" className="block  font-medium leading-6 text-gray-900">Password attuale</label>
-                                    <div className="mt-2">
-                                        <input 
-                                        id="old_password" 
-                                        name="old_password" 
-                                        type="password"
-                                        value={oldPassword}
-                                        onChange={(e)=>setOldPassword(e.target.value)}
-                                        minLength="8"
-                                        required
-                                        className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 "/>
+                                        {/* old password */}
+                                        <div className="mb-4">
+                                            <label htmlFor="old_password" className="block  font-medium leading-6 text-gray-900">Password attuale</label>
+                                            <div className="mt-2">
+                                                <input 
+                                                id="old_password" 
+                                                name="old_password" 
+                                                type="password"
+                                                value={oldPassword}
+                                                onChange={(e)=>setOldPassword(e.target.value)}
+                                                minLength="8"
+                                                required
+                                                className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 "/>
+                                            </div>
+                                            {errors.includes('vecchia password') && <div className='text-red-500 text-xs mt-1'>{errors}</div>}
+                                        </div>
+                                        {/* new password */}
+                                        <div className="mb-4">
+                                            <label htmlFor="new_password" className="block  font-medium leading-6 text-gray-900">Nuova password</label>
+                                            <div className="mt-2">
+                                                <input 
+                                                id="new_password" 
+                                                name="new_password" 
+                                                type="password"
+                                                value={newPassword}
+                                                onChange={(e)=>setNewPassword(e.target.value)}
+                                                minLength="8"
+                                                required
+                                                className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 "/>
+                                            </div>
+                                        </div>
+                                        {/* new password_confirmation */}
+                                        <div className="mb-4">
+                                            <label htmlFor="password_confirmation" className="block  font-medium leading-6 text-gray-900">Conferma Password</label>
+                                            <div className="mt-2">
+                                                <input 
+                                                id="password_confirmation" 
+                                                name="password_confirmation" 
+                                                type="password"
+                                                value={newPassword_confirmation}
+                                                onChange={(e)=>setNewPassword_confirmation(e.target.value)}
+                                                minLength="8"
+                                                required
+                                                className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 "/>
+                                            </div>
+                                            {errors.includes('nuova password') && <div className='text-red-500 text-xs mt-1'>{errors}</div>}
+                                        </div>
+                                        <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                        <button type="submit" class="btn main-color-btn" data-bs-dismiss="modal" aria-label="Close">Modifica</button>
                                     </div>
-                                    {errors.includes('vecchia password') && <div className='text-red-500 text-xs mt-1'>{errors}</div>}
+                                    </form>
                                 </div>
-                                {/* new password */}
-                                <div className="mb-4">
-                                    <label htmlFor="new_password" className="block  font-medium leading-6 text-gray-900">Nuova password</label>
-                                    <div className="mt-2">
-                                        <input 
-                                        id="new_password" 
-                                        name="new_password" 
-                                        type="password"
-                                        value={newPassword}
-                                        onChange={(e)=>setNewPassword(e.target.value)}
-                                        minLength="8"
-                                        required
-                                        className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 "/>
-                                    </div>
-                                </div>
-                                {/* new password_confirmation */}
-                                <div className="mb-4">
-                                    <label htmlFor="password_confirmation" className="block  font-medium leading-6 text-gray-900">Password Confirm</label>
-                                    <div className="mt-2">
-                                        <input 
-                                        id="password_confirmation" 
-                                        name="password_confirmation" 
-                                        type="password"
-                                        value={newPassword_confirmation}
-                                        onChange={(e)=>setNewPassword_confirmation(e.target.value)}
-                                        minLength="8"
-                                        required
-                                        className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 "/>
-                                    </div>
-                                    {errors.includes('nuova password') && <div className='text-red-500 text-xs mt-1'>{errors}</div>}
-                                </div>
-                                <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                                <button type="submit" class="btn main-color-btn">Salva</button>
                             </div>
-                            </form>
-                        </div>
-                        
                         </div>
                     </div>
-                </div>
                 </div>
             </div>
             
@@ -153,7 +269,7 @@ export default function SettingsComponent() {
                             <div class="text-center">
                                 <h1 class="modal-title fs-5 mb-4" id="exampleModalLabel">Vuoi disconnetterti?</h1>
                                 <button type="button" class="btn btn-secondary w-25 mr-3" data-bs-dismiss="modal">Annulla</button>
-                                <button type="button" class="btn bg-red-700 hover:bg-red-800 text-white w-25" onClick={logout}>Esci</button>
+                                <button type="button" class="btn bg-red-700 hover:bg-red-800 text-white w-25" data-bs-dismiss="modal" aria-label="Close" onClick={logout}>Esci</button>
                             </div>
                         </div>
                     </div>
@@ -174,7 +290,7 @@ export default function SettingsComponent() {
                                     <p>Una volta eliminato non potrai più recuperare i tuoi dati.</p>
                                 </div>
                                 <button type="button" class="btn btn-secondary w-25 mr-3" data-bs-dismiss="modal">Annulla</button>
-                                <button type="button" class="btn bg-red-700 hover:bg-red-800 text-white w-25" onClick={()=>destroy(user.id)}>Elimina</button>
+                                <button type="button" class="btn bg-red-700 hover:bg-red-800 text-white w-25" data-bs-dismiss="modal" aria-label="Close" onClick={()=>destroy(user.id)}>Elimina</button>
                             </div>
                         </div>
                     </div>

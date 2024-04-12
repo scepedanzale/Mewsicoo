@@ -44,6 +44,10 @@ button {
   text-shadow: 2px 2px 10px black;
 }
 
+.filter-cover {
+  filter: brightness(60%);
+}
+
 /* colore principale */
 .main-color {
   color: #4299B3 !important;

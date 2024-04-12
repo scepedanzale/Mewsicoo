@@ -10,6 +10,8 @@ const initialstate = {
     },
     loggedUser:{
         info : {},
+        birthDay : '',
+        email : '',
         posts : []
     },
     follows : {

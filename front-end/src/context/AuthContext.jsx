@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import {server} from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setLoggedUserFollowers, setLoggedUserFollowings, setPosts, updateInfo } from '../redux/actions/actions';
+import { setLoggedUserFollowers, setLoggedUserFollowings, setPosts, updateBirthDay, updateEmail, updateInfo } from '../redux/actions/actions';
 
 const AuthContext = createContext();
 
@@ -22,6 +22,8 @@ export function AuthProvider({children}) {
         const { data } = await server.get('api/user-auth');
         setUser(data);
         dispatch(updateInfo({biography: data.biography, name: data.name, profile_img: data.profile_img, username: data.username}))
+        dispatch(updateBirthDay(data.birth_day))
+        dispatch(updateEmail(data.email))
         dispatch(setPosts(data.posts))
         dispatch(setLoggedUserFollowers(data.followers))
         dispatch(setLoggedUserFollowings(data.followings))

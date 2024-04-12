@@ -88,7 +88,7 @@ export default function ProfileComponent() {
                             </>
                         }
                     </div>
-                    <Link to={'/account/settings'} className='absolute top-0 right-0 max-w-max text-gray-500 text-2xl md:text-3xl'>
+                    <Link to={'/account/settings'} className='absolute top-0 right-0 max-w-max text-gray-500 text-2xl md:text-3xl hover:text-gray-700'>
                         <LuSettings />
                     </Link>
                 </div>
@@ -119,13 +119,16 @@ export default function ProfileComponent() {
             </div>
 
             {/* post */}
-            {user.posts.length>0 &&
+            
             <div className="container-fluid order-2 p-0 mt-3">
-                {profileUser?.posts && profileUser.posts.map((p)=>(
+                {profileUser?.posts.length>0 ? profileUser.posts.map((p)=>(
                     <SinglePostComponent key={p.id} post={p}/>
-                ))}
+                ))
+                :
+                <p className='text-center mt-36 text-xl text-gray-500'>Non ci sono post</p>
+                }
             </div>
-            }
+            
         </div>
   )
 }

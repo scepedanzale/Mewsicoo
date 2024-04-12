@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FiEdit } from "react-icons/fi";
 import { FaCheck } from "react-icons/fa";
 import { server } from '../../api/axios'
@@ -10,24 +10,23 @@ import { Alert } from 'react-bootstrap';
 
 export default function EditProfileComponent() {
 
-    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const {user, csrf} = useAuthContext()
+    const loggedUser = useSelector(state => state.loggedUser.info)
 
     const [errors, setErrors] = useState([])
     const [alert, setAlert] = useState(false)
 
-    const [name, setName] = useState(user.name)
-    const [username, setUsername] = useState(user.username)
-    const [biography, setBiography] = useState(user.biography)
-    const [profile_img, setProfile_img] = useState(user.profile_img)
+    const [name, setName] = useState(loggedUser.name)
+    const [username, setUsername] = useState(loggedUser.username)
+    const [biography, setBiography] = useState(loggedUser.biography)
+    const [profile_img, setProfile_img] = useState(loggedUser.profile_img)
 
     const handleEditProfile = async (event) => {
       event.preventDefault();
       setErrors([]);
       const data = {name, username, biography, profile_img}
-      console.log(data)
       await csrf()
       try{
           const response = await server.patch('api/user/'+user.id, data)
@@ -35,7 +34,6 @@ export default function EditProfileComponent() {
               dispatch(updateInfo(data))
               setAlert(true)
           }
-
         }catch(e){
           if(e.response.status === 500){
             if (e.response.data.message.includes('Duplicate entry')) {
@@ -46,10 +44,6 @@ export default function EditProfileComponent() {
            }
         }
     }
-
-    useEffect(()=>{
-        console.log(errors)
-    }, [errors])
 
 
   return (
@@ -64,10 +58,10 @@ export default function EditProfileComponent() {
             <div className="max-w-max mx-auto relative flex justify-center items-center rounded-full" type="button" data-bs-toggle="modal" data-bs-target="#profile_img_modal">
                 <div className='icon_edit'><FiEdit /></div>
                 <div className="edit_profile_img mx-auto overflow-hidden flex justify-center items-center rounded-full h-36 w-36 sm:h-48 sm:w-48">
-                    <img src={user?.profile_img} alt="profile image" className='object-cover h-full w-full'/>
+                    <img src={profile_img} alt="profile image" className='object-cover h-full w-full'/>
                 </div>
             </div>
-                {/* modal */}
+                {/* modal profile img*/}
                 <div class="modal fade" id="profile_img_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -76,7 +70,7 @@ export default function EditProfileComponent() {
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form onSubmit={handleEditProfile}>
+                          <form onSubmit={handleEditProfile}>
                                 <input type="file" />
                                 <div className="mt-4">
                                     <div className="mt-2">
@@ -90,11 +84,11 @@ export default function EditProfileComponent() {
                                         className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 "/>
                                     </div>
                                 </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                  <button type="submit" class="btn main-color-btn" data-bs-dismiss="modal" aria-label="Close">Salva</button>
+                              </div>
                             </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                            <button type="button" class="btn main-color-btn">Salva</button>
                         </div>
                         </div>
                     </div>
