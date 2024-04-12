@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import useAuthContext from '../context/AuthContext'
 import {server} from '../api/axios'
 import SinglePostComponent from './posts/SinglePostComponent'
 
 export default function HomepageComponent() {
-  const {user} = useAuthContext([])
+
   const [posts, setPosts] = useState([])
   const [postLoading, setPostLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState(false)
@@ -23,7 +22,6 @@ export default function HomepageComponent() {
     })
   }, [])
   
-  
 
   return (
     <div className='container mx-auto p-3 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5'>
@@ -32,7 +30,7 @@ export default function HomepageComponent() {
       }
 
         {posts && posts.map((p)=>(
-            <SinglePostComponent key={p.id} post={p}/>
+            <SinglePostComponent key={p.id} post={p} user={p.user}/>
         ))}
     </div>
   )

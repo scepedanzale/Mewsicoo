@@ -122,7 +122,7 @@ export default function ProfileComponent() {
             
             <div className="container-fluid order-2 p-0 mt-3">
                 {profileUser?.posts.length>0 ? profileUser.posts.map((p)=>(
-                    <SinglePostComponent key={p.id} post={p}/>
+                    <SinglePostComponent key={p.id} post={p} user={profileUser}/>
                 ))
                 :
                 <p className='text-center mt-36 text-xl text-gray-500'>Non ci sono post</p>
