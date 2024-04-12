@@ -11,6 +11,7 @@ use App\Http\Controllers\PostController;
 
 Route::resource('/user', UserController::class);
 Route::get('/user-auth', [UserController::class, 'user_auth']);
+Route::post('/change-password', [UserController::class, 'change_password']);
 
 /* follows */
 Route::get('/user/follow/{userId}', [UserController::class, 'follow']);

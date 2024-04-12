@@ -60,6 +60,22 @@ export function AuthProvider({children}) {
       server.post('/logout')
       .then(()=>{
         setUser(null)
+        dispatch(updateInfo({}))
+        dispatch(setPosts([]))
+        dispatch(setLoggedUserFollowers([]))
+        dispatch(setLoggedUserFollowings([]))
+        navigate('/')
+      })
+    }
+    
+    const destroy = async () => {
+      server.delete('/api/user/'+ user.id)
+      .then(()=>{
+        setUser(null)
+        dispatch(updateInfo({}))
+        dispatch(setPosts([]))
+        dispatch(setLoggedUserFollowers([]))
+        dispatch(setLoggedUserFollowings([]))
         navigate('/')
       })
     }
@@ -71,7 +87,7 @@ export function AuthProvider({children}) {
     }, [])
 
   return (
-    <AuthContext.Provider value={{user, errors, getUser, login, register, logout, csrf}}>
+    <AuthContext.Provider value={{user, errors, getUser, login, register, logout, destroy, csrf}}>
         {children}
     </AuthContext.Provider>
   )

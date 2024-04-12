@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 
 class UserController extends Controller
@@ -15,6 +16,31 @@ class UserController extends Controller
     public function user_auth()
     {
         return Auth::user()->load('followers', 'followings', 'posts');
+    }
+
+    public function change_password(Request $request)
+    {
+        $user = Auth::user();
+        $oldPassword = $request->input('old_password');
+        $newPassword = $request->input('password');
+        $newPasswordConfirmation = $request->input('password_confirmation');
+
+        if($newPassword === $oldPassword && $newPasswordConfirmation === $oldPassword){
+            return response()->json(['error' => 'Non puoi impostare la nuova password uguale a quella vecchia.'], 422);
+        }
+
+        if (!Hash::check($oldPassword, $user->password)) {
+            return response()->json(['error' => 'La vecchia password non è corretta'], 422);
+        }
+
+        if ($newPassword !== $newPasswordConfirmation) {
+            return response()->json(['error' => 'La nuova password e la conferma della nuova password non corrispondono'], 422);
+        }
+
+        $user->password = bcrypt($newPassword);
+        $user->save();
+
+        return response()->json(['message' => 'Password cambiata con successo']);
     }
 
     public function index(Request $request)
@@ -123,9 +149,9 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
     }
 
     // check follow

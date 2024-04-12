@@ -34,9 +34,6 @@ export default function EditProfileComponent() {
           if(response.status === 200){
               dispatch(updateInfo(data))
               setAlert(true)
-              setTimeout(()=>{
-                setAlert(false)
-              }, 2000)
           }
 
         }catch(e){
@@ -64,14 +61,14 @@ export default function EditProfileComponent() {
             </Alert>}
 
             {/* profile img */}
-            <div className="max-w-max mx-auto relative flex justify-center items-center rounded-full" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <div className="max-w-max mx-auto relative flex justify-center items-center rounded-full" type="button" data-bs-toggle="modal" data-bs-target="#profile_img_modal">
                 <div className='icon_edit'><FiEdit /></div>
                 <div className="edit_profile_img mx-auto overflow-hidden flex justify-center items-center rounded-full h-36 w-36 sm:h-48 sm:w-48">
                     <img src={user?.profile_img} alt="profile image" className='object-cover h-full w-full'/>
                 </div>
             </div>
                 {/* modal */}
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="profile_img_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                         <div class="modal-header">

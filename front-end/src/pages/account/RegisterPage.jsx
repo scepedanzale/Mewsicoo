@@ -39,7 +39,7 @@ export default function RegisterPage() {
     }
 
   return (
-    <div className="container-fluid m-10 ">
+    <div className="container-fluid">
       <div className="sm:px-20 md:px-40 lg:px-64 xl:px-96">
         <div className='w-full text-center my-20'>
           <h2 className="font-semibold text-6xl text-gray-900">Mewsikoo</h2>

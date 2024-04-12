@@ -88,7 +88,7 @@ export default function ProfileComponent() {
                             </>
                         }
                     </div>
-                    <Link className='absolute top-0 right-0 max-w-max text-gray-500 text-2xl md:text-3xl'>
+                    <Link to={'/account/settings'} className='absolute top-0 right-0 max-w-max text-gray-500 text-2xl md:text-3xl'>
                         <LuSettings />
                     </Link>
                 </div>
