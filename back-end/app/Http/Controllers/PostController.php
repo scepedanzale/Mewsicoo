@@ -39,7 +39,8 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        $p = $post->with('user')->first();
+        return $p;
     }
 
     /**

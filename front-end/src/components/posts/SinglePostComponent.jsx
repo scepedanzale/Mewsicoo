@@ -2,10 +2,34 @@ import React, { useEffect, useState } from 'react'
 import SingleTrackComponent from '../music/SingleTrackComponent'
 import { LuPin, LuHeart, LuMessageSquare } from "react-icons/lu";
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { apiKey, urlTrack } from '../../api/config';
 
 
 export default function SinglePostComponent({post, user}) {
   const [date, setDate] = useState('')
+  const [track, setTrack] = useState([])  // song
+  const [isLoading, setIsLoading] = useState(false);
+
+  // chiamata alla canzone
+  useEffect(()=>{
+    setIsLoading(true);
+    axios(urlTrack + post.track_id, {
+      headers: {
+        'Authorization' : 'Bearer ' + apiKey
+      }
+    })
+    .then(response => {
+      if(response.status === 200){
+        setTrack(response.data)
+          setIsLoading(false);
+      }
+    })
+    .catch(e => {
+      console.error(e)
+      setIsLoading(false);
+    })
+}, [post.track_id])
   
   /* formatting data */
   useEffect(()=>{
@@ -28,7 +52,12 @@ export default function SinglePostComponent({post, user}) {
   return (
     <div className='row post border-2 rounded-lg m-0 mb-4 py-2 h-100'>
       <div className='h-100 col-12 col-sm-4 col-lg-3 flex flex-col justify-center relative rounded-md'>
-        <SingleTrackComponent track_id={post.track_id} post_id={post.id}/>
+        <SingleTrackComponent track={track} isLoading={isLoading} post_id={post.id}/>
+        {/* artist - album */}
+        <div className="order-1 order-sm-2 text-center sm:text-sm md:text-base mt-sm-2 mb-2 text-gray-500">
+          <Link to={'artist/'+track.artist?.id} className='hover:font-semibold'>{track.artist?.name} - </Link>
+          <Link to={'album/'+track.album?.id} className='hover:font-semibold'>{track.album?.title}</Link>
+        </div>
       </div>
 
       {/* text */}
@@ -42,9 +71,12 @@ export default function SinglePostComponent({post, user}) {
         <div className=''>
           <p className='text-gray-700 overflow-hidden max-w-full overflow-ellipsis'>
             {truncateText(post?.text)}
-              
-              {post?.text.length>nChars && '...'}<Link><span className='text-gray-400 font-semibold italic border-3 border-gray-300 ms-2 px-2 rounded-full hover:bg-gray-300 hover:text-white whitespace-nowrap max-w-max'>apri post</span></Link>
-            
+              {post?.text.length>nChars && '...'}
+              <Link to={'/post/'+post.id} state={{post, user, date, track, isLoading}}>
+                <span className='text-gray-400 font-semibold italic border-3 border-gray-300 ms-2 px-2 rounded-full hover:bg-gray-300 hover:text-white whitespace-nowrap max-w-max'>
+                  apri post
+                </span>
+              </Link>
           </p>
           <p className='text-gray-400 text-sm mt-2'>{date}</p>
         </div>
