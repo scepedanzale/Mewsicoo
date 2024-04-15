@@ -2,6 +2,10 @@ button {
   border: 0 !important;
 }
 
+.active {
+  background-color: #347d93 !important;
+}
+
 /* player track */
 .cover {
   width: 100%;

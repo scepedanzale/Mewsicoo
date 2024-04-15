@@ -2,4 +2,4 @@ export const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjEzYWI0
 export const urlArtist = 'https://striveschool-api.herokuapp.com/api/deezer/artist/';
 export const urlAlbum = 'https://striveschool-api.herokuapp.com/api/deezer/album/';
 export const urlTrack = 'https://striveschool-api.herokuapp.com/api/deezer/track/';
-export const search = 'https://striveschool-api.herokuapp.com/api/deezer/search?q=';
+export const urlSearch = 'https://striveschool-api.herokuapp.com/api/deezer/search?q=';

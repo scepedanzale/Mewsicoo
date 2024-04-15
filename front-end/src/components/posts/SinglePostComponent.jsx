@@ -4,10 +4,11 @@ import { LuPin, LuHeart, LuMessageSquare } from "react-icons/lu";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { apiKey, urlTrack } from '../../api/config';
+import { formattedDate } from '../../functions/functions';
 
 
 export default function SinglePostComponent({post, user}) {
-  const [date, setDate] = useState('')
+  const date = formattedDate(post?.created_at)
   const [track, setTrack] = useState([])  // song
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,14 +32,6 @@ export default function SinglePostComponent({post, user}) {
     })
 }, [post.track_id])
   
-  /* formatting data */
-  useEffect(()=>{
-    if(post?.created_at){
-      const date = new Date(post.created_at)
-      const formattedDate = date.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })
-      setDate(formattedDate);
-    }
-  }, [post])
   
   /* cutting text */
   const nChars = 300

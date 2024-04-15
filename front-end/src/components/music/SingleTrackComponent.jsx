@@ -33,49 +33,38 @@ export default function SingleTrackComponent({track, isLoading, post_id}) {
     // btn and action control
     const player = () => {
         if(!play){
-            if(trackPlaying?.post_id !== post_id){
-                dispatch(setTrackPlaying({audio: audioPlayer, post_id : post_id}))
-            }
+            dispatch(setTrackPlaying({post_id : post_id}))
             setPlay(true)
         }else{
             setPlay(false)
-            dispatch(setTrackPlaying({}))
+            audioPlayer.pause()
+            audioPlayer.currentTime = 0;
+            //dispatch(setTrackPlaying({}))
         }
     }
-    
-    // set btn false
-    useEffect(()=>{
-        if(trackPlaying.post_id !== post_id){
-            setPlay(false)
-        }
-    }, [trackPlaying])
 
-    // play music
     useEffect(()=>{
         if(audioPlayer){
-            if(play && trackPlaying.post_id === post_id){
-                audioPlayer.play();
+            if(trackPlaying.post_id === post_id && play){
+                
+                audioPlayer.play()
             }else{
-                audioPlayer.pause();
+                setPlay(false)
+                audioPlayer.pause()
                 audioPlayer.currentTime = 0;
             }
         }
-    }, [play, trackPlaying])
+    }, [trackPlaying])
 
-    // Component unmount
     useEffect(() => {
+        // Stop playing when unmounting or changing the song
         return () => {
-            if (play) {
+            if(play){
                 console.log('unmount')
-                setPlay(false)
-                dispatch(setTrackPlaying({}))
-                if(play && audioPlayer){
-                    audioPlayer.pause();
-                    audioPlayer.currentTime = 0;
-                }
+                audioPlayer?.pause();
             }
         };
-    }, [play]);
+      }, [play]);
 
 
   return (
@@ -91,8 +80,10 @@ export default function SingleTrackComponent({track, isLoading, post_id}) {
                             <div className="dot dot-3">.</div>
                         </div>
                     :
-                        <button className='play absolute text-white max-w-max text-6xl sm:text-4xl' onClick={player}>
-                            {play && trackPlaying?.post_id === post_id ? <FaPause /> : <FaPlay />}
+                        <button 
+                        className='play absolute text-white max-w-max text-6xl sm:text-4xl' 
+                        onClick={player}>
+                            {play  ? <FaPause /> : <FaPlay />}
                         </button>
                     }
                     <img src={`${track?.album?.cover_big ? track.album.cover_big : {trackPlaceholder}}`} alt="" className={`cover rounded-md ${play && 'filter-cover'} ${isLoading && 'blur-sm'}`}/>
@@ -117,3 +108,4 @@ export default function SingleTrackComponent({track, isLoading, post_id}) {
                         <div className="dot dot-2">.</div>
                         <div className="dot dot-3">.</div>
                     </div> */}
+                    
