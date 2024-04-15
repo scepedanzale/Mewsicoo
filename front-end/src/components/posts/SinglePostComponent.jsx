@@ -32,6 +32,10 @@ export default function SinglePostComponent({post, user}) {
     })
 }, [post.track_id])
   
+useEffect(()=>{
+  console.log(post)
+  console.log(track)
+}, [post, track])
   
   /* cutting text */
   const nChars = 300
@@ -48,8 +52,8 @@ export default function SinglePostComponent({post, user}) {
         <SingleTrackComponent track={track} isLoading={isLoading} post_id={post.id}/>
         {/* artist - album */}
         <div className="order-1 order-sm-2 text-center sm:text-sm md:text-base mt-sm-2 mb-2 text-gray-500">
-          <Link to={'artist/'+track.artist?.id} className='hover:font-semibold'>{track.artist?.name} - </Link>
-          <Link to={'album/'+track.album?.id} className='hover:font-semibold'>{track.album?.title}</Link>
+          <Link to={'/artist/'+track.artist?.id} className='hover:font-semibold'>{track.artist?.name} - </Link>
+          <Link to={'/album/'+track.album?.id} className='hover:font-semibold'>{track.album?.title}</Link>
         </div>
       </div>
 

@@ -33,7 +33,7 @@ export default function SingleTrackComponent({track, isLoading, post_id}) {
     // btn and action control
     const player = () => {
         if(!play){
-            dispatch(setTrackPlaying({post_id : post_id}))
+            dispatch(setTrackPlaying(track.id))
             setPlay(true)
         }else{
             setPlay(false)
@@ -45,8 +45,7 @@ export default function SingleTrackComponent({track, isLoading, post_id}) {
 
     useEffect(()=>{
         if(audioPlayer){
-            if(trackPlaying.post_id === post_id && play){
-                
+            if(trackPlaying === track.id && play){
                 audioPlayer.play()
             }else{
                 setPlay(false)

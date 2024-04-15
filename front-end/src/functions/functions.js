@@ -1,8 +1,8 @@
 
-export function albumDuration(album){
-    if(album.duration){
-        const minutes = album.duration / 60;
-        let duration = minutes.toLocaleString('it-IT', {
+export function albumDuration(duration){
+    
+        const minutes = duration / 60;
+        let d = minutes.toLocaleString('it-IT', {
             style: 'decimal',
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
@@ -12,11 +12,11 @@ export function albumDuration(album){
         if (minutes > 60) {
             const hours = Math.floor(minutes / 60);
             const remainingMinutes = Math.floor(minutes % 60);
-            duration = hours + " ora e " + remainingMinutes + " min";
+            d = hours + " ora e " + remainingMinutes + " min";
         }
 
-        return (duration);
-    }
+        return (d);
+
 }
 
 export function formattedDate (created_at) {
