@@ -1,25 +1,33 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
-import { server } from '../../api/axios';
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { LuPin, LuHeart, LuMessageSquare, LuPencil } from "react-icons/lu";
 import { BsThreeDotsVertical, BsTrash } from "react-icons/bs";
-import SingleTrackComponent from '../music/SingleTrackComponent';
-import { useSelector } from 'react-redux';
+import { server } from '../../api/axios';
+import { deletePost } from '../../redux/actions/actions';
 import { Collapse } from 'react-bootstrap';
+import SingleTrackComponent from '../music/SingleTrackComponent';
 
 export default function PostComponent() {
-
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const location = useLocation();
-    const loggedUser = useSelector(state => state.loggedUser.info)
     const {post, user, track, date, isLoading} = location.state;
-    const [biography, setBiography] = useState(loggedUser.biography)
+    const loggedUser = useSelector(state => state.loggedUser.info)
+    
     const [open, setOpen] = useState(false);
 
     useEffect(()=>{
-        console.log(post)
+        console.log(post.text)
         console.log(date)
     }, [post, date])
+
+    const handleDeletePost = () => {
+        server.delete('/api/post/'+post.id)
+        dispatch(deletePost(post))
+        navigate(-1)
+    }
 
 
   return (
@@ -34,33 +42,50 @@ export default function PostComponent() {
                     </div>
                     <div className="col-7 p-0 relative">
                         {/* post settings */}
-                        {user.username === loggedUser.username &&
+                        {user?.username === loggedUser.username &&
                         <>
-                            <div type="button"
-                            onClick={() => setOpen(!open)}
-                            aria-controls="example-collapse-text"
-                            aria-expanded={open}
-                            className='top-0 right-3 text-xl md:text-2xl flex justify-end text-gray-500 hover:text-gray-700'>
-                                <BsThreeDotsVertical />
-                            </div>
-                            <Collapse in={open}>
-                                <div id="example-collapse-text" className='sticky bg-white flex justify-end p-2'>
-                                    <ul>
-                                        <li>
-                                            <Link className='flex items-center gap-2'><LuPencil />Modifica</Link>
-                                        </li>
-                                        <li>
-                                            <Link className='flex items-center gap-2 text-red-700'><BsTrash />Elimina</Link>
-                                        </li>
-                                    </ul>
+                            <div className='flex justify-end'>
+                                <div type="button"
+                                onClick={() => setOpen(!open)}
+                                aria-controls="example-collapse-text"
+                                aria-expanded={open}
+                                className='max-w-max top-0 right-3 text-xl md:text-2xl flex justify-end text-gray-500 hover:text-gray-700'>
+                                    <BsThreeDotsVertical />
                                 </div>
-                            </Collapse>
+                                <Collapse in={open}>
+                                    <div id="example-collapse-text" className='fixed absolute right-5 mt-2 bg-white border-2 rounded-lg flex justify-end'>
+                                        <ul>
+                                            <li className='hover:bg-gray-100 p-2'>
+                                                <Link to={'/edit/post/'+post.id} state={{post}} className='flex items-center gap-2'><LuPencil />Modifica</Link>
+                                            </li>
+                                            <li className='hover:bg-gray-100 p-2' type="button" data-bs-toggle="modal" data-bs-target="#delete_post_modal">
+                                                <button className='flex items-center gap-2 text-red-700'><BsTrash />Elimina</button>
+                                            </li>
+                                                <div class="modal fade" id="delete_post_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content p-3">
+                                                            <div class="text-end">
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="text-center">
+                                                                <h1 class="modal-title fs-5 mb-4" id="exampleModalLabel">Vuoi eliminare questo post?</h1>
+                                                                <button type="button" class="btn btn-secondary w-25 mr-3" data-bs-dismiss="modal">Annulla</button>
+                                                                <button type="button" class="btn bg-red-700 hover:bg-red-800 text-white w-25" data-bs-dismiss="modal" aria-label="Close" onClick={handleDeletePost}>Elimina</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </ul>
+                                    </div>
+                                </Collapse>
+
+                            </div>
                         </>
                         }
-                        <p className='font-bold text-lg sm:text-xl md:text-2xl'>{track.title}</p>
+                        <p className='font-bold text-lg sm:text-xl md:text-2xl'>{track?.title}</p>
                         <div className='mt-1 text-sm sm:text-base md:text-xl'>
-                            <p className='truncate'>{track.artist.name}</p>
-                            <p className='truncate'>{track.album.title}</p>
+                            <p className='truncate'>{track?.artist?.name}</p>
+                            <p className='truncate'>{track?.album?.title}</p>
                         </div>
                     </div>
                 </div>
@@ -81,7 +106,7 @@ export default function PostComponent() {
                 </div>
 
                 {/* icons */}
-                <div className="row p-0 flex justify-between gap-xl-3 items-center text-center">
+                <div className="row p-0 flex justify-between items-center text-center">
                     <div className="col-4">
                     <button className='btn text-2xl hover:text-red-800'><LuHeart /></button>
                     </div>
@@ -98,3 +123,5 @@ export default function PostComponent() {
     </div>
   )
 }
+
+

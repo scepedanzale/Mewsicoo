@@ -15,6 +15,7 @@ import ProfilePage from './pages/users/ProfilePage';
 import EditProfilePage from './pages/users/EditProfilePage';
 import SettingsPage from './pages/users/SettingsPage';
 import PostPage from './pages/posts/PostPage';
+import EditPostPage from './pages/posts/EditPostPage';
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
           <Route path='/album/:id' element={<AlbumPage/>}/>
           <Route path='/artist/:id' element={<ArtistPage/>}/>
           <Route path='/post/:id' element={<PostPage/>}/>
+          <Route path='/edit/post/:id' element={<EditPostPage/>}/>
           <Route path='/:username' element={<ProfilePage/>}/>
           <Route path='/:username/:follows' element={<FollowsPage/>}/>
           <Route path='/account/edit' element={<EditProfilePage/>}/>

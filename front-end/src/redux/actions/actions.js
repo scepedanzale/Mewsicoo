@@ -4,6 +4,8 @@ export const UPDATE_INFO = 'UPDATE_INFO';
 export const UPDATE_BIRTHDAY = 'UPDATE_BIRTHDAY';
 export const UPDATE_EMAIL = 'UPDATE_EMAIL';
 export const SET_POSTS = 'SET_POSTS';
+export const DELETE_POST = 'DELETE_POST';
+export const UPDATE_POST = 'UPDATE_POST';
 
 export const SET_LOGGED_USER_FOLLOWERS = 'SET_LOGGED_USER_FOLLOWERS';
 export const SET_LOGGED_USER_FOLLOWINGS = 'SET_LOGGED_USER_FOLLOWINGS';
@@ -33,6 +35,12 @@ export const updateEmail = (email) => {
 }
 export const setPosts = (data) => {
     return ({type: SET_POSTS, payload: data})
+}
+export const deletePost = (post) => {
+    return ({type: DELETE_POST, payload: post})
+}
+export const updatePost = (text, id) => {
+    return ({type: UPDATE_POST, payload: {text, id}})
 }
 
 
