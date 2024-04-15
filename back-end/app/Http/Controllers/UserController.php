@@ -42,16 +42,18 @@ class UserController extends Controller
 
         return response()->json(['message' => 'Password cambiata con successo']);
     }
+    
 
     public function index(Request $request)
     {
         $query = User::with('followers')
                 ->with('posts')
-                ->with('followings');
+                ->with('followings')
+                ->where(function ($query) use ($request) {
+                    $query->where("username", "like", "%" . $request->input('query') . "%")
+                        ->orWhere("name", "like", "%" . $request->input('query') . "%");
+                });
 
-        if ($request->has('username')) {
-            $query->where("username", "=", $request->input('username'));
-        }
 
         $users = $query->get();
         $authenticatedUser = Auth::user();

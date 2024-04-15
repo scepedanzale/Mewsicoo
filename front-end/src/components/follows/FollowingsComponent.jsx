@@ -4,7 +4,7 @@ import UserRowComponent from '../users/UserRowComponent'
 export default function FollowingsComponent({followings}) {
     
   return (
-    followings ? followings.map((f)=>(
+    followings?.length>0 ? followings.map((f)=>(
         <UserRowComponent f={f}/>
     ))
     :

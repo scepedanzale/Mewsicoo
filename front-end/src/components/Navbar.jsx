@@ -13,7 +13,7 @@ export default function Navbar() {
             <Link to={'/'}>Home</Link>
           </div>
           <div>
-            <Link to={'/'}>Search</Link>
+            <Link to={'/search/users'}>Search</Link>
           </div>
           <div>
             <Link to={'/'}>+</Link>

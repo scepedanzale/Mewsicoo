@@ -16,6 +16,7 @@ import EditProfilePage from './pages/users/EditProfilePage';
 import SettingsPage from './pages/users/SettingsPage';
 import PostPage from './pages/posts/PostPage';
 import EditPostPage from './pages/posts/EditPostPage';
+import SearchPage from './pages/SearchPage';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
         <Route path='*' element={<NotFoundPage/>}/>
         <Route element={<AuthLayout/>}>
           <Route path='/' element={<HomePage/>}/>
+          <Route path='/search/:element' element={<SearchPage/>}/>
           <Route path='/album/:id' element={<AlbumPage/>}/>
           <Route path='/artist/:id' element={<ArtistPage/>}/>
           <Route path='/post/:id' element={<PostPage/>}/>

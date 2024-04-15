@@ -5,7 +5,7 @@ import UserRowComponent from '../users/UserRowComponent';
 export default function FollowersComponent({followers}) {
     
   return (
-    followers ? followers.map((f)=>(
+    followers?.length>0 ? followers.map((f)=>(
         <UserRowComponent key={f.id} f={f}/>
     ))
     :

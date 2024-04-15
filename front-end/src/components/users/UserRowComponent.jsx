@@ -34,9 +34,9 @@ export default function UserRowComponent({f}) {
         dispatch(addFollowing(f))
     }
 
-    useEffect(()=>{
+/*     useEffect(()=>{
         console.log(f)
-    }, [f])
+    }, [f]) */
 
   return (
       <div className='row post border-2 rounded-lg m-0 mb-4 p-2 h-100 justify-between items-center'>
