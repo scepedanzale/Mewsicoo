@@ -13,11 +13,14 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         return Post::with('user')
-                ->orderBy("created_at", "asc")
-                ->get();
+                ->get()
+                ->where(function ($query) use ($request) {
+                    $query->where("username", "like", "%" . $request->input('query') . "%")
+                        ->orWhere("name", "like", "%" . $request->input('query') . "%");
+                });
     }
 
     /**

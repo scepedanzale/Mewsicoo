@@ -6,6 +6,7 @@ import { LuSettings } from "react-icons/lu";
 import { useDispatch, useSelector } from 'react-redux';
 import { server } from '../../api/axios';
 import { addFollower, addFollowing, removeFollower, removeFollowing, setOtherUserFollowings, setOtherdUsersFollowers } from '../../redux/actions/actions';
+import { descendingOrderPost } from '../../functions/functions';
 
 export default function ProfileComponent() {
     const dispatch = useDispatch();
@@ -16,6 +17,8 @@ export default function ProfileComponent() {
     const loggedUserPosts = useSelector(state => state.loggedUser.posts)
 
     const [profileUser, setProfileUser] = useState({})
+
+    const [orderPosts, setOrderPosts] = useState([])
 
     const followers = useSelector(state => username === user.username ? state.follows.loggedUserFollowers : state.follows.otherUsersFollowers)
     const followings = useSelector(state => username === user.username ? state.follows.loggedUserFollowings : state.follows.otherUsersFollowings)
@@ -55,6 +58,15 @@ export default function ProfileComponent() {
         console.log(followers)
         console.log(followings)
     }, [followers, followings, profileUser, loggedUser, user, loggedUserPosts])
+
+
+    
+    useEffect(()=>{
+        if(profileUser?.posts){
+            const orderPosts = descendingOrderPost(profileUser)
+            setOrderPosts(orderPosts)
+        }
+    },[profileUser])
 
 
     return (
@@ -121,7 +133,7 @@ export default function ProfileComponent() {
             {/* post */}
             
             <div className="container-fluid order-2 p-0 mt-3">
-                {profileUser?.posts.length>0 ? profileUser.posts.map((p)=>(
+                {orderPosts ? orderPosts.map((p)=>(
                     <SinglePostComponent key={p.id} post={p} user={profileUser}/>
                 ))
                 :
