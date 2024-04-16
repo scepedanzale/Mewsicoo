@@ -16,11 +16,7 @@ class PostController extends Controller
     public function index(Request $request)
     {
         return Post::with('user')
-                ->get()
-                ->where(function ($query) use ($request) {
-                    $query->where("username", "like", "%" . $request->input('query') . "%")
-                        ->orWhere("name", "like", "%" . $request->input('query') . "%");
-                });
+                ->get();
     }
 
     /**

@@ -32,10 +32,10 @@ export default function SinglePostComponent({post, user}) {
     })
 }, [post.track_id])
   
-useEffect(()=>{
+/* useEffect(()=>{
   console.log(post)
   console.log(track)
-}, [post, track])
+}, [post, track]) */
   
   /* cutting text */
   const nChars = 300
