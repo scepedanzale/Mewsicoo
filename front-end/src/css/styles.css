@@ -172,6 +172,7 @@ html, #root, body {
 
 body {
   user-select: none;
+  background-color: #4299B3;
 }
 
 h2 {
@@ -185,6 +186,7 @@ label {
 nav {
   z-index: 500;
   color: white;
+  background-color: #195669;
 }
 
 .noHover {
@@ -220,4 +222,8 @@ nav {
 .edit_profile_img:hover {
   filter: brightness(60%);
   z-index: 50;
+}
+
+.box {
+  background-color: white;
 }/*# sourceMappingURL=styles.css.map */

@@ -39,7 +39,7 @@ export default function UserRowComponent({f}) {
     }, [f]) */
 
   return (
-      <div className='row post border-2 rounded-lg m-0 mb-4 p-2 h-100 justify-between items-center'>
+      <div className='box row post border-2 rounded-lg m-0 mb-4 p-2 h-100 justify-between items-center'>
             <Link to={`/${f.username}`} className='col-9 flex items-center p-0'>
                 <div className="col-5 col-sm-3 p-0">
                     <div className="profile_img overflow-hidden flex justify-center items-center rounded-full h-16 w-16 sm:h-20 sm:w-20">

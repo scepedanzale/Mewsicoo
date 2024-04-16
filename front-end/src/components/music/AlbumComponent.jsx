@@ -24,8 +24,8 @@ export default function AlbumComponent() {
 
   return (
     <div className="container-fluid md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
-        <div className='container-fluid post border-2 rounded-lg m-0 mb-4 p-2 h-100 justify-between items-center'>
-            <div className="row mb-3 justify-center">
+        <div className='container-fluid post m-0 mb-4 p-2 h-100 justify-between items-center'>
+            <div className="row mb-3 py-2 box justify-center border-2 rounded-lg">
                 <div className="col-12 col-md-6 col-lg-4 flex justify-center">
                     <img src={`${album?.cover_big ? album.cover_big : {trackPlaceholder}}`} alt="" className={`rounded-md`}/>
                 </div>
@@ -43,7 +43,7 @@ export default function AlbumComponent() {
             </div>
 
             {/* tracks */}
-            <div className="container-fluid">
+            <div className="container-fluid p-0">
                 {album?.tracks && album.tracks.data.map((track)=>(
                     <TrackComponent track={track}/>
                 ))}

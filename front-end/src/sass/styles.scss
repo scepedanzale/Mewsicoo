@@ -8,7 +8,9 @@ html, #root, body{
 }
 body{
     user-select: none;
+    background-color: $main-color;
 }
+
 
 h2{
     color: $main-color !important;
@@ -20,6 +22,7 @@ label{
 nav{
     z-index: 500;
     color: white;
+    background-color: #195669;
 }
 
 .noHover{
@@ -60,3 +63,8 @@ nav{
     }
 }
 
+
+
+.box{
+    background-color: white;
+}

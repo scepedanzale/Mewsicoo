@@ -105,7 +105,7 @@ export default function SettingsComponent() {
             <Alert variant='success' className='flex items-center gap-2'  onClose={() => setShowAlert(false)} dismissible>
                 <FaCheck className='text-success text-lg'/>{alertMsg}
             </Alert>}
-        <div className="container-fluid order-1 order-sm-2 border-2 p-3 rounded-md h-100">
+        <div className="container-fluid box order-1 order-sm-2 border-2 p-3 rounded-md h-100">
             <h1 className='font-bold text-2xl mb-3'>Impostazioni account</h1>
             <div className="row mb-4">
                 <p className='font-bold text-xl text-gray-500'>Informazioni personali</p>
