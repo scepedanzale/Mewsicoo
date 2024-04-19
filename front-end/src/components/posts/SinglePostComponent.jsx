@@ -59,7 +59,7 @@ export default function SinglePostComponent({post, user}) {
 
       {/* text */}
       <div className='h-100 col-12 col-sm-6 col-lg-7 my-2'>
-          <Link to={`/${user?.username}`} className='flex items-center gap-2 mb-2 max-w-max hover:text-gray-600'>
+          <Link to={`/profile/user/${user?.id}`} className='flex items-center gap-2 mb-2 max-w-max hover:text-gray-600'>
             <div className="profile_img overflow-hidden flex justify-center items-center rounded-full h-6 w-6 hover:w-7 hover:h-7">
               <img src={user?.profile_img} alt="profile image" className='object-cover h-full w-full'/>
             </div>

@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { server } from '../../api/axios';
 import useAuthContext from '../../context/AuthContext';
 import { useDispatch } from 'react-redux';
-import { updatePost } from '../../redux/actions/actions';
+import { UPDATE_POST } from '../../redux/actions/actions';
+//import { updatePost } from '../../redux/actions/actions';
 
 export default function EditPostComponent() {
     const dispatch = useDispatch();
@@ -20,7 +21,9 @@ export default function EditPostComponent() {
         try{
             const response = await server.patch('api/post/'+post.id, {text})
             if(response.status === 200){
-                dispatch(updatePost(text, post.id))
+                post.text = text
+                console.log(post)
+                dispatch({type: UPDATE_POST, payload: post})
                 navigate(-2)
             }
         }catch(e){
@@ -28,9 +31,13 @@ export default function EditPostComponent() {
         }
     }
 
+    useEffect(()=>{
+        console.log(post)
+    }, [post])
+
   return (
     <div className="container-fluid md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
-        <div className="container-fluid order-1 order-sm-2 border-2 p-3 rounded-md">
+        <div className="box container-fluid order-1 order-sm-2 border-2 p-3 rounded-md">
             <h1 className='font-bold text-2xl mb-3'>Modifica post</h1>
             <form className='w-100'>
                 <textarea 

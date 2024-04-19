@@ -2,7 +2,8 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import {server} from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setLoggedUserFollowers, setLoggedUserFollowings, setPosts, updateBirthDay, updateEmail, updateInfo } from '../redux/actions/actions';
+import { SET_LOGGED } from '../redux/actions/actions';
+//import { setLogged, setLoggedUserFollowers, setLoggedUserFollowings, setPosts, updateBirthDay, updateEmail, updateInfo } from '../redux/actions/actions';
 
 const AuthContext = createContext();
 
@@ -21,12 +22,14 @@ export function AuthProvider({children}) {
       try {
         const { data } = await server.get('api/user-auth');
         setUser(data);
-        dispatch(updateInfo({biography: data.biography, name: data.name, profile_img: data.profile_img, username: data.username}))
+        dispatch({type: SET_LOGGED, payload: data})
+
+        /* dispatch(updateInfo({id: data.id, biography: data.biography, name: data.name, profile_img: data.profile_img, username: data.username}))
         dispatch(updateBirthDay(data.birth_day))
         dispatch(updateEmail(data.email))
         dispatch(setPosts(data.posts))
         dispatch(setLoggedUserFollowers(data.followers))
-        dispatch(setLoggedUserFollowings(data.followings))
+        dispatch(setLoggedUserFollowings(data.followings)) */
       } catch (error) {
         console.error("Error fetching user:", error);
       }
@@ -62,10 +65,11 @@ export function AuthProvider({children}) {
       server.post('/logout')
       .then(()=>{
         setUser(null)
-        dispatch(updateInfo({}))
+        dispatch({type: SET_LOGGED, payload: {}})
+        /* dispatch(updateInfo({}))
         dispatch(setPosts([]))
         dispatch(setLoggedUserFollowers([]))
-        dispatch(setLoggedUserFollowings([]))
+        dispatch(setLoggedUserFollowings([])) */
         navigate('/')
       })
     }
@@ -74,10 +78,11 @@ export function AuthProvider({children}) {
       server.delete('/api/user/'+ user.id)
       .then(()=>{
         setUser(null)
-        dispatch(updateInfo({}))
+        dispatch({type: SET_LOGGED, payload: {}})
+       /*  dispatch(updateInfo({}))
         dispatch(setPosts([]))
         dispatch(setLoggedUserFollowers([]))
-        dispatch(setLoggedUserFollowings([]))
+        dispatch(setLoggedUserFollowings([])) */
         navigate('/')
       })
     }

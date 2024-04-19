@@ -8,8 +8,8 @@ export default function SearchUsers({users}) {
     }, [users])
 
   return (
-    users && users.map((u)=>(
-        <UserRowComponent f={u}/>
+    users && users.map((user)=>(
+        <UserRowComponent user={user}/>
     ))
   )
 }

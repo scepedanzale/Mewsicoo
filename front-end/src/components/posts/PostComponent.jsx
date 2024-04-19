@@ -5,16 +5,16 @@ import { Link } from 'react-router-dom';
 import { LuPin, LuHeart, LuMessageSquare, LuPencil } from "react-icons/lu";
 import { BsThreeDotsVertical, BsTrash } from "react-icons/bs";
 import { server } from '../../api/axios';
-import { deletePost } from '../../redux/actions/actions';
 import { Collapse } from 'react-bootstrap';
 import SingleTrackComponent from '../music/SingleTrackComponent';
+import { DELETE_POST } from '../../redux/actions/actions';
 
 export default function PostComponent() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
     const {post, user, track, date, isLoading} = location.state;
-    const loggedUser = useSelector(state => state.loggedUser.info)
+    const loggedUser = useSelector(state => state.loggedUser)
     
     const [open, setOpen] = useState(false);
 
@@ -25,7 +25,7 @@ export default function PostComponent() {
 
     const handleDeletePost = () => {
         server.delete('/api/post/'+post.id)
-        dispatch(deletePost(post))
+        dispatch({type: DELETE_POST, payload: post})
         navigate(-1)
     }
 
@@ -42,7 +42,7 @@ export default function PostComponent() {
                     </div>
                     <div className="col-7 p-0 relative">
                         {/* post settings */}
-                        {user?.username === loggedUser.username &&
+                        {user?.username === loggedUser?.username &&
                         <>
                             <div className='flex justify-end'>
                                 <div type="button"
@@ -84,14 +84,14 @@ export default function PostComponent() {
                         }
                         <p className='font-bold text-lg sm:text-xl md:text-2xl'>{track?.title}</p>
                         <div className='mt-1 text-sm sm:text-base md:text-xl'>
-                            <p className='truncate'>{track?.artist?.name}</p>
-                            <p className='truncate'>{track?.album?.title}</p>
+                            <p className='truncate'><Link to={'/artist/'+track?.artist?.id}>{track?.artist?.name}</Link></p>
+                            <p className='truncate'><Link to={'/artist/'+track?.album?.id}>{track?.album?.title}</Link></p>
                         </div>
                     </div>
                 </div>
                 {/* user e text*/}
                 <div className="row my-3">
-                    <Link to={`/${user?.username}`} className='flex items-center gap-2 mb-2 max-w-max hover:text-gray-600'>
+                    <Link to={`/profile/user/${user?.id}`} className='flex items-center gap-2 mb-2 max-w-max hover:text-gray-600'>
                         <div className="profile_img overflow-hidden flex justify-center items-center rounded-full h-6 w-6 hover:w-7 hover:h-7">
                         <img src={user?.profile_img} alt="profile image" className='object-cover h-full w-full'/>
                         </div>

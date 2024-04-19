@@ -5,62 +5,59 @@ import SinglePostComponent from '../posts/SinglePostComponent';
 import { LuSettings } from "react-icons/lu";
 import { useDispatch, useSelector } from 'react-redux';
 import { server } from '../../api/axios';
-import { addFollower, addFollowing, removeFollower, removeFollowing, setOtherUserFollowings, setOtherdUsersFollowers } from '../../redux/actions/actions';
 import { descendingOrderPost } from '../../functions/functions';
+import { ADD_FOLLOWER, ADD_FOLLOWING, REMOVE_FOLLOWER, REMOVE_FOLLOWING, SET_OTHER_USER } from '../../redux/actions/actions';
 
 export default function ProfileComponent() {
     const dispatch = useDispatch();
     
-    const {username} = useParams()
-    const {user} = useAuthContext();
-    const loggedUser = useSelector(state => state.loggedUser.info)
-    const loggedUserPosts = useSelector(state => state.loggedUser.posts)
+    const {id} = useParams()
 
-    const [profileUser, setProfileUser] = useState({})
-
+    const loggedUser = useSelector(state => state.loggedUser) // utente loggato
+    const otherUser = useSelector(state => state.otherUser) // altro utente
+    
+    const [profileUser, setProfileUser] = useState({}) // utente di cui vedere il profilo
+    
     const [orderPosts, setOrderPosts] = useState([])
 
-    const followers = useSelector(state => username === user.username ? state.follows.loggedUserFollowers : state.follows.otherUsersFollowers)
-    const followings = useSelector(state => username === user.username ? state.follows.loggedUserFollowings : state.follows.otherUsersFollowings)
-
     useEffect(()=>{
-        if(username === user.username){
-            setProfileUser(prevState => ({
-                ...loggedUser,
-                posts: loggedUserPosts
-            }));
-        }else{
-            server(`api/user/${username}`)
+        if(id != loggedUser.id){
+            server(`api/user/${id}`)
             .then(response => {
-                setProfileUser(response.data[0])
-                dispatch(setOtherdUsersFollowers(response.data[0].followers))
-                dispatch(setOtherUserFollowings(response.data[0].followings))
+                dispatch({type: SET_OTHER_USER, payload: response.data[0]})
+                console.log(response.data)
             })
         }
-    }, [username])
+    }, [id])
+
+    useEffect(()=>{
+        if(id == loggedUser.id){ // se username è uguale a utente loggato
+            setProfileUser(loggedUser);   // setto utente loggato
+        }else{
+            setProfileUser(otherUser); 
+        }
+    }, [id, otherUser, loggedUser])
     
     const unfollow = () => {
         server('api/user/unfollow/'+profileUser.id)
-        dispatch(removeFollower(user))
-        dispatch(removeFollowing(profileUser))
+        dispatch({type: REMOVE_FOLLOWING, payload: profileUser})    // rimuovo un seguito a me
+        dispatch({type: REMOVE_FOLLOWER, payload: loggedUser})  // rimuovo un follower altro utente
     }
     const follow = () => {
         server('api/user/follow/'+profileUser.id)
-        dispatch(addFollower(user))
-        dispatch(addFollowing(profileUser))
+        dispatch({type: ADD_FOLLOWING, payload: profileUser})  // aggiungo a me un seguito
+        dispatch({type: ADD_FOLLOWER, payload: loggedUser})  //aggiungo un follower altro utente
     }
     
     useEffect(()=>{
-        console.log(loggedUser)
-        console.log(loggedUserPosts)
         console.log(profileUser)
-        console.log(user)
-        console.log(followers)
-        console.log(followings)
-    }, [followers, followings, profileUser, loggedUser, user, loggedUserPosts])
+        console.log(loggedUser.id)
+        console.log(otherUser)
+        console.log(id)
+    }, [profileUser, id, loggedUser, otherUser])
 
 
-    
+    // ordine discentente posts
     useEffect(()=>{
         if(profileUser?.posts){
             const orderPosts = descendingOrderPost(profileUser)
@@ -85,24 +82,26 @@ export default function ProfileComponent() {
                         <p className='font-bold text-gray-400'>{profileUser?.username}</p>
                         <p>{profileUser?.name}</p>
                         {profileUser?.username === loggedUser.username ?
-                            <Link to={'/account/edit'} className='main-color-btn text-white btn btn-sm mt-3 w-1/3'>modifica </Link>
+                        <>
+                            <Link to={'/account/edit'} className='main-color-btn text-white btn btn-sm mt-3 w-2/3'>modifica </Link>
+                            <Link to={'/account/settings'} className='absolute top-0 right-2 max-w-max text-gray-500 text-2xl md:text-3xl hover:text-gray-700'>
+                                <LuSettings />
+                            </Link>
+                        </>
                             :
                             <>
-                                {followers?.some(f => f.username === loggedUser.username) ?
+                                {profileUser?.followers?.some(f => f.username === loggedUser.username) ?
                                    <button className='btn btn-sm bg-gray-400 hover:bg-gray-500 text-white mt-3 w-2/3' onClick={unfollow}>
-                                        rimuovi
+                                        unfollow
                                     </button>
                                     : 
                                     <button className='btn btn-sm main-color-btn mt-3 w-2/3' onClick={follow}>
-                                        segui
+                                        follow
                                     </button>
                                 }
                             </>
                         }
                     </div>
-                    <Link to={'/account/settings'} className='absolute top-0 right-0 max-w-max text-gray-500 text-2xl md:text-3xl hover:text-gray-700'>
-                        <LuSettings />
-                    </Link>
                 </div>
 
                 {/* biography */}
@@ -115,13 +114,13 @@ export default function ProfileComponent() {
                 {/* follow */}
                 <div className="row my-2 mt-4">
                     <div className="col-4 flex justify-center">
-                        <Link to={`/${profileUser.username}/followers`} className='main-color-btn text-white btn btn-sm w-100'>
-                            <span className='font-bold'>{followers?.length}</span> followers 
+                        <Link to={`/user/${profileUser.id}/followers`} className='main-color-btn text-white btn btn-sm w-100'>
+                            <span className='font-bold'>{profileUser?.followers?.length}</span> followers 
                         </Link>
                     </div>
                     <div className="col-4 flex justify-center">
-                        <Link to={`/${profileUser.username}/followings`} className='main-color-btn text-white btn btn-sm w-100'>
-                            <span className='font-bold'>{followings?.length}</span> seguiti 
+                        <Link to={`/user/${profileUser.id}/followings`} className='main-color-btn text-white btn btn-sm w-100'>
+                            <span className='font-bold'>{profileUser?.followings?.length}</span> seguiti 
                         </Link>
                     </div>
                     <div className="col-4 flex justify-center">
@@ -131,7 +130,6 @@ export default function ProfileComponent() {
             </div>
 
             {/* post */}
-            
             <div className="container-fluid order-2 p-0 mt-3">
                 {orderPosts ? orderPosts.map((p)=>(
                     <SinglePostComponent key={p.id} post={p} user={profileUser}/>
@@ -140,7 +138,6 @@ export default function ProfileComponent() {
                 <p className='text-center mt-36 text-xl text-gray-500'>Non ci sono post</p>
                 }
             </div>
-            
         </div>
   )
 }

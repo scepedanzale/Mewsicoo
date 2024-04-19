@@ -5,9 +5,11 @@ import { IoSearchOutline } from "react-icons/io5";
 import FollowersComponent from './FollowersComponent'
 import FollowingsComponent from './FollowingsComponent'
 import useAuthContext from '../../context/AuthContext'
+import { useSelector } from 'react-redux';
 
 export default function FollowsComponent() {
-    const {username, follows} = useParams()
+    const {id, follows} = useParams()
+    const loggedUser = useSelector(state => state.loggedUser)
 
     const [profileUser, setProfileUser] = useState({})
     const {user} = useAuthContext()
@@ -18,11 +20,11 @@ export default function FollowsComponent() {
     const [searchParam, setSearchParam] = useState('')
 
     useEffect(()=>{
-        server(`api/user/${username}`)
+        server(`api/user/${id}`)
         .then(response => {
             setProfileUser(response.data[0])
         })
-    }, [username])
+    }, [id])
     
 
     useEffect(()=>{
@@ -68,12 +70,12 @@ export default function FollowsComponent() {
                 </div>
                 <div className="row p-2">
                     <div className="col-6 flex justify-center">
-                        <Link to={`/${username}/followers`} className='main-color-btn text-white btn btn-sm w-100'>
+                        <Link to={`/user/${id}/followers`} className='main-color-btn text-white btn btn-sm w-100'>
                             {/*  <span className='font-bold'>{user?.followers.length}</span> */} Followers 
                         </Link>
                     </div>
                     <div className="col-6 flex justify-center">
-                        <Link to={`/${username}/followings`} className='main-color-btn text-white btn btn-sm w-100'>
+                        <Link to={`/user/${id}/followings`} className='main-color-btn text-white btn btn-sm w-100'>
                             {/* <span className='font-bold'>{user?.followings.length}</span> */} Followings 
                         </Link>
                     </div>
@@ -82,7 +84,7 @@ export default function FollowsComponent() {
             <div className="container-fluid py-5 ">
                 {follows === 'followers' && 
                 <>
-                    {profileUser.username === user.username ?
+                    {profileUser.username === loggedUser.username ?
                     <h1 className='font-bold text-white text-2xl mb-3'>I tuoi followers</h1>
                     :
                     <h1 className='font-bold text-white text-2xl mb-3'>I followers di {profileUser.username}</h1>
@@ -92,7 +94,7 @@ export default function FollowsComponent() {
                 }
                 {follows === 'followings' && 
                 <>
-                    {profileUser.username === user.username ?
+                    {profileUser.username === loggedUser.username ?
                     <h1 className='font-bold text-white text-2xl mb-3'>I tuoi seguiti</h1>
                     :
                     <h1 className='font-bold text-white text-2xl mb-3'>I seguiti di {profileUser.username}</h1>

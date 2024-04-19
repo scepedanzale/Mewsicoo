@@ -24,13 +24,13 @@ export default function ForgotPasswordPage() {
       }
 
     return (
-        <div className="container-fluid m-10">
+        <div className="container-fluid ">
             <div className="sm:px-20 md:px-40 lg:px-64 xl:px-96">
                 <div className='w-full text-center my-20'>
                     <h2 className="font-semibold text-6xl">Mewsikoo</h2>
                 </div>
                 
-                <div className='border-2 rounded-xl p-6'>
+                <div className='box border-2 rounded-xl p-6'>
                     <div className='w-full mb-8 text-center'>
                         <p className='main-color text-lg mb-5'>Hai dimenticato la tua password?</p>
                         <span className='text-gray-600'>Per recuperare la password inserisci la tua email e ti invieremo il link per accedere al tuo account.</span>

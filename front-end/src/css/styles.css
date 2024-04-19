@@ -172,11 +172,11 @@ html, #root, body {
 
 body {
   user-select: none;
-  background-color: #4299B3;
+  background-color: rgb(248, 202, 18);
 }
 
 h2 {
-  color: #4299B3 !important;
+  color: white !important;
 }
 
 label {
@@ -186,7 +186,7 @@ label {
 nav {
   z-index: 500;
   color: white;
-  background-color: #195669;
+  background-color: rgba(0, 0, 0, 0.6235294118);
 }
 
 .noHover {
@@ -226,4 +226,5 @@ nav {
 
 .box {
   background-color: white;
+  box-shadow: 0.2em 0.2em 3em 0.2em rgba(0, 0, 0, 0.501);
 }/*# sourceMappingURL=styles.css.map */

@@ -4,23 +4,22 @@ import { server } from '../../api/axios';
 import { Alert } from 'react-bootstrap';
 import { FaCheck } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateBirthDay, updateEmail } from '../../redux/actions/actions';
+import { UPDATE_BIRTHDAY, UPDATE_EMAIL } from '../../redux/actions/actions';
 
 export default function SettingsComponent() {
 
     const dispatch = useDispatch()
 
     const {user, csrf, logout, destroy} = useAuthContext();
-    const loggedBirthDay = useSelector(state => state.loggedUser.birthDay)
-    const loggedEmail = useSelector(state => state.loggedUser.email)
+    const loggedUser = useSelector(state => state.loggedUser)
 
     const [errorAge, setErrorAge] = useState('')
     const [errors, setErrors] = useState([])
     const [alertMsg, setAlertMsg] = useState('')
     const [showAlert, setShowAlert] = useState(false)
 
-    const [birth_day, setBirth_day] = useState(loggedBirthDay)
-    const [email, setEmail] = useState(loggedEmail)
+    const [birth_day, setBirth_day] = useState(loggedUser.birth_day)
+    const [email, setEmail] = useState(loggedUser.email)
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [newPassword_confirmation, setNewPassword_confirmation] = useState('')
@@ -61,14 +60,14 @@ export default function SettingsComponent() {
         }
     }
     /* modifica data di nascita */
-    const handleBirthDay = async (event) => {
-        event.preventDefault();
+    const handleBirthDay = async (e) => {
+        e.preventDefault();
         setErrors([]);
         await csrf()
         try{
             const response = await server.patch('api/user/'+user.id, {birth_day})
             if(response.status === 200){
-                dispatch(updateBirthDay(birth_day))
+                dispatch({type: UPDATE_BIRTHDAY, payload: birth_day})
                 setAlertMsg('Data di nascita aggiornata!')
                 setShowAlert(true)
             }
@@ -76,15 +75,15 @@ export default function SettingsComponent() {
             console.error(e)
         }
       }
-      /* modifica email */
-    const handleEmail = async (event) => {
-        event.preventDefault();
+    /* modifica email */
+    const handleEmail = async (e) => {
+        e.preventDefault();
         setErrors([]);
         await csrf()
         try{
             const response = await server.patch('api/user/'+user.id, {email})
             if(response.status === 200){
-                dispatch(updateEmail(email))
+                dispatch({type: UPDATE_EMAIL, payload: email})
                 setAlertMsg('Email aggiornata!')
                 setShowAlert(true)
             }
@@ -194,7 +193,7 @@ export default function SettingsComponent() {
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form onSubmit={handlePassword}>
+                                    <form onSubmit={(e)=>handlePassword(e)}>
 
                                         {/* old password */}
                                         <div className="mb-4">

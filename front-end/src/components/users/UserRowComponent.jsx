@@ -1,62 +1,52 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { server } from '../../api/axios'
-import { useDispatch } from 'react-redux';
-import { addFollower, addFollowing, removeFollower, removeFollowing } from '../../redux/actions/actions';
+import { useDispatch, useSelector } from 'react-redux';
 import useAuthContext from '../../context/AuthContext';
+import { ADD_FOLLOWING, REMOVE_FOLLOWING } from '../../redux/actions/actions';
 
-export default function UserRowComponent({f}) {
+export default function UserRowComponent({user}) {
     const dispatch = useDispatch();
     
-    const {user} = useAuthContext();
-
-    const [isFollowing, setIsFollowing] = useState(null)
-
-    useEffect(()=>{
-        server('api/user/is_following/'+f.id)
-        .then(response => {
-            setIsFollowing(response.data.is_following)
-        })
-        .catch(e => console.error(e))
-    }, [f])
+    const loggedUser = useSelector(state => state.loggedUser)
 
     const unfollow = () => {
-        server('api/user/unfollow/'+f.id)
-        setIsFollowing(false)
-        dispatch(removeFollower(user))
-        dispatch(removeFollowing(f))
+        server('api/user/unfollow/'+user.id)
+        dispatch({type: REMOVE_FOLLOWING, payload: user})    // rimuovo un seguito a me
     }
 
     const follow = () => {
-        server('api/user/follow/'+f.id)
-        setIsFollowing(true)
-        dispatch(addFollower(user))
-        dispatch(addFollowing(f))
+        server('api/user/follow/'+user.id)
+        dispatch({type: ADD_FOLLOWING, payload: user})  // aggiungo a me un seguito
     }
 
-/*     useEffect(()=>{
-        console.log(f)
-    }, [f]) */
+   useEffect(()=>{
+        console.log(user)
+    }, [user]) 
 
   return (
       <div className='box row post border-2 rounded-lg m-0 mb-4 p-2 h-100 justify-between items-center'>
-            <Link to={`/${f.username}`} className='col-9 flex items-center p-0'>
+            <Link to={`/profile/user/${user?.id}`} className='col-9 flex items-center p-0'>
                 <div className="col-5 col-sm-3 p-0">
                     <div className="profile_img overflow-hidden flex justify-center items-center rounded-full h-16 w-16 sm:h-20 sm:w-20">
-                        <img src={f.profile_img} alt="profile image" className='object-cover h-full w-full'/>
+                        <img src={user?.profile_img} alt="profile image" className='object-cover h-full w-full'/>
                     </div>
                 </div>
                 <div className="col-7 p-0 px-2">
-                    <p className='truncate font-bold'>{f.username}</p>
-                    <p className='truncate text-sm'>{f.name}</p>
+                    <p className='truncate font-bold'>{user?.username}</p>
+                    <p className='truncate text-sm'>{user?.name}</p>
                 </div>
             </Link>
             <div className="col-3 p-0 text-end">
-                {f.username !== user.username ?
-                isFollowing ? 
-                    <button className='btn btn-sm bg-gray-400 hover:bg-gray-500 text-white w-100' onClick={unfollow}>unfollow</button>
-                    : 
-                    <button className='btn btn-sm main-color-btn w-100' onClick={follow}>follow</button>
+                {user?.username !== loggedUser?.username ?
+                    loggedUser?.followings.some(f => f.username === user?.username) ?
+                        <button className='btn btn-sm bg-gray-400 hover:bg-gray-500 text-white mt-3 w-2/3' onClick={unfollow}>
+                            unfollow
+                        </button>
+                        : 
+                        <button className='btn btn-sm main-color-btn mt-3 w-2/3' onClick={follow}>
+                            follow
+                        </button>
                 :
                 ''
                 }

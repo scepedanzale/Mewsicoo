@@ -51,7 +51,8 @@ class UserController extends Controller
                 ->with('followings')
                 ->where(function ($query) use ($request) {
                     $query->where("username", "like", "%" . $request->input('query') . "%")
-                        ->orWhere("name", "like", "%" . $request->input('query') . "%");
+                        ->orWhere("name", "like", "%" . $request->input('query') . "%")
+                        ->orWhere("id", $request->input('id'));
                 });
 
 
@@ -83,12 +84,12 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $username)
+    public function show(string $id)
     {
         $users = User::with('followers')
         ->with('posts')
         ->with('followings')
-        ->where("username", "=", $username)
+        ->where("id", "=", $id)
         ->get();
 
         $authenticatedUser = Auth::user();

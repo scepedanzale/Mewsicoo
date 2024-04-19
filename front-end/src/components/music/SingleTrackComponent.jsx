@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import { GiDeathSkull } from "react-icons/gi";
 import { FaPlay, FaPause } from "react-icons/fa";
-import { apiKey, urlTrack } from '../../api/config'
-import { setTrackPlaying } from '../../redux/actions/actions';
-import { Link } from 'react-router-dom';
+import { SET_TRACK_PLAYING } from '../../redux/actions/actions';
 import trackPlaceholder from '../../assets/track-placeholder.jpeg'
 
 export default function SingleTrackComponent({track, isLoading, post_id}) {
@@ -33,7 +30,7 @@ export default function SingleTrackComponent({track, isLoading, post_id}) {
     // btn and action control
     const player = () => {
         if(!play){
-            dispatch(setTrackPlaying(track.id))
+            dispatch({type: SET_TRACK_PLAYING, payload: track.id})
             setPlay(true)
         }else{
             setPlay(false)
@@ -71,7 +68,7 @@ export default function SingleTrackComponent({track, isLoading, post_id}) {
         !isLoading ?
             track ?
             <>
-                <div className='order-2 order-sm-1 flex flex-col justify-center items-center relative rounded-md overflow-hidden'>
+                <div className='shadow-lg order-2 order-sm-1 flex flex-col justify-center items-center relative rounded-md overflow-hidden'>
                     {isLoading ?
                         <div className="loading flex absolute">
                             <div className="dot dot-1">.</div>

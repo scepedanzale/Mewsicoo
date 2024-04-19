@@ -5,15 +5,16 @@ import { FiEdit } from "react-icons/fi";
 import { FaCheck } from "react-icons/fa";
 import { server } from '../../api/axios'
 import useAuthContext from '../../context/AuthContext'
-import { updateInfo } from '../../redux/actions/actions';
+//import { updateInfo } from '../../redux/actions/actions';
 import { Alert } from 'react-bootstrap';
+import { UPDATE_BIOGRAPHY, UPDATE_NAME, UPDATE_PROFILE_IMG, UPDATE_USERNAME } from '../../redux/actions/actions';
 
 export default function EditProfileComponent() {
 
     const dispatch = useDispatch();
 
     const {user, csrf} = useAuthContext()
-    const loggedUser = useSelector(state => state.loggedUser.info)
+    const loggedUser = useSelector(state => state.loggedUser)
 
     const [errors, setErrors] = useState([])
     const [alert, setAlert] = useState(false)
@@ -29,9 +30,13 @@ export default function EditProfileComponent() {
       const data = {name, username, biography, profile_img}
       await csrf()
       try{
-          const response = await server.patch('api/user/'+user.id, data)
+          const response = await server.patch('api/user/'+loggedUser.id, data)
           if(response.status === 200){
-              dispatch(updateInfo(data))
+              dispatch({type: UPDATE_NAME, payload: data.name})
+              dispatch({type: UPDATE_USERNAME, payload: data.username})
+              dispatch({type: UPDATE_BIOGRAPHY, payload: data.biography})
+              dispatch({type: UPDATE_PROFILE_IMG, payload: data.profile_img})
+              console.log(data.name)
               setAlert(true)
           }
         }catch(e){

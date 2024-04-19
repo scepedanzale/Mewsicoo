@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { urlAlbum } from '../../api/config'
 import trackPlaceholder from '../../assets/track-placeholder.jpeg'
 import { albumDuration, formattedDate } from '../../functions/functions'
@@ -32,7 +32,7 @@ export default function AlbumComponent() {
                 <div className="col m-3">
                     <div className='mb-3'>
                         <h1 className='text-2xl font-bold'>{album?.title}</h1>
-                        <p className='text-gray-500 text-xl'>{album?.artist?.name}</p>
+                        <p className='text-gray-500 text-xl'><Link to={'/artist/'+album?.artist?.id}>{album?.artist?.name}</Link></p>
                         <p className='text-gray-500'>{formattedDate(album?.release_date)}</p>
                     </div>
                     <div className='text-gray-400 text-sm'>

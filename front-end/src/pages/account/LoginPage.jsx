@@ -23,7 +23,7 @@ export default function LoginPage() {
           <h2 className="font-semibold text-6xl text-gray-900">Mewsikoo</h2>
         </div>
 
-        <div className='border-2 rounded-xl p-6'>
+        <div className='box border-2 rounded-xl p-6'>
           <form onSubmit={handleLogin} className='px-2'>
             {/* email */}
             <div className="mb-4">

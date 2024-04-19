@@ -17,6 +17,7 @@ import SettingsPage from './pages/users/SettingsPage';
 import PostPage from './pages/posts/PostPage';
 import EditPostPage from './pages/posts/EditPostPage';
 import SearchPage from './pages/SearchPage';
+import NewPostPage from './pages/posts/NewPostPage';
 
 function App() {
 
@@ -30,9 +31,10 @@ function App() {
           <Route path='/album/:id' element={<AlbumPage/>}/>
           <Route path='/artist/:id' element={<ArtistPage/>}/>
           <Route path='/post/:id' element={<PostPage/>}/>
+          <Route path='/new/post' element={<NewPostPage/>}/>
           <Route path='/edit/post/:id' element={<EditPostPage/>}/>
-          <Route path='/:username' element={<ProfilePage/>}/>
-          <Route path='/:username/:follows' element={<FollowsPage/>}/>
+          <Route path='/profile/user/:id' element={<ProfilePage/>}/>
+          <Route path='/user/:id/:follows' element={<FollowsPage/>}/>
           <Route path='/account/edit' element={<EditProfilePage/>}/>
           <Route path='account/settings' element={<SettingsPage/>}/>
         </Route>
