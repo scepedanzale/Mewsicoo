@@ -53,7 +53,7 @@ export default function EditProfileComponent() {
 
   return (
     <div className="container-fluid md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
-        <div className="container-fluid box order-1 order-sm-2 border-2 p-3 rounded-md">
+        <div className="container-fluid shadow-lg box order-1 order-sm-2 border-2 p-3 rounded-md">
             {alert && 
             <Alert variant='success' className='flex items-center gap-2'  onClose={() => setAlert(false)} dismissible>
                 <FaCheck className='text-success text-lg'/>Profilo modificato

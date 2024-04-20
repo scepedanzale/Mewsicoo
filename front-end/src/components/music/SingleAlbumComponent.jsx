@@ -13,7 +13,7 @@ export default function SingleAlbumComponent({result}) {
 
   return (
     result &&
-    <div className="row box py-2 mb-3 items-center rounded-lg">
+    <div className="row box shadow-lg py-2 mb-3 items-center rounded-lg">
       <div className="col-4 col-sm-3 col-md-2">
       <img src={`${result?.album?.cover_big ? result?.album?.cover_big : {trackPlaceholder}}`} alt="" className={`cover rounded-md`}/>
       </div>

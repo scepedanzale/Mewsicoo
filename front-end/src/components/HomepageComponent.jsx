@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import SinglePostComponent from './posts/SinglePostComponent'
 import { descendingOrderPost } from '../functions/functions'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 export default function HomepageComponent() {
 
@@ -27,9 +28,12 @@ export default function HomepageComponent() {
       {postLoading && 
         <div className="loader mx-auto mb-5"></div>
       }
-      {posts && posts.map((p)=>(
+      {posts.length>0 ? posts.map((p)=>(
         <SinglePostComponent key={p.post.id} post={p.post} user={p.user}/>
-      ))}
+      ))
+        :
+          <p>Non ci sono post da visualizzare...</p>
+      }
     </div>
   )
 }

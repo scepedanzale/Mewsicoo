@@ -47,7 +47,7 @@ export default function SinglePostComponent({post, user}) {
   }
 
   return (
-    <div className='box row post border-2 rounded-lg m-0 mb-4 py-2 h-100'>
+    <div className='box row post shadow-lg border-2 rounded-lg m-0 mb-4 py-2 h-100'>
       <div className='h-100 col-12 col-sm-4 col-lg-3 flex flex-col justify-center relative rounded-md'>
         <SingleTrackComponent track={track} isLoading={isLoading} post_id={post.id}/>
         {/* artist - album */}
