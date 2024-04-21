@@ -2,29 +2,33 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { LuPencil } from "react-icons/lu";
-import { PiChatBold, PiHeartBold, PiHeartFill, PiPushPinBold } from "react-icons/pi";
+import { LuPencil, LuSend } from "react-icons/lu";
+import { PiChatBold, PiChatFill, PiHeartBold, PiHeartFill, PiPushPinBold } from "react-icons/pi";
 import { BsThreeDotsVertical, BsTrash } from "react-icons/bs";
 import { server } from '../../api/axios';
 import { Collapse } from 'react-bootstrap';
 import SingleTrackComponent from '../music/SingleTrackComponent';
-import { DELETE_POST } from '../../redux/actions/actions';
+import { ADD_COMMENT, DELETE_COMMENT, DELETE_POST, SET_COMMENTS } from '../../redux/actions/actions';
 import useAuthContext from '../../context/AuthContext';
+import { IoSearchOutline } from 'react-icons/io5';
+import { formattedDate } from '../../functions/functions';
 
 export default function PostComponent() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const location = useLocation();
     const {csrf} = useAuthContext()
-    const {post, like, user, track, date, isLoading} = location.state;
+    const location = useLocation();
+    const {post, user, track, date, isLoading} = location.state;
     const loggedUser = useSelector(state => state.loggedUser)
     
     const [open, setOpen] = useState(false);
 
-    const [likeState, setLikeState] = useState(like);
+    const [commentText, setCommentText] = useState('')
+    const comments = useSelector(state => state.comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)))
+    const [like, setLike] = useState(false)
 
     useEffect(()=>{
-        console.log(post.text)
+        console.log(post)
         console.log(date)
     }, [post, date])
 
@@ -34,33 +38,75 @@ export default function PostComponent() {
         navigate(-1)
     }
 
-    /* like post */
-    const likePost = async () => {
-        await csrf()
-        try{
-          if (like) {
-            const response = await server.post('/api/like/delete', {post_id: post.id})
-            if(response){
-              console.log('ciao')
-            }
-          }else{
-            await server.post('/api/like', {post_id: post.id})
-          }
-          setLikeState(!like)
-        }catch(err){
-          console.log(err)
+   /* like */
+
+  const likePost = async () => {
+    await csrf()
+    try{
+      if (like) {
+        const response = await server.post('/api/like/delete', {post_id: post.id})
+        if(response){
+          setLike(!like)
+        }
+      }else{
+        const response = await server.post('/api/like', {post_id: post.id})
+        if(response){
+          setLike(!like)
         }
       }
+    }catch(err){
+      console.log(err)
+    }
+  }
 
-  /* liked */
   useEffect(()=>{
-    loggedUser?.likes_user?.forEach(like => {
-      if(like.pivot.post_id == post.id){
-        setLikeState(true)
-        console.log(post)
+    post?.likes?.forEach(like => {
+      if(like.user_id == loggedUser.id){
+        setLike(true)
       }
     })
   }, [post])
+
+
+  /* comments */
+
+  const handleSubmit = async () => {
+    await csrf()
+    try{
+        const response = await server.post('/api/comment', {post_id: post.id, comment: commentText})
+        if(response.status === 200){
+            dispatch({type: ADD_COMMENT, payload: {...response.data, user: loggedUser}})
+            console.log(response)
+            setCommentText('')
+        }
+    }catch(err){
+        console.log(err)
+    }
+  }
+
+  const handleDeleteComment = async (c) => {
+    try{
+        const response = await server.delete('/api/comment/'+c.id)
+        dispatch({type: DELETE_COMMENT, payload: c})
+    }catch(err){
+        console.log(err)
+    }
+  }
+
+  useEffect(()=>{
+    if (post.comments) {
+        dispatch({ type: SET_COMMENTS, payload: post.comments });
+    }
+    else{
+        dispatch({ type: SET_COMMENTS, payload: [] });
+    }
+  }, [post])
+
+  useEffect(()=>{
+    console.log(comments)
+  }, [comments])
+
+
 
   return (
     <div className="container-fluid md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
@@ -102,7 +148,7 @@ export default function PostComponent() {
                                                             <div class="text-center">
                                                                 <h1 class="modal-title fs-5 mb-4" id="exampleModalLabel">Vuoi eliminare questo post?</h1>
                                                                 <button type="button" class="btn btn-secondary w-25 mr-3" data-bs-dismiss="modal">Annulla</button>
-                                                                <button type="button" class="btn bg-red-700 hover:bg-red-800 text-white w-25" data-bs-dismiss="modal" aria-label="Close" onClick={handleDeletePost}>Elimina</button>
+                                                                <button type="button" class="btn bg-red-700 hover:bg-red-800 text-white w-25" data-bs-dismiss="modal" aria-label="Close" onClick={handleDeleteComment}>Elimina</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -123,8 +169,8 @@ export default function PostComponent() {
                 </div>
                 {/* user e text*/}
                 <div className="row my-3">
-                    <Link to={`/profile/user/${user?.id}`} className='flex items-center gap-2 mb-2 max-w-max hover:text-gray-600'>
-                        <div className="profile_img overflow-hidden flex justify-center items-center rounded-full h-6 w-6 hover:w-7 hover:h-7">
+                    <Link to={`/profile/user/${user?.id}`} className='flex items-center gap-2 mb-2 max-w-max hover:text-gray-400'>
+                        <div className="profile_img overflow-hidden flex justify-center items-center rounded-full h-6 w-6">
                         <img src={user?.profile_img} alt="profile image" className='object-cover h-full w-full'/>
                         </div>
                         <p className='font-semibold'>{user?.username}</p>
@@ -139,24 +185,104 @@ export default function PostComponent() {
 
                 {/* icons */}
                 <div className="row p-0 flex justify-between items-center text-center">
-                    <div className="col-4">
-                        <button className={`btn text-2xl hover:text-red-800 ${likeState && 'text-red-800'}`} onClick={likePost}>
-                            {like ?
-                            <PiHeartFill />
-                            :
-                            <PiHeartBold />
-                            }
+                    {/* like */}
+                    {user?.id != loggedUser?.id &&
+                    <div className="col flex justify-center">
+                        {like ?
+                        <button className='btn text-2xl hover:text-gray-700 text-red-800' onClick={likePost}>
+                        <PiHeartFill />
                         </button>
+                        :
+                        <button className='btn text-2xl hover:text-red-800' onClick={likePost}>
+                        <PiHeartBold />
+                        </button>            
+                        }
                     </div>
-                    <div className="col-4">
-                        <button className='btn text-2xl hover:text-yellow-500'><PiChatBold /></button>
+                    }
+                    <div className="col flex justify-center">
+                            {post?.comments?.some(c => c.user_id == loggedUser.id) ?
+                            <button className='btn text-2xl text-yellow-500 hover:text-gray-500'>
+                                <PiChatFill />
+                            </button>
+                            :
+                            <button className='btn text-2xl hover:text-yellow-500'>
+                                <PiChatBold />
+                            </button>
+                            }
                     </div>
-                    <div className="col-4">
+                    <div className="col flex justify-center">
                         <button className='btn text-2xl hover:text-sky-600'><PiPushPinBold /></button>
                     </div>
                 </div>
             </>
             }
+        </div>
+
+        {/* comments */}
+        <div className="container-fluid shadow-lg box rounded-lg my-3 p-2">
+            <div className="row">
+                <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className='flex items-center gap-3 relative'>
+                    <input 
+                        type="text"
+                        id="search"
+                        name="search"
+                        placeholder='Scrivi un commento...'
+                        value={commentText}
+                        onChange={(e)=> setCommentText(e.target.value)}
+                        className='form-control my-3 rounded-full'
+                        autofocus
+                    />
+                    <button 
+                        type='button' 
+                        onClick={(e) => { e.preventDefault(); handleSubmit(); }}
+                        className='btn absolute right-5 text-2xl text-gray-500 hover:text-gray-600'>
+                            <LuSend />
+                    </button>
+                </form>
+            </div>
+            <div className="container-fluid">
+                {comments?.length>0 ?
+                comments.map((c) => (
+                    <div key={c.id} className="row my-2 rounded-md p-2 bg-gray-100 items-center">
+                        <div className='col'>
+                            <Link to={`/profile/user/${c.user?.id}`} className='flex items-center gap-2 mb-2 max-w-max hover:text-gray-400'>
+                                <div className="profile_img overflow-hidden flex justify-center items-center rounded-full h-6 w-6">
+                                <img src={c.user?.profile_img} alt="profile image" className='object-cover h-full w-full'/>
+                                </div>
+                                <p className='font-semibold text-sm'>{c.user?.username}</p>
+                            </Link>
+                            <p>{c.comment}</p>
+                            <p className="col text-gray-400 text-sm">{formattedDate(c.created_at)}</p>
+                        </div>
+                        <div className="col-2">
+                            {c.user_id == loggedUser.id &&
+                            <>
+                                <button data-bs-toggle="modal" data-bs-target="#delete_comment_modal" className='text-lg hover:text-red-700'>
+                                    <BsTrash />
+                                </button>
+                                <div class="modal fade" id="delete_comment_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content p-3">
+                                            <div class="text-end">
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="text-center">
+                                                <h1 class="modal-title fs-5 mb-4" id="exampleModalLabel">Vuoi eliminare questo commento?</h1>
+                                                <button type="button" class="btn btn-secondary w-25 mr-3" data-bs-dismiss="modal">Annulla</button>
+                                                <button type="button" class="btn bg-red-700 hover:bg-red-800 text-white w-25" data-bs-dismiss="modal" aria-label="Close" onClick={()=>handleDeleteComment(c)}>Elimina</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                            }
+                        </div>
+                    </div>
+                ))
+                :
+                <p>Non ci sono commenti</p>
+                }
+            </div>
         </div>
     </div>
   )

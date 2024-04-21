@@ -15,7 +15,9 @@ class UserController extends Controller
      */
     public function user_auth()
     {
-        return Auth::user()->load('followers', 'followings', 'posts.likes', 'likesUser');
+        return Auth::user()->load(['followers', 'followings', 'posts.likes', 'posts.comments' => function ($query) {
+            $query->with('user')->orderBy('created_at', 'desc');
+        }, 'likesUser']);
     }
 
     public function change_password(Request $request)
@@ -48,6 +50,10 @@ class UserController extends Controller
     {
         $query = User::with('followers')
                 ->with('posts.likes')
+                ->with(['posts.comments' => function ($query) {
+                    // Ordina i commenti per data decrescente, se necessario
+                    $query->with('user')->orderBy('created_at', 'desc');
+                }])
                 ->with('followings')
                 ->where(function ($query) use ($request) {
                     $query->where("username", "like", "%" . $request->input('query') . "%")
@@ -88,6 +94,10 @@ class UserController extends Controller
     {
         $users = User::with('followers')
         ->with('posts.likes')
+        ->with(['posts.comments' => function ($query) {
+            // Ordina i commenti per data decrescente, se necessario
+            $query->with('user')->orderBy('created_at', 'desc');
+        }])
         ->with('followings')
         ->where("id", "=", $id)
         ->get();

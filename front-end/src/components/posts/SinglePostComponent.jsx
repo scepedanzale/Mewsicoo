@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import SingleTrackComponent from '../music/SingleTrackComponent'
-import { PiChatBold, PiHeartBold, PiHeartFill, PiPushPinBold } from "react-icons/pi";
+import { PiChatBold, PiChatFill, PiHeartBold, PiHeartFill, PiPushPinBold } from "react-icons/pi";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { apiKey, urlTrack } from '../../api/config';
@@ -97,8 +97,8 @@ useEffect(()=>{
 
       {/* text */}
       <div className='h-100 col-12 col-sm-6 col-lg-7 my-2'>
-          <Link to={`/profile/user/${user?.id}`} className='flex items-center gap-2 mb-2 max-w-max hover:text-gray-600'>
-            <div className="profile_img overflow-hidden flex justify-center items-center rounded-full h-6 w-6 hover:w-7 hover:h-7">
+          <Link to={`/profile/user/${user?.id}`} className='flex items-center gap-2 mb-2 max-w-max hover:text-gray-400'>
+            <div className="profile_img overflow-hidden flex justify-center items-center rounded-full h-6 w-6">
               <img src={user?.profile_img} alt="profile image" className='object-cover h-full w-full'/>
             </div>
             <p className='font-semibold'>{user?.username}</p>
@@ -120,7 +120,7 @@ useEffect(()=>{
       {/* icons */}
       <div className="col-12 col-sm-1 col-md-2 my-1 p-0 flex flex-sm-column justify-between gap-xl-3 items-center text-center">
         {/* like */}
-          {post.user_id != loggedUser.id &&
+          {user?.id != loggedUser?.id &&
           <div className="col flex justify-center">
             {like ?
             <button className='btn text-2xl hover:text-gray-700 text-red-800' onClick={likePost}>
@@ -134,7 +134,16 @@ useEffect(()=>{
           </div>
           }
         <div className="col flex justify-center">
-          <button className='btn text-2xl hover:text-yellow-500'><PiChatBold /></button>
+          {post?.comments?.some(c => c.user_id == loggedUser.id) ?
+            <button className='btn text-2xl text-yellow-500 hover:text-gray-500'>
+              <Link to={'/post/'+post.id} state={{post, user, date, track, isLoading}}><PiChatFill /></Link>
+            </button>
+            :
+            <button className='btn text-2xl hover:text-yellow-500'>
+              <Link to={'/post/'+post.id} state={{post, user, date, track, isLoading}}><PiChatBold /></Link>
+            </button> 
+          }
+
         </div>
         <div className="col flex justify-center">
           <button className='btn text-2xl hover:text-sky-600'><PiPushPinBold /></button>

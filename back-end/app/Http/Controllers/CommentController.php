@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Comment;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
@@ -27,9 +30,16 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCommentRequest $request)
+    public function store(Request $request)
     {
-        //
+        $comment = Comment::create([
+            'user_id' => Auth::user()->id,
+            'post_id' => $request->post_id,
+            'comment' => $request->comment,
+            'created_at' => Carbon::now()
+        ]);
+        
+        return response()->json($comment, 200);
     }
 
     /**
@@ -61,6 +71,7 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        //
+        $comment->delete();
+        return response()->json(['message' => 'commento eliminato'], 200);
     }
 }

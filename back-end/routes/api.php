@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\CommentController;
 
 
 Route::resource('/user', UserController::class);
@@ -22,3 +23,4 @@ Route::get('/user/is_following/{followerId}', [UserController::class, 'isFollowi
 Route::resource('/post', PostController::class);
 Route::resource('/like', LikeController::class);
 Route::post('/like/delete', [LikeController::class, 'removeLike']);
+Route::resource('/comment', CommentController::class);
