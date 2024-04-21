@@ -3,6 +3,7 @@ import SinglePostComponent from './posts/SinglePostComponent'
 import { descendingOrderPost } from '../functions/functions'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { server } from '../api/axios'
 
 export default function HomepageComponent() {
 
@@ -10,7 +11,8 @@ export default function HomepageComponent() {
   const [errorMsg, setErrorMsg] = useState(false)
   
   const loggedUser = useSelector(state => state.loggedUser)
-  const users = [loggedUser, ...loggedUser.followings]
+  const [followings, setFollowings] = useState([])
+  const users = [loggedUser, ...followings]
   const posts = descendingOrderPost(users)
 
   useEffect(()=>{
@@ -18,6 +20,22 @@ export default function HomepageComponent() {
     console.log(posts)
     console.log(users)    // inserire i miei post
   }, [loggedUser, users, posts])
+
+  useEffect(()=>{
+    try{
+      server('/api/user')
+      .then(response => {
+        setFollowings(response.data.filter(f => f.is_following))
+        console.log(response.data)
+      })
+    }catch(err){
+      console.log(err)
+    }
+  },[])
+
+  useEffect(()=>{
+    console.log(followings)
+  }, [followings])
  
   
   return (
@@ -29,7 +47,7 @@ export default function HomepageComponent() {
         <div className="loader mx-auto mb-5"></div>
       }
       {posts.length>0 ? posts.map((p)=>(
-        <SinglePostComponent key={p.post.id} post={p.post} user={p.user}/>
+        <SinglePostComponent key={p.post.id} post={p.post} user={p.user} className="shadow-lg"/>
       ))
         :
           <p>Non ci sono post da visualizzare...</p>

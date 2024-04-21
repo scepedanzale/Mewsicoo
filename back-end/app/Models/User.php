@@ -53,12 +53,12 @@ class User extends Authenticatable
     }
 
     public function followers(){
-        return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id')->with('posts');
+        return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id')->with('posts.likes');
     }
 
     public function followings()
     {
-        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id')->with('posts');
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id')->with('posts.likes');
     }
 
     public function posts(){
@@ -68,5 +68,9 @@ class User extends Authenticatable
     public function isFollowing($userId)
     {
         return $this->followings()->where('user_id', $userId)->exists();
+    }
+
+    public function likesUser(){
+        return $this->belongsToMany(Post::class, 'likes', 'user_id', 'post_id');
     }
 }

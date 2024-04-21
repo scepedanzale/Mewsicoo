@@ -51,7 +51,7 @@ export default function ProfileComponent() {
     
     useEffect(()=>{
         console.log(profileUser)
-        console.log(loggedUser.id)
+        console.log(loggedUser)
         console.log(otherUser)
         console.log(id)
     }, [profileUser, id, loggedUser, otherUser])

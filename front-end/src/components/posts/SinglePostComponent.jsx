@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import SingleTrackComponent from '../music/SingleTrackComponent'
-import { LuPin, LuHeart, LuMessageSquare } from "react-icons/lu";
+import { PiChatBold, PiHeartBold, PiHeartFill, PiPushPinBold } from "react-icons/pi";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { apiKey, urlTrack } from '../../api/config';
 import { formattedDate } from '../../functions/functions';
+import useAuthContext from '../../context/AuthContext';
+import { server } from '../../api/axios';
+import { useSelector } from 'react-redux';
 
 
 export default function SinglePostComponent({post, user}) {
+  const {csrf} = useAuthContext()
+  const loggedUser = useSelector(state => state.loggedUser)
+
   const date = formattedDate(post?.created_at)
   const [track, setTrack] = useState([])  // song
   const [isLoading, setIsLoading] = useState(false);
+
+  const [like, setLike] = useState(false)
 
   // chiamata alla canzone
   useEffect(()=>{
@@ -31,11 +39,11 @@ export default function SinglePostComponent({post, user}) {
       setIsLoading(false);
     })
 }, [post.track_id])
-  
-/* useEffect(()=>{
+
+useEffect(()=>{
   console.log(post)
   console.log(track)
-}, [post, track]) */
+}, [post, track])
   
   /* cutting text */
   const nChars = 300
@@ -45,6 +53,36 @@ export default function SinglePostComponent({post, user}) {
     }
     return text;
   }
+
+  /* like post */
+  const likePost = async () => {
+    await csrf()
+    try{
+      if (like) {
+        const response = await server.post('/api/like/delete', {post_id: post.id})
+        if(response){
+          setLike(!like)
+        }
+      }else{
+        const response = await server.post('/api/like', {post_id: post.id})
+        if(response){
+          setLike(!like)
+        }
+      }
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+  /* liked */
+  useEffect(()=>{
+    post?.likes?.forEach(like => {
+      if(like.user_id == loggedUser.id){
+        setLike(true)
+      }
+    })
+  }, [post])
+
 
   return (
     <div className='box row post shadow-lg border-2 rounded-lg m-0 mb-4 py-2 h-100'>
@@ -81,14 +119,25 @@ export default function SinglePostComponent({post, user}) {
       
       {/* icons */}
       <div className="col-12 col-sm-1 col-md-2 my-1 p-0 flex flex-sm-column justify-between gap-xl-3 items-center text-center">
-        <div className="col-4">
-          <button className='btn text-2xl hover:text-red-800'><LuHeart /></button>
+        {/* like */}
+          {post.user_id != loggedUser.id &&
+          <div className="col flex justify-center">
+            {like ?
+            <button className='btn text-2xl hover:text-gray-700 text-red-800' onClick={likePost}>
+              <PiHeartFill />
+            </button>
+            :
+            <button className='btn text-2xl hover:text-red-800' onClick={likePost}>
+              <PiHeartBold />
+            </button>            
+            }
+          </div>
+          }
+        <div className="col flex justify-center">
+          <button className='btn text-2xl hover:text-yellow-500'><PiChatBold /></button>
         </div>
-        <div className="col-4">
-          <button className='btn text-2xl hover:text-yellow-500'><LuMessageSquare /></button>
-        </div>
-        <div className="col-4">
-          <button className='btn text-2xl hover:text-sky-600'><LuPin /></button>
+        <div className="col flex justify-center">
+          <button className='btn text-2xl hover:text-sky-600'><PiPushPinBold /></button>
         </div>
        </div>
     </div>

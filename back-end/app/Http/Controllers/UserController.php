@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function user_auth()
     {
-        return Auth::user()->load('followers', 'followings', 'posts');
+        return Auth::user()->load('followers', 'followings', 'posts.likes', 'likesUser');
     }
 
     public function change_password(Request $request)
@@ -47,7 +47,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $query = User::with('followers')
-                ->with('posts')
+                ->with('posts.likes')
                 ->with('followings')
                 ->where(function ($query) use ($request) {
                     $query->where("username", "like", "%" . $request->input('query') . "%")
@@ -87,7 +87,7 @@ class UserController extends Controller
     public function show(string $id)
     {
         $users = User::with('followers')
-        ->with('posts')
+        ->with('posts.likes')
         ->with('followings')
         ->where("id", "=", $id)
         ->get();

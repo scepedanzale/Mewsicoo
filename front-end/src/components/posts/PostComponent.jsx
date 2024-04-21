@@ -2,21 +2,26 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { LuPin, LuHeart, LuMessageSquare, LuPencil } from "react-icons/lu";
+import { LuPencil } from "react-icons/lu";
+import { PiChatBold, PiHeartBold, PiHeartFill, PiPushPinBold } from "react-icons/pi";
 import { BsThreeDotsVertical, BsTrash } from "react-icons/bs";
 import { server } from '../../api/axios';
 import { Collapse } from 'react-bootstrap';
 import SingleTrackComponent from '../music/SingleTrackComponent';
 import { DELETE_POST } from '../../redux/actions/actions';
+import useAuthContext from '../../context/AuthContext';
 
 export default function PostComponent() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
-    const {post, user, track, date, isLoading} = location.state;
+    const {csrf} = useAuthContext()
+    const {post, like, user, track, date, isLoading} = location.state;
     const loggedUser = useSelector(state => state.loggedUser)
     
     const [open, setOpen] = useState(false);
+
+    const [likeState, setLikeState] = useState(like);
 
     useEffect(()=>{
         console.log(post.text)
@@ -29,6 +34,33 @@ export default function PostComponent() {
         navigate(-1)
     }
 
+    /* like post */
+    const likePost = async () => {
+        await csrf()
+        try{
+          if (like) {
+            const response = await server.post('/api/like/delete', {post_id: post.id})
+            if(response){
+              console.log('ciao')
+            }
+          }else{
+            await server.post('/api/like', {post_id: post.id})
+          }
+          setLikeState(!like)
+        }catch(err){
+          console.log(err)
+        }
+      }
+
+  /* liked */
+  useEffect(()=>{
+    loggedUser?.likes_user?.forEach(like => {
+      if(like.pivot.post_id == post.id){
+        setLikeState(true)
+        console.log(post)
+      }
+    })
+  }, [post])
 
   return (
     <div className="container-fluid md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
@@ -108,15 +140,21 @@ export default function PostComponent() {
                 {/* icons */}
                 <div className="row p-0 flex justify-between items-center text-center">
                     <div className="col-4">
-                    <button className='btn text-2xl hover:text-red-800'><LuHeart /></button>
+                        <button className={`btn text-2xl hover:text-red-800 ${likeState && 'text-red-800'}`} onClick={likePost}>
+                            {like ?
+                            <PiHeartFill />
+                            :
+                            <PiHeartBold />
+                            }
+                        </button>
                     </div>
                     <div className="col-4">
-                    <button className='btn text-2xl hover:text-yellow-500'><LuMessageSquare /></button>
+                        <button className='btn text-2xl hover:text-yellow-500'><PiChatBold /></button>
                     </div>
                     <div className="col-4">
-                    <button className='btn text-2xl hover:text-sky-600'><LuPin /></button>
+                        <button className='btn text-2xl hover:text-sky-600'><PiPushPinBold /></button>
+                    </div>
                 </div>
-            </div>
             </>
             }
         </div>

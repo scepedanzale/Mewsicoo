@@ -18,6 +18,9 @@ export const ADD_POST = 'ADD_POST';
 export const UPDATE_POST = 'UPDATE_POST';
 export const DELETE_POST = 'DELETE_POST';
 
+export const ADD_LIKE_TO_POST = 'ADD_LIKE_TO_POST';
+export const REMOVE_LIKE_FROM_POST = 'REMOVE_LIKE_FROM_POST';
+
 // gestione following utente loggato
 export const ADD_FOLLOWING = 'ADD_FOLLOWING';
 export const REMOVE_FOLLOWING = 'REMOVE_FOLLOWING';

@@ -17,8 +17,9 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        return Post::with('user')
-                ->get();
+        return (Post::with('user')
+                ->with('likes')
+                ->get());
     }
 
     /**
@@ -48,7 +49,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $p = $post->with('user')->first();
+        $p = $post->with('user')->with('likes')->first();
         return $p;
     }
 
