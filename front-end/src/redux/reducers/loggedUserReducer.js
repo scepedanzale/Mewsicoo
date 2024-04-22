@@ -1,5 +1,5 @@
 import React from 'react'
-import { SET_LOGGED, UPDATE_NAME, UPDATE_USERNAME, UPDATE_PROFILE_IMG, UPDATE_EMAIL, UPDATE_BIRTHDAY, ADD_POST, UPDATE_POST, DELETE_POST, ADD_FOLLOWER, REMOVE_FOLLOWER, ADD_FOLLOWING, REMOVE_FOLLOWING, UPDATE_BIOGRAPHY, REMOVE_LIKE_FROM_POST, ADD_LIKE_TO_POST } from '../actions/actions';
+import { SET_LOGGED, UPDATE_NAME, UPDATE_USERNAME, UPDATE_PROFILE_IMG, UPDATE_EMAIL, UPDATE_BIRTHDAY, ADD_POST, UPDATE_POST, DELETE_POST, ADD_FOLLOWER, REMOVE_FOLLOWER, ADD_FOLLOWING, REMOVE_FOLLOWING, UPDATE_BIOGRAPHY, REMOVE_LIKE_FROM_POST, ADD_LIKE_TO_POST, REMOVE_SAVED_POST, ADD_SAVED_POST } from '../actions/actions';
 
 export default function loggedUserReducer(state = {}, action) {
   switch (action.type) {
@@ -70,6 +70,17 @@ export default function loggedUserReducer(state = {}, action) {
       return {
         ...state,
         followings: state.followings.filter(following => following.id !== action.payload.id)
+      };
+    case ADD_SAVED_POST:
+      return {
+        ...state,
+        saved_posts: [...state.saved_posts, action.payload]
+      };
+
+    case REMOVE_SAVED_POST:
+      return {
+        ...state,
+        saved_posts: state.saved_posts.filter(post => post.id !== action.payload.id)
       };
 
       /* case ADD_LIKE_TO_POST:

@@ -55,6 +55,7 @@ export default function NewPostComponent() {
                 if(response.status === 201){
                     console.log(response)
                     dispatch({type: ADD_POST, payload: response.data})
+                    navigate(-1)
                 }
             }catch(e){
                 console.log(e)
@@ -69,8 +70,9 @@ export default function NewPostComponent() {
     }
 
   return (
-    <div className="container-fluid md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
+    <div className="container-fluid h-100 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
         <div className="box mb-3 shadow-lg container-fluid order-1 order-sm-2 border-2 p-3 rounded-md">
+
             <h1 className='font-bold text-2xl mb-3'>Crea post</h1>
             {trackId && <TrackComponent track={trackId}/>}
             <form onSubmit={handleSubmit} className='w-100'>

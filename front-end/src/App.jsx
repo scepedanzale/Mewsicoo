@@ -18,6 +18,7 @@ import PostPage from './pages/posts/PostPage';
 import EditPostPage from './pages/posts/EditPostPage';
 import SearchPage from './pages/SearchPage';
 import NewPostPage from './pages/posts/NewPostPage';
+import SavedPage from './pages/SavedPage';
 
 function App() {
 
@@ -34,7 +35,8 @@ function App() {
           <Route path='/new/post' element={<NewPostPage/>}/>
           <Route path='/edit/post/:id' element={<EditPostPage/>}/>
           <Route path='/profile/user/:id' element={<ProfilePage/>}/>
-          <Route path='/user/:id/:follows' element={<FollowsPage/>}/>
+          <Route path='/user/:id/follows/:follows' element={<FollowsPage/>}/>
+          <Route path='/user/:id/saved/:saved' element={<SavedPage/>}/>
           <Route path='/account/edit' element={<EditProfilePage/>}/>
           <Route path='account/settings' element={<SettingsPage/>}/>
         </Route>

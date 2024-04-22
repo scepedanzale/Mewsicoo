@@ -76,7 +76,7 @@ export default function SearchComponent() {
 
 
   return (
-    <div className="container-fluid md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
+    <div className="container-fluid h-100 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
         <div className="container-fluid shadow-lg box rounded-lg p-2">
             <div className="row">
                 <form onSubmit={(e) => { e.preventDefault(); search(); }} className='flex items-center gap-3 relative'>

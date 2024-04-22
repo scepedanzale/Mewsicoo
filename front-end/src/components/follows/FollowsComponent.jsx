@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { server } from '../../api/axios'
 import { IoSearchOutline } from "react-icons/io5";
 import FollowersComponent from './FollowersComponent'
@@ -8,6 +8,7 @@ import useAuthContext from '../../context/AuthContext'
 import { useSelector } from 'react-redux';
 
 export default function FollowsComponent() {
+    const navigate = useNavigate()
     const {id, follows} = useParams()
     const loggedUser = useSelector(state => state.loggedUser)
 
@@ -39,6 +40,8 @@ export default function FollowsComponent() {
                     return user.username.includes(searchParam) || user.name.includes(searchParam);
                 });
                 setFollowings(filteredFollowings);
+            }else{
+                navigate(-1)
             }
         }else{
             setFollowers(profileUser.followers)
@@ -70,12 +73,12 @@ export default function FollowsComponent() {
                 </div>
                 <div className="row p-2">
                     <div className="col-6 flex justify-center">
-                        <Link to={`/user/${id}/followers`} className='main-color-btn text-white btn btn-sm w-100'>
+                        <Link to={`/user/${id}/follows/followers`} className='main-color-btn text-white btn btn-sm w-100'>
                             {/*  <span className='font-bold'>{user?.followers.length}</span> */} Followers 
                         </Link>
                     </div>
                     <div className="col-6 flex justify-center">
-                        <Link to={`/user/${id}/followings`} className='main-color-btn text-white btn btn-sm w-100'>
+                        <Link to={`/user/${id}/follows/followings`} className='main-color-btn text-white btn btn-sm w-100'>
                             {/* <span className='font-bold'>{user?.followings.length}</span> */} Followings 
                         </Link>
                     </div>

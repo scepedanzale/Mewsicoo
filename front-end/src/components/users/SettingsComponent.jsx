@@ -99,7 +99,7 @@ export default function SettingsComponent() {
       }
 
   return (
-    <div className="container-fluid md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5 h-100">
+    <div className="container-fluid h-100 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5 h-100">
         {showAlert && 
             <Alert variant='success' className='flex items-center gap-2'  onClose={() => setShowAlert(false)} dismissible>
                 <FaCheck className='text-success text-lg'/>{alertMsg}

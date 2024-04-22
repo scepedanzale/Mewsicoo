@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 
 use App\Models\Follower;
 use App\Models\Post;
+use App\Models\SavedPost;
 
 class User extends Authenticatable
 {
@@ -72,5 +73,9 @@ class User extends Authenticatable
 
     public function likesUser(){
         return $this->belongsToMany(Post::class, 'likes', 'user_id', 'post_id');
+    }
+
+    public function savedPosts(){
+        return $this->belongsToMany(Post::class, 'saved_posts', 'user_id', 'post_id')->with('user');
     }
 }

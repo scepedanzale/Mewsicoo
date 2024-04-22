@@ -4,11 +4,11 @@
 @import '_animations';
 
 html, #root, body{
-    height: fit-content;
+    min-height: 100%;
 }
 body{
     user-select: none;
-    background-color: rgb(68, 66, 66);
+    background-color: rgb(189, 189, 189);
 }
 
 
@@ -22,7 +22,8 @@ label{
 nav{
     z-index: 500;
     color: white;
-    background-color: #0000009f;
+    background-color: #252525;
+    max-height: 70%;
 }
 
 .noHover{

@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\SavedPostController;
 
 
 Route::resource('/user', UserController::class);
@@ -23,4 +24,8 @@ Route::get('/user/is_following/{followerId}', [UserController::class, 'isFollowi
 Route::resource('/post', PostController::class);
 Route::resource('/like', LikeController::class);
 Route::post('/like/delete', [LikeController::class, 'removeLike']);
+
 Route::resource('/comment', CommentController::class);
+
+Route::resource('/saved_post', SavedPostController::class);
+Route::post('/saved_post/delete', [SavedPostController::class, 'removeSavedPost']);

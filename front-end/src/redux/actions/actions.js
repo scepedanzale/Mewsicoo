@@ -18,12 +18,18 @@ export const ADD_POST = 'ADD_POST';
 export const UPDATE_POST = 'UPDATE_POST';
 export const DELETE_POST = 'DELETE_POST';
 
+// commenti
 export const SET_COMMENTS = 'SET_COMMENTS';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
 
+// likes
 export const ADD_LIKE_TO_POST = 'ADD_LIKE_TO_POST';
 export const REMOVE_LIKE_FROM_POST = 'REMOVE_LIKE_FROM_POST';
+
+// post salvati
+export const ADD_SAVED_POST = 'ADD_SAVED_POST';
+export const REMOVE_SAVED_POST = 'REMOVE_SAVED_POST';
 
 // gestione following utente loggato
 export const ADD_FOLLOWING = 'ADD_FOLLOWING';

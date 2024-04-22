@@ -68,7 +68,7 @@ export default function ProfileComponent() {
 
     return (
         profileUser?.name &&
-        <div className="container-fluid md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
+        <div className="container-fluid h-100 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
             <div className="container-fluid box shadow-lg order-1 order-sm-2 border-2 p-3 rounded-md">
                 
                 {/* info */}
@@ -111,20 +111,20 @@ export default function ProfileComponent() {
                     </p>
                 </div>
 
-                {/* follow */}
+                {/* follow e saved*/}
                 <div className="row my-2 mt-4">
                     <div className="col-4 flex justify-center">
-                        <Link to={`/user/${profileUser.id}/followers`} className='main-color-btn text-white btn btn-sm w-100'>
+                        <Link to={`/user/${profileUser.id}/follows/followers`} className='main-color-btn text-white btn btn-sm w-100'>
                             <span className='font-bold'>{profileUser?.followers?.length}</span> followers 
                         </Link>
                     </div>
                     <div className="col-4 flex justify-center">
-                        <Link to={`/user/${profileUser.id}/followings`} className='main-color-btn text-white btn btn-sm w-100'>
+                        <Link to={`/user/${profileUser.id}/follows/followings`} className='main-color-btn text-white btn btn-sm w-100'>
                             <span className='font-bold'>{profileUser?.followings?.length}</span> seguiti 
                         </Link>
                     </div>
                     <div className="col-4 flex justify-center">
-                        <Link to={'/profile'} className='main-color-btn text-white btn btn-sm w-100'>salvati </Link>
+                        <Link to={`/user/${profileUser.id}/saved/saved_posts`} className='main-color-btn text-white btn btn-sm w-100'>salvati </Link>
                     </div>
                 </div>
             </div>

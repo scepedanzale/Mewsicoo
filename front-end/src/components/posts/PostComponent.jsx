@@ -3,12 +3,12 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { LuPencil, LuSend } from "react-icons/lu";
-import { PiChatBold, PiChatFill, PiHeartBold, PiHeartFill, PiPushPinBold } from "react-icons/pi";
+import { PiChatBold, PiChatFill, PiHeartBold, PiHeartFill, PiPushPinBold, PiPushPinFill } from "react-icons/pi";
 import { BsThreeDotsVertical, BsTrash } from "react-icons/bs";
 import { server } from '../../api/axios';
 import { Collapse } from 'react-bootstrap';
 import SingleTrackComponent from '../music/SingleTrackComponent';
-import { ADD_COMMENT, DELETE_COMMENT, DELETE_POST, SET_COMMENTS } from '../../redux/actions/actions';
+import { ADD_COMMENT, ADD_SAVED_POST, DELETE_COMMENT, DELETE_POST, REMOVE_SAVED_POST, SET_COMMENTS } from '../../redux/actions/actions';
 import useAuthContext from '../../context/AuthContext';
 import { IoSearchOutline } from 'react-icons/io5';
 import { formattedDate } from '../../functions/functions';
@@ -26,6 +26,7 @@ export default function PostComponent() {
     const [commentText, setCommentText] = useState('')
     const comments = useSelector(state => state.comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)))
     const [like, setLike] = useState(false)
+    const [savedPost, setSavedPost] = useState(false)
 
     useEffect(()=>{
         console.log(post)
@@ -104,12 +105,43 @@ export default function PostComponent() {
 
   useEffect(()=>{
     console.log(comments)
-  }, [comments])
+    console.log(post.comments)
+  }, [comments, post])
 
+  /* save post */
+
+  const savePost = async () => {
+    await csrf()
+    try{
+      if (savedPost) {
+        const response = await server.post('/api/saved_post/delete', {post_id: post.id})
+        if(response){
+          setSavedPost(!savedPost)
+          dispatch({type: REMOVE_SAVED_POST, payload: post})
+        }
+      }else{
+        const response = await server.post('/api/saved_post', {post_id: post.id})
+        if(response){
+          setSavedPost(!savedPost)
+          dispatch({type: ADD_SAVED_POST, payload: post})
+        }
+      }
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+  useEffect(()=>{
+    loggedUser?.saved_posts?.forEach(p => {
+      if(p.id == post.id){
+        setSavedPost(true)
+      }
+    })
+  }, [post, loggedUser])
 
 
   return (
-    <div className="container-fluid md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
+    <div className="container-fluid h-100 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
         <div className="container-fluid box order-1 order-sm-2 border-2 p-3 rounded-md">
             {post &&
             <>
@@ -148,7 +180,7 @@ export default function PostComponent() {
                                                             <div class="text-center">
                                                                 <h1 class="modal-title fs-5 mb-4" id="exampleModalLabel">Vuoi eliminare questo post?</h1>
                                                                 <button type="button" class="btn btn-secondary w-25 mr-3" data-bs-dismiss="modal">Annulla</button>
-                                                                <button type="button" class="btn bg-red-700 hover:bg-red-800 text-white w-25" data-bs-dismiss="modal" aria-label="Close" onClick={handleDeleteComment}>Elimina</button>
+                                                                <button type="button" class="btn bg-red-700 hover:bg-red-800 text-white w-25" data-bs-dismiss="modal" aria-label="Close" onClick={handleDeletePost}>Elimina</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -187,7 +219,7 @@ export default function PostComponent() {
                 <div className="row p-0 flex justify-between items-center text-center">
                     {/* like */}
                     {user?.id != loggedUser?.id &&
-                    <div className="col flex justify-center">
+                    <div className="col flex flex-col items-center justify-center">
                         {like ?
                         <button className='btn text-2xl hover:text-gray-700 text-red-800' onClick={likePost}>
                         <PiHeartFill />
@@ -197,10 +229,11 @@ export default function PostComponent() {
                         <PiHeartBold />
                         </button>            
                         }
+                        <p>{post?.likes.length}</p>
                     </div>
                     }
-                    <div className="col flex justify-center">
-                            {post?.comments?.some(c => c.user_id == loggedUser.id) ?
+                    <div className="col flex flex-col items-center justify-center">
+                            {comments?.some(c => c.user.id == loggedUser.id) ?
                             <button className='btn text-2xl text-yellow-500 hover:text-gray-500'>
                                 <PiChatFill />
                             </button>
@@ -209,9 +242,14 @@ export default function PostComponent() {
                                 <PiChatBold />
                             </button>
                             }
+                            <p>{comments?.length}</p>
                     </div>
-                    <div className="col flex justify-center">
-                        <button className='btn text-2xl hover:text-sky-600'><PiPushPinBold /></button>
+                    <div className="col flex flex-col items-center justify-center">
+                        {loggedUser?.saved_posts?.some(p => p.id == post.id) ?
+                            <button className='btn text-2xl hover:text-gray-800 text-sky-600' onClick={savePost}><PiPushPinFill /></button>
+                            :
+                            <button className='btn text-2xl hover:text-sky-600' onClick={savePost}><PiPushPinBold /></button>
+                        }
                     </div>
                 </div>
             </>

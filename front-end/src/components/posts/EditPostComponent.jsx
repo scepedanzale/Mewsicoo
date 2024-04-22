@@ -36,7 +36,7 @@ export default function EditPostComponent() {
     }, [post])
 
   return (
-    <div className="container-fluid md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
+    <div className="container-fluid h-100 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
         <div className="box container-fluid order-1 order-sm-2 border-2 p-3 rounded-md">
             <h1 className='font-bold text-2xl mb-3'>Modifica post</h1>
             <form className='w-100'>

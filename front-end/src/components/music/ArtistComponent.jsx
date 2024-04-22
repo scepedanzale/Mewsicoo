@@ -28,7 +28,7 @@ export default function ArtistComponent() {
     }, [artist])
 
   return (
-    <div className="container-fluid md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
+    <div className="container-fluid h-100 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
         <div className='container-fluid post m-0 mb-4 p-2 h-100 justify-between items-center'>
             <div className="row mb-3 py-2 box shadow-lg justify-center border-2 rounded-lg">
                 <div className="col-12 col-md-6 col-lg-4 flex justify-center">

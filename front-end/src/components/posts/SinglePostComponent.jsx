@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import SingleTrackComponent from '../music/SingleTrackComponent'
-import { PiChatBold, PiChatFill, PiHeartBold, PiHeartFill, PiPushPinBold } from "react-icons/pi";
+import { PiChatBold, PiChatFill, PiHeartBold, PiHeartFill, PiPushPinBold, PiPushPinFill } from "react-icons/pi";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { apiKey, urlTrack } from '../../api/config';
 import { formattedDate } from '../../functions/functions';
 import useAuthContext from '../../context/AuthContext';
 import { server } from '../../api/axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { ADD_SAVED_POST, REMOVE_SAVED_POST } from '../../redux/actions/actions';
 
 
 export default function SinglePostComponent({post, user}) {
+  const dispatch = useDispatch()
   const {csrf} = useAuthContext()
   const loggedUser = useSelector(state => state.loggedUser)
 
@@ -19,6 +21,7 @@ export default function SinglePostComponent({post, user}) {
   const [isLoading, setIsLoading] = useState(false);
 
   const [like, setLike] = useState(false)
+  const [savedPost, setSavedPost] = useState(false)
 
   // chiamata alla canzone
   useEffect(()=>{
@@ -42,8 +45,9 @@ export default function SinglePostComponent({post, user}) {
 
 useEffect(()=>{
   console.log(post)
+  console.log(loggedUser)
   console.log(track)
-}, [post, track])
+}, [post, track, loggedUser])
   
   /* cutting text */
   const nChars = 300
@@ -83,6 +87,37 @@ useEffect(()=>{
     })
   }, [post])
 
+  /* save post */
+
+  const savePost = async () => {
+    await csrf()
+    try{
+      if (savedPost) {
+        const response = await server.post('/api/saved_post/delete', {post_id: post.id})
+        if(response){
+          setSavedPost(!savedPost)
+          dispatch({type: REMOVE_SAVED_POST, payload: post})
+        }
+      }else{
+        const response = await server.post('/api/saved_post', {post_id: post.id})
+        if(response){
+          setSavedPost(!savedPost)
+          dispatch({type: ADD_SAVED_POST, payload: {...post, user: user}})
+        }
+      }
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+  useEffect(()=>{
+    loggedUser?.saved_posts?.forEach(p => {
+      if(p.id == post.id){
+        setSavedPost(true)
+      }
+    })
+  }, [post, loggedUser])
+
 
   return (
     <div className='box row post shadow-lg border-2 rounded-lg m-0 mb-4 py-2 h-100'>
@@ -107,13 +142,16 @@ useEffect(()=>{
           <p className='text-gray-700 overflow-hidden max-w-full overflow-ellipsis'>
             {truncateText(post?.text)}
               {post?.text.length>nChars && '...'}
-              <Link to={'/post/'+post.id} state={{post, user, date, track, isLoading}}>
-                <span className='text-gray-400 font-semibold italic border-3 border-gray-300 ms-2 px-2 rounded-full hover:bg-gray-300 hover:text-white whitespace-nowrap max-w-max'>
-                  apri post
-                </span>
-              </Link>
+                
           </p>
-          <p className='text-gray-400 text-sm mt-2'>{date}</p>
+          <p className='text-gray-400 text-sm mt-2'>
+            <span className='text-gray-400 font-semibold italic border-3 border-gray-300 me-2 px-2 rounded-full hover:bg-gray-300 hover:text-white whitespace-nowrap max-w-max'>
+                <Link to={'/post/'+post.id} state={{post, user, date, track, isLoading}}>
+                    apri post
+                </Link>
+            </span>
+            {date}
+          </p>
         </div>
       </div>
       
@@ -146,7 +184,11 @@ useEffect(()=>{
 
         </div>
         <div className="col flex justify-center">
-          <button className='btn text-2xl hover:text-sky-600'><PiPushPinBold /></button>
+          {loggedUser?.saved_posts?.some(p => p.id == post.id) ?
+            <button className='btn text-2xl hover:text-gray-800 text-sky-600' onClick={savePost}><PiPushPinFill /></button>
+            :
+            <button className='btn text-2xl hover:text-sky-600' onClick={savePost}><PiPushPinBold /></button>
+          }
         </div>
        </div>
     </div>
