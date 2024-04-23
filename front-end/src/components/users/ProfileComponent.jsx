@@ -109,22 +109,25 @@ export default function ProfileComponent() {
                     <p className='text-sm md:text-base'>
                         {profileUser?.biography}
                     </p>
+                    <p className='text-sm md:text-base mt-3 font-semibold'>Post: {profileUser?.posts?.length}</p>
                 </div>
 
                 {/* follow e saved*/}
                 <div className="row my-2 mt-4">
                     <div className="col-4 flex justify-center">
-                        <Link to={`/user/${profileUser.id}/follows/followers`} className='main-color-btn text-white btn btn-sm w-100'>
+                        <Link to={`/user/${profileUser.id}/follows/followers`} className='main-color-btn text-white btn btn-sm w-100 flex flex-col sm:flex-row justify-center sm:gap-1'>
                             <span className='font-bold'>{profileUser?.followers?.length}</span> followers 
                         </Link>
                     </div>
                     <div className="col-4 flex justify-center">
-                        <Link to={`/user/${profileUser.id}/follows/followings`} className='main-color-btn text-white btn btn-sm w-100'>
+                        <Link to={`/user/${profileUser.id}/follows/followings`} className='main-color-btn text-white btn btn-sm w-100 flex flex-col sm:flex-row justify-center sm:gap-1'>
                             <span className='font-bold'>{profileUser?.followings?.length}</span> seguiti 
                         </Link>
                     </div>
                     <div className="col-4 flex justify-center">
-                        <Link to={`/user/${profileUser.id}/saved/saved_posts`} className='main-color-btn text-white btn btn-sm w-100'>salvati </Link>
+                        <Link to={`/user/${profileUser.id}/saved/saved_posts`} state={{profileUser}} className='main-color-btn text-white btn btn-sm w-100 flex flex-col sm:flex-row justify-center sm:gap-1'>
+                            <span className='font-bold'>{profileUser?.saved_posts?.length}</span> salvati 
+                        </Link>
                     </div>
                 </div>
             </div>

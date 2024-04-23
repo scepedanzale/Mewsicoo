@@ -123,7 +123,7 @@ export default function PostComponent() {
         const response = await server.post('/api/saved_post', {post_id: post.id})
         if(response){
           setSavedPost(!savedPost)
-          dispatch({type: ADD_SAVED_POST, payload: post})
+          dispatch({type: ADD_SAVED_POST, payload: {...post, user: user}})
         }
       }
     }catch(err){
@@ -229,7 +229,7 @@ export default function PostComponent() {
                         <PiHeartBold />
                         </button>            
                         }
-                        <p>{post?.likes.length}</p>
+                        <p>{post?.likes?.length}</p>
                     </div>
                     }
                     <div className="col flex flex-col items-center justify-center">

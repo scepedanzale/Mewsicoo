@@ -17,6 +17,8 @@ export const UPDATE_BIRTHDAY = 'UPDATE_BIRTHDAY';
 export const ADD_POST = 'ADD_POST';
 export const UPDATE_POST = 'UPDATE_POST';
 export const DELETE_POST = 'DELETE_POST';
+export const ADD_COMMENT_MYPOST = 'ADD_COMMENT_MYPOST';
+export const DELETE_COMMENT_MYPOST = 'DELETE_COMMENT_MYPOST';
 
 // commenti
 export const SET_COMMENTS = 'SET_COMMENTS';

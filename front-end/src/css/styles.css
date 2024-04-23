@@ -3,7 +3,7 @@ button {
 }
 
 .active {
-  background-color: #347d93 !important;
+  background-color: #98866b !important;
 }
 
 /* player track */
@@ -54,24 +54,24 @@ button {
 
 /* colore principale */
 .main-color {
-  color: #4299B3 !important;
+  color: #b39e7e !important;
 }
 
 .main-color:hover {
-  color: #347d93 !important;
+  color: #98866b !important;
 }
 
 .main-color-bg {
-  background-color: #4299B3 !important;
+  background-color: #b39e7e !important;
 }
 
 .main-color-btn {
-  background-color: #4299B3 !important;
+  background-color: #b39e7e !important;
   color: white !important;
 }
 
 .main-color-btn:hover {
-  background-color: #347d93 !important;
+  background-color: #98866b !important;
 }
 
 /* wave animation */
@@ -172,7 +172,7 @@ html, #root, body {
 
 body {
   user-select: none;
-  background-color: rgb(189, 189, 189);
+  background-color: rgb(35, 63, 93);
 }
 
 h2 {
@@ -186,8 +186,11 @@ label {
 nav {
   z-index: 500;
   color: white;
-  background-color: #252525;
+  background-color: #b39e7e;
   max-height: 70%;
+}
+nav a:hover {
+  color: rgb(35, 63, 93);
 }
 
 .noHover {
@@ -226,5 +229,12 @@ nav {
 }
 
 .box {
-  background-color: white;
+  background-color: #ffffff;
+}
+.box p {
+  color: rgb(87, 87, 87);
+}
+
+p {
+  color: rgb(157, 157, 157);
 }/*# sourceMappingURL=styles.css.map */

@@ -82,6 +82,7 @@ export default function loggedUserReducer(state = {}, action) {
         ...state,
         saved_posts: state.saved_posts.filter(post => post.id !== action.payload.id)
       };
+    
 
       /* case ADD_LIKE_TO_POST:
       return {

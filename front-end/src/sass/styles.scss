@@ -8,7 +8,7 @@ html, #root, body{
 }
 body{
     user-select: none;
-    background-color: rgb(189, 189, 189);
+    background-color: $bg-color;
 }
 
 
@@ -22,8 +22,13 @@ label{
 nav{
     z-index: 500;
     color: white;
-    background-color: #252525;
+    background-color: $main-color;
     max-height: 70%;
+    a{
+        &:hover{
+            color: $bg-color;
+        }
+    }
 }
 
 .noHover{
@@ -67,5 +72,12 @@ nav{
 
 
 .box{
-    background-color: white;
+    background-color: $box-color;
+    p{
+        color: rgb(87, 87, 87);
+    }
+}
+
+p{
+    color: rgb(157, 157, 157);
 }
