@@ -19,6 +19,7 @@ export default function NewPostComponent() {
     const [trackId, setTrackId] = useState('')
     const [text, setText] = useState('')
 
+    /* cerca canzone real time */
     useEffect(()=>{
         axios(urlSearch+searchParam, {
             headers: {
@@ -35,13 +36,13 @@ export default function NewPostComponent() {
         setSearchParam(e.target.value)
     }
 
-    // settaggio canzone scelta
+    /*  settaggio canzone scelta */
     const setTrack = (t) => {
         setSearchParam('')
         setTrackId(t)
     }
 
-    // chiamata per creazione post
+    /* creazione post */
     const handleSubmit = async () => {
         if(trackId && text){
             const data = {
@@ -50,12 +51,11 @@ export default function NewPostComponent() {
             }
             await csrf()
             try{
-                console.log(data)
                 const response = await server.post('api/post', data)
                 if(response.status === 201){
                     console.log(response)
                     dispatch({type: ADD_POST, payload: response.data})
-                    navigate(-1)
+                    navigate('/')
                 }
             }catch(e){
                 console.log(e)
@@ -70,12 +70,16 @@ export default function NewPostComponent() {
     }
 
   return (
-    <div className="container-fluid h-100 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
-        <div className="box mb-3 shadow-lg container-fluid order-1 order-sm-2 border-2 p-3 rounded-md">
+    <>
+        <div className="new-post-form mb-3 container-fluid p-3 rounded-md">
 
-            <h1 className='font-bold text-2xl mb-3'>Crea post</h1>
-            {trackId && <TrackComponent track={trackId}/>}
+            <h2 className='font-bold text-2xl mb-3'>Crea post</h2>
+            {trackId && 
+            /* canzone scelta */
+            <div className='shadow-lg mb-10'><TrackComponent track={trackId}/></div>}
+
             <form onSubmit={handleSubmit} className='w-100'>
+                {/* cerca canzone */}
                 <input 
                     type="text"
                     id="search"
@@ -87,6 +91,7 @@ export default function NewPostComponent() {
                     autofocus
                     />
                 
+                {/* descrizione */}
                 {trackId && !searchParam &&
                 <>
                     <textarea 
@@ -102,22 +107,20 @@ export default function NewPostComponent() {
                     >
                     </textarea>
                     <div className='flex justify-center gap-3 mt-3'>
-                        <button className='btn bg-gray-400 hover:bg-gray-500 text-white w-32' onClick={()=>navigate(-1)}>Indietro</button>
-                        <button className='btn main-color-btn w-32' onClick={(e) => { e.preventDefault(); handleSubmit();}}>Salva</button>
+                        <button className='btn empty-btn w-32' onClick={()=>navigate(-1)}>Indietro</button>
+                        <button className='btn colored-btn w-32' onClick={(e) => { e.preventDefault(); handleSubmit();}}>Pubblica</button>
                     </div>
                 </>
                 }
             </form>
-            {
+        </div>
+            {   /* elenco canzoni */
                 searchParam &&
-                    tracks.length > 0 ? 
+                   ( tracks.length > 0 ? 
                     tracks.map((t)=>(
-                        <div className="container-fluid border-2 px-3 mb-2 rounded-md hover:bg-gray-100">
-                            <div className="row mb-2 py-1 border-b-2 text-gray-500 hover:text-cyan-700 hover:border-cyan-700">
-                                <button
-                                    onClick={(e) => { e.preventDefault(); setTrack(t); }}
-                                    className=''
-                                >
+                        <div className="new-post-track container-fluid box border-2 px-3 mb-2 rounded-md">
+                            <div className="row choose-row mb-2 py-1 border-b-2 text-gray-500">
+                                <button onClick={(e) => { e.preventDefault(); setTrack(t); }}>
                                     scegli
                                 </button> 
                             </div>
@@ -125,9 +128,8 @@ export default function NewPostComponent() {
                         </div>
                     ))
                     : 
-                    <p className='text-white'>Nessuna canzone trovata</p>
-                }
-        </div>
-    </div>
+                    <p>Nessuna canzone trovata</p>)
+            }
+    </>
   )
 }

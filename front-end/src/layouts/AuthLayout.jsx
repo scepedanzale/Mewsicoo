@@ -10,13 +10,14 @@ export default function AuthLayout() {
   <>
     <Topbar/>
     <div className='md:flex h-100'>
-      <div className='col-12 col-md-11 h-100'>
-        <Outlet /> 
+      <div className='outlet-div col-12 col-md-11 overflow-auto'>
+        <div className='container-fluid mx-auto mb-20 p-3 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5'>
+          <Outlet /> 
+        </div>
       </div>
       <div className='col sticky-bottom bottom-1'>
         <Navbar/>
       </div>
-
     </div>
   </>
   : <Navigate to="/login" />

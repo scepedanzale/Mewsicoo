@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { server } from '../../api/axios'
 import { useDispatch, useSelector } from 'react-redux';
-import useAuthContext from '../../context/AuthContext';
 import { ADD_FOLLOWING, REMOVE_FOLLOWING } from '../../redux/actions/actions';
 
 export default function UserRowComponent({user}) {
@@ -20,12 +19,8 @@ export default function UserRowComponent({user}) {
         dispatch({type: ADD_FOLLOWING, payload: user})  // aggiungo a me un seguito
     }
 
-   useEffect(()=>{
-        console.log(user)
-    }, [user]) 
-
   return (
-      <div className='box row post shadow-lg border-2 rounded-lg m-0 mb-4 p-2 h-100 justify-between items-center'>
+      <div className='box user-row row post shadow-lg border-2 rounded-lg m-0 mb-4 p-2 h-100 justify-between items-center'>
             <Link to={`/profile/user/${user?.id}`} className='col-9 flex items-center p-0'>
                 <div className="col-5 col-sm-3 p-0">
                     <div className="profile_img overflow-hidden flex justify-center items-center rounded-full h-16 w-16 sm:h-20 sm:w-20">
@@ -40,11 +35,11 @@ export default function UserRowComponent({user}) {
             <div className="col-3 p-0 text-end">
                 {user?.username !== loggedUser?.username ?
                     loggedUser?.followings.some(f => f.username === user?.username) ?
-                        <button className='btn btn-sm bg-gray-400 hover:bg-gray-500 text-white mt-3 w-2/3' onClick={unfollow}>
+                        <button className='btn btn-sm empty-btn mt-3 w-2/3' onClick={unfollow}>
                             unfollow
                         </button>
                         : 
-                        <button className='btn btn-sm main-color-btn mt-3 w-2/3' onClick={follow}>
+                        <button className='btn btn-sm colored-btn mt-3 w-2/3' onClick={follow}>
                             follow
                         </button>
                 :

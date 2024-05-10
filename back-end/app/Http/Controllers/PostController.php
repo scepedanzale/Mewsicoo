@@ -17,9 +17,14 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        return (Post::with('user')
-                ->with('likes')
-                ->get());
+
+        $offset = $request->query('offset', 0); // Impostazione predefinita a 0 se non specificato
+        $limit = $request->query('limit', 10); // Impostazione predefinita a 10 se non specificato
+
+        // Esegui la query per ottenere i post con offset e limit
+        $posts = Post::skip($offset)->take($limit)->get();
+        
+        return response()->json($posts);
     }
 
     /**
@@ -49,8 +54,8 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $p = $post->with('user')->with('likes')->first();
-        return $p;
+        $post->load('likes.user', 'comments.user', 'user');
+        return $post;
     }
 
     /**

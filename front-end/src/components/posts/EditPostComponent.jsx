@@ -4,17 +4,18 @@ import { server } from '../../api/axios';
 import useAuthContext from '../../context/AuthContext';
 import { useDispatch } from 'react-redux';
 import { UPDATE_POST } from '../../redux/actions/actions';
-//import { updatePost } from '../../redux/actions/actions';
 
 export default function EditPostComponent() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     const location = useLocation();
     const {post} = location.state;
 
     const {csrf} = useAuthContext()
     const [text, setText] = useState(post.text)
 
+    /* modifica testo del post */
     const handleText = async (event) =>{
         event.preventDefault();
         await csrf()
@@ -22,7 +23,6 @@ export default function EditPostComponent() {
             const response = await server.patch('api/post/'+post.id, {text})
             if(response.status === 200){
                 post.text = text
-                console.log(post)
                 dispatch({type: UPDATE_POST, payload: post})
                 navigate(-2)
             }
@@ -31,14 +31,10 @@ export default function EditPostComponent() {
         }
     }
 
-    useEffect(()=>{
-        console.log(post)
-    }, [post])
 
   return (
-    <div className="container-fluid h-100 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
-        <div className="box container-fluid order-1 order-sm-2 border-2 p-3 rounded-md">
-            <h1 className='font-bold text-2xl mb-3'>Modifica post</h1>
+        <div className="box edit-post container-fluid order-1 order-sm-2 border-2 p-3 rounded-md">
+            <h2 className='font-bold text-2xl mb-3'>Modifica post</h2>
             <form className='w-100'>
                 <textarea 
                 name="text" 
@@ -51,11 +47,10 @@ export default function EditPostComponent() {
                 >
                 </textarea>
                 <div className='flex justify-center gap-3 mt-3'>
-                    <button className='btn bg-gray-400 hover:bg-gray-500 text-white w-25' onClick={()=>navigate(-1)}>Indietro</button>
-                    <button className='btn main-color-btn w-25' onClick={handleText}>Salva</button>
+                    <button className='btn back w-25' onClick={()=>navigate(-1)}>Indietro</button>
+                    <button className='btn save w-25' onClick={handleText}>Salva</button>
                 </div>
             </form>
         </div>
-    </div>
   )
 }

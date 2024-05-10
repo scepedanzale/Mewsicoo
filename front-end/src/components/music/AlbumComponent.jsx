@@ -6,24 +6,22 @@ import trackPlaceholder from '../../assets/track-placeholder.jpeg'
 import { albumDuration, formattedDate } from '../../functions/functions'
 import TrackComponent from './TrackComponent'
 
-
 export default function AlbumComponent() {
     const {id} = useParams()
     const [album, setAlbum] = useState({})
 
+    /* chiamata album */
     useEffect(()=>{
         if(id){
             axios(urlAlbum+id)
             .then(response => {
                 setAlbum(response.data)
-                console.log(response.data)
             })
         }
     }, [id])
-    
 
   return (
-    <div className="container-fluid h-100 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
+    <>
         <div className='container-fluid post m-0 mb-4 p-2 h-100 justify-between items-center'>
             <div className="row mb-3 py-2 box shadow-lg justify-center border-2 rounded-lg">
                 <div className="col-12 col-md-6 col-lg-4 flex justify-center">
@@ -33,9 +31,9 @@ export default function AlbumComponent() {
                     <div className='mb-3'>
                         <h1 className='text-2xl font-bold'>{album?.title}</h1>
                         <p className='text-gray-500 text-xl'><Link to={'/artist/'+album?.artist?.id}>{album?.artist?.name}</Link></p>
-                        <p className='text-gray-500'>{formattedDate(album?.release_date)}</p>
+                        <p className='date'>{formattedDate(album?.release_date)}</p>
                     </div>
-                    <div className='text-gray-400 text-sm'>
+                    <div className='text-gray-400 text-sm border-t-2 pt-1'>
                         <p>{album?.nb_tracks} brani</p>
                         <p>{albumDuration(album.duration)}</p>
                     </div>
@@ -51,6 +49,6 @@ export default function AlbumComponent() {
                 ))}
             </div>
         </div>
-    </div>
+    </>
   )
 }

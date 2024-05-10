@@ -44,16 +44,16 @@ export default function ResetPassword() {
     }
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid auth-page">
         <div className="sm:px-20 md:px-40 lg:px-64 xl:px-96">
-            <div className='w-full text-center my-20'>
-                <h2 className="font-semibold text-6xl">Mewsikoo</h2>
+            <div className='w-full text-center'>
+                <h2>Reset Password</h2>
             </div>
             
             <div className='box border-2 rounded-xl p-6'>
                 <form onSubmit={handleSubmit} className='px-2'>
                     <div className='w-full mb-8 text-center'>
-                        <p className='main-color text-lg mb-5'>Reimposta password</p>
+                        <p className='text-lg mb-5'>Reimposta password</p>
                     </div>
                     {/* password */}
                     <div className="mb-4">
@@ -90,9 +90,9 @@ export default function ResetPassword() {
                     </div>
                     <div className="mt-10 w-full flex justify-center">
                         {status?.code === 200 ?
-                        <Link to={'/login'} className='main-color font-bold text-lg'>Vai al login</Link>
+                        <Link to={'/login'} className='text-lg'>Vai al login</Link>
                         :
-                        <button type='submit' className='main-color-btn text-neutral-100 p-2 rounded-md w-1/2'>Conferma</button>
+                        <button type='submit' className='btn text-neutral-100 w-1/2'>Conferma</button>
                         }
                     </div>
                 </form>

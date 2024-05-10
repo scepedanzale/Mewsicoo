@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Post;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -18,6 +19,26 @@ class UserController extends Controller
         return Auth::user()->load(['followers', 'followings', 'posts.likes', 'posts.comments' => function ($query) {
             $query->with('user')->orderBy('created_at', 'desc');
         }, 'likesUser', 'savedPosts.user']);
+    }
+
+    public function getFollowingPosts(Request $request){
+        $authenticatedUser = Auth::user();
+
+        // Ottieni gli ID degli utenti seguiti dall'utente loggato
+        $followingIds = $authenticatedUser->followings()->pluck('users.id');
+
+        // Aggiungi l'ID dell'utente loggato per ottenere anche i propri post
+        $followingIds[] = $authenticatedUser->id;
+
+        // Ottieni i post dei seguiti e del proprio utente
+        $posts = Post::whereIn('user_id', $followingIds)
+                    ->with('user', 'likes', 'comments.user')
+                    ->orderBy('created_at', 'desc')
+                    ->offset($request->input('offset', 0))
+                    ->limit($request->input('limit', 10))
+                    ->get();
+
+        return $posts;
     }
 
     public function change_password(Request $request)

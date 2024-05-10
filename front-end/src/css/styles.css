@@ -1,12 +1,59 @@
+/* 
+    colore principale bottoni, navbar... e colore hover
+*/
 button {
   border: 0 !important;
 }
 
-.active {
-  background-color: #98866b !important;
+.btn {
+  border-radius: 0.5em;
 }
 
-/* player track */
+/* ----- MAIN COLORS ----- */
+.colored-btn {
+  background-color: rgb(23, 94, 118);
+  color: #ffffff !important;
+}
+.colored-btn:hover {
+  background-color: rgb(18, 78, 98);
+}
+
+.empty-btn {
+  background-color: #ffffff;
+  border: 1px solid rgb(23, 94, 118) !important;
+  color: rgb(23, 94, 118) !important;
+}
+.empty-btn:hover {
+  background-color: rgb(232, 232, 232);
+}
+
+/* ----- ICONS ----- */
+.post-icon {
+  font-size: 1.3em;
+}
+
+.like-icon {
+  color: rgb(143, 13, 13);
+}
+.like-icon:hover {
+  color: rgb(114, 9, 9);
+}
+
+.comment-icon {
+  color: rgb(209, 151, 13);
+}
+.comment-icon:hover {
+  color: rgb(175, 126, 10);
+}
+
+.pin-icon {
+  color: rgb(54, 104, 137);
+}
+.pin-icon:hover {
+  color: rgb(40, 81, 108);
+}
+
+/* ----- PLAYER TRACK ----- */
 .cover {
   width: 100%;
   z-index: 100;
@@ -50,28 +97,6 @@ button {
 
 .filter-cover {
   filter: brightness(60%);
-}
-
-/* colore principale */
-.main-color {
-  color: #b39e7e !important;
-}
-
-.main-color:hover {
-  color: #98866b !important;
-}
-
-.main-color-bg {
-  background-color: #b39e7e !important;
-}
-
-.main-color-btn {
-  background-color: #b39e7e !important;
-  color: white !important;
-}
-
-.main-color-btn:hover {
-  background-color: #98866b !important;
 }
 
 /* wave animation */
@@ -166,35 +191,158 @@ button {
     background-position: 0 50%, 0 calc(0% - 2px), 0 calc(100% + 2px), 50% 50%, 50% calc(0% - 2px), 50% calc(100% + 2px), 100% 50%, 100% calc(0% - 2px), 100% calc(100% + 2px);
   }
 }
+nav {
+  z-index: 500;
+  color: rgb(41, 43, 45);
+}
+
+/* topbar */
+.top-bar {
+  background-color: #ffffff;
+  border-bottom: 3px solid rgb(23, 94, 118) !important;
+}
+
+.top-nav-icon {
+  color: rgb(23, 94, 118);
+  padding: 0.4em;
+  border-radius: 0.5em;
+  border: 1px solid rgb(23, 94, 118) !important;
+  box-shadow: 0 0 0.5em 0.2em rgba(215, 215, 215, 0.538) inset;
+}
+.top-nav-icon:hover {
+  background-color: rgba(95, 129, 153, 0.2078431373);
+}
+
+/* navbar */
+.nav-bar {
+  background-color: rgb(23, 94, 118);
+  margin-top: 1em;
+}
+
+.nav-icon {
+  padding: 0.3em;
+  font-size: 1.2em;
+  border-radius: 0.5em;
+  color: #ffffff;
+  border: 1px solid rgb(23, 94, 118) !important;
+}
+.nav-icon:hover {
+  border: 1px solid #ffffff !important;
+}
+
+.nav-icon-selected {
+  color: rgb(8, 42, 53);
+}
+
+/* ----- GENERAL ----- */
 html, #root, body {
-  min-height: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
   user-select: none;
-  background-color: rgb(35, 63, 93);
+  background-color: #e6e6e6;
 }
 
 h2 {
-  color: white !important;
+  color: rgb(87, 87, 87) !important;
 }
 
 label {
   color: rgb(95, 93, 93) !important;
 }
 
-nav {
-  z-index: 500;
-  color: white;
-  background-color: #b39e7e;
-  max-height: 70%;
-}
-nav a:hover {
-  color: rgb(35, 63, 93);
-}
-
 .noHover {
   pointer-events: none;
+}
+
+p {
+  color: rgb(157, 157, 157);
+}
+
+.date {
+  color: rgb(149, 149, 149) !important;
+}
+
+/* contenitore del contenuto */
+.outlet-div {
+  height: 93%;
+}
+
+.outlet-div::-webkit-scrollbar {
+  background-color: rgba(29, 20, 20, 0);
+  visibility: hidden;
+  border-radius: 0.5em;
+}
+
+/* modals */
+.modal {
+  margin-top: 15em;
+}
+
+/* box  */
+.box {
+  background-color: #ffffff;
+  border-radius: 0.5em;
+  padding: 1em;
+}
+.box p {
+  color: rgb(87, 87, 87);
+}
+
+/* ----- SEARCH ----- */
+.search-form {
+  background-color: rgb(23, 94, 118);
+}
+.search-form .btn {
+  background-color: #ffffff;
+  color: rgb(41, 43, 45) !important;
+  border: 0;
+}
+.search-form .btn:hover {
+  background-color: rgb(232, 232, 232);
+}
+.search-form .active {
+  background-color: rgb(221, 222, 223) !important;
+}
+
+/* auth */
+.auth-page {
+  background-color: rgb(23, 94, 118);
+  height: 100%;
+  padding-top: 3em;
+}
+.auth-page h2 {
+  margin-bottom: 1em;
+  font-size: 3em;
+  font-weight: bold;
+  color: white !important;
+}
+.auth-page .btn {
+  border: 1px solid rgb(23, 94, 118) !important;
+  color: rgb(23, 94, 118);
+}
+.auth-page .btn:hover {
+  background-color: rgb(23, 94, 118);
+  color: #ffffff;
+}
+.auth-page a {
+  color: rgb(23, 94, 118);
+  font-weight: bold;
+}
+.auth-page a:hover {
+  color: rgb(18, 78, 98);
+}
+
+/* profile page */
+.profile-container .edit-profile {
+  background-color: #ffffff;
+  border: 1px solid rgb(23, 94, 118);
+  color: rgb(23, 94, 118);
+}
+.profile-container .edit-profile:hover {
+  background-color: rgb(221, 222, 223);
 }
 
 /* profile img */
@@ -212,7 +360,7 @@ nav a:hover {
   position: absolute;
   top: 45%;
   z-index: 70;
-  color: white;
+  color: #ffffff;
   text-shadow: 2px 2px 10px black;
 }
 .icon_edit:hover + .edit_profile_img {
@@ -228,13 +376,28 @@ nav a:hover {
   z-index: 50;
 }
 
-.box {
+/*  edit post */
+.edit-post .back {
   background-color: #ffffff;
+  border: 1px solid rgb(23, 94, 118) !important;
+  color: rgb(23, 94, 118) !important;
 }
-.box p {
-  color: rgb(87, 87, 87);
+.edit-post .back:hover {
+  background-color: rgb(232, 232, 232);
+}
+.edit-post .save {
+  background-color: rgb(23, 94, 118);
+  color: #ffffff !important;
+}
+.edit-post .save:hover {
+  background-color: rgb(18, 78, 98);
 }
 
-p {
-  color: rgb(157, 157, 157);
+/* new post */
+.new-post-track:hover {
+  border: 1px solid rgb(23, 94, 118);
+}
+.new-post-track .choose-row:hover {
+  border-bottom: 1px solid rgb(23, 94, 118);
+  color: rgb(23, 94, 118);
 }/*# sourceMappingURL=styles.css.map */

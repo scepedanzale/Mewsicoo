@@ -38,7 +38,7 @@ class LikeController extends Controller
             'created_at' => Carbon::now()
         ]);
         
-        return response()->json(['message' => 'Like added successfully'], 200);
+        return response()->json($like, 200);
     }
 
     /**
@@ -81,7 +81,7 @@ class LikeController extends Controller
 
         if ($like) {
             $like->delete();
-            return response()->json(['message' => 'Like removed successfully'], 200);
+            return response()->json($like, 200);
         } else {
             return response()->json(['message' => 'Like not found'], 404);
         }

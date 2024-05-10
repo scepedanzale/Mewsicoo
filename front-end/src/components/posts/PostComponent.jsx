@@ -8,9 +8,8 @@ import { BsThreeDotsVertical, BsTrash } from "react-icons/bs";
 import { server } from '../../api/axios';
 import { Collapse } from 'react-bootstrap';
 import SingleTrackComponent from '../music/SingleTrackComponent';
-import { ADD_COMMENT, ADD_SAVED_POST, DELETE_COMMENT, DELETE_POST, REMOVE_SAVED_POST, SET_COMMENTS } from '../../redux/actions/actions';
+import { ADD_COMMENT, ADD_LIKE, ADD_SAVED_POST, DELETE_COMMENT, DELETE_LIKE, DELETE_POST, REMOVE_SAVED_POST, SET_COMMENTS, SET_LIKES } from '../../redux/actions/actions';
 import useAuthContext from '../../context/AuthContext';
-import { IoSearchOutline } from 'react-icons/io5';
 import { formattedDate } from '../../functions/functions';
 
 export default function PostComponent() {
@@ -18,63 +17,106 @@ export default function PostComponent() {
     const dispatch = useDispatch();
     const {csrf} = useAuthContext()
     const location = useLocation();
-    const {post, user, track, date, isLoading} = location.state;
+    const {id, user, track, date, isLoading} = location.state;
     const loggedUser = useSelector(state => state.loggedUser)
     
     const [open, setOpen] = useState(false);
 
     const [commentText, setCommentText] = useState('')
-    const comments = useSelector(state => state.comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)))
+    const comments = useSelector(state => state.posts.comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)))
+    const likes = useSelector(state => state.posts.likes)
+    const [post, setPost] = useState({})
     const [like, setLike] = useState(false)
     const [savedPost, setSavedPost] = useState(false)
 
-    useEffect(()=>{
-        console.log(post)
-        console.log(date)
-    }, [post, date])
+    /*  chiamata al post tramite id per aggiornamento in tempo reale likes da singlepost */
+    useEffect(() => {
+        try{
+            server('/api/post/'+id)
+            .then(response => {
+                console.log(response.data)
+                setPost(response.data)
+            })
+        }catch(err){
+            console.log(err)
+        }
+    }, [id])
 
+    /*  elimina post    */
     const handleDeletePost = () => {
-        server.delete('/api/post/'+post.id)
+        server.delete('/api/post/'+id)
         dispatch({type: DELETE_POST, payload: post})
         navigate(-1)
     }
 
-   /* like */
 
+
+   /* ----------------------------------- LIKES  */
+
+   /*    setta likes nello stato per aggiornamento in tempo reale icona e numero   */
+   useEffect(()=>{
+    if (post.likes) {
+        dispatch({ type: SET_LIKES, payload: post.likes });
+    }
+    else{
+        dispatch({ type: SET_LIKES, payload: [] });
+    }
+  }, [post])
+
+   /*   aggiungere o rimuovere like db e stato    */
   const likePost = async () => {
-    await csrf()
-    try{
-      if (like) {
-        const response = await server.post('/api/like/delete', {post_id: post.id})
-        if(response){
-          setLike(!like)
+    if(user?.id != loggedUser?.id ){
+        await csrf()
+        try{
+          if (like) {
+            const response = await server.post('/api/like/delete', {post_id: id})
+            if(response){
+              setLike(!like)
+              dispatch({type: DELETE_LIKE, payload: response.data})
+            }
+          }else{
+            const response = await server.post('/api/like', {post_id: id})
+            if(response){
+                setLike(!like)
+                dispatch({type: ADD_LIKE, payload: response.data})
+            }
+          }
+        }catch(err){
+          console.log(err)
         }
-      }else{
-        const response = await server.post('/api/like', {post_id: post.id})
-        if(response){
-          setLike(!like)
-        }
-      }
-    }catch(err){
-      console.log(err)
     }
   }
 
+  /*    cambia icona se ho messo like   */
   useEffect(()=>{
-    post?.likes?.forEach(like => {
-      if(like.user_id == loggedUser.id){
-        setLike(true)
-      }
-    })
+    if(post.likes){
+        post.likes?.forEach(like => {
+            if(like.user_id == loggedUser.id){
+                setLike(true)
+            }
+        })
+    }
   }, [post])
 
 
-  /* comments */
 
+  /* ----------------------------------- COMMENTS  */
+
+  /*    setta commenti nello stato per aggiornamento in tempo reale icona e numero   */
+  useEffect(()=>{
+    if (post.comments) {
+        dispatch({ type: SET_COMMENTS, payload: post.comments });
+    }
+    else{
+        dispatch({ type: SET_COMMENTS, payload: [] });
+    }
+  }, [post])
+
+  /*    aggiungere commento   */
   const handleSubmit = async () => {
     await csrf()
     try{
-        const response = await server.post('/api/comment', {post_id: post.id, comment: commentText})
+        const response = await server.post('/api/comment', {post_id: id, comment: commentText})
         if(response.status === 200){
             dispatch({type: ADD_COMMENT, payload: {...response.data, user: loggedUser}})
             console.log(response)
@@ -85,6 +127,7 @@ export default function PostComponent() {
     }
   }
 
+  /*    rimuovere commento     */
   const handleDeleteComment = async (c) => {
     try{
         const response = await server.delete('/api/comment/'+c.id)
@@ -94,33 +137,22 @@ export default function PostComponent() {
     }
   }
 
-  useEffect(()=>{
-    if (post.comments) {
-        dispatch({ type: SET_COMMENTS, payload: post.comments });
-    }
-    else{
-        dispatch({ type: SET_COMMENTS, payload: [] });
-    }
-  }, [post])
+  
 
-  useEffect(()=>{
-    console.log(comments)
-    console.log(post.comments)
-  }, [comments, post])
-
-  /* save post */
-
+    /* ----------------------------------- SAVE  */
+  
+  /*   aggiungere o rimuovere salvataggio post db e stato    */
   const savePost = async () => {
     await csrf()
     try{
       if (savedPost) {
-        const response = await server.post('/api/saved_post/delete', {post_id: post.id})
+        const response = await server.post('/api/saved_post/delete', {post_id: id})
         if(response){
           setSavedPost(!savedPost)
           dispatch({type: REMOVE_SAVED_POST, payload: post})
         }
       }else{
-        const response = await server.post('/api/saved_post', {post_id: post.id})
+        const response = await server.post('/api/saved_post', {post_id: id})
         if(response){
           setSavedPost(!savedPost)
           dispatch({type: ADD_SAVED_POST, payload: {...post, user: user}})
@@ -130,19 +162,22 @@ export default function PostComponent() {
       console.log(err)
     }
   }
-
+/*    cambia icona se ho salvato il post   */
   useEffect(()=>{
     loggedUser?.saved_posts?.forEach(p => {
-      if(p.id == post.id){
+      if(p.id == id){
         setSavedPost(true)
       }
     })
-  }, [post, loggedUser])
+  }, [id, loggedUser])
 
+  useEffect(()=>{
+    console.log(track)
+  }, [track])
 
   return (
-    <div className="container-fluid h-100 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
-        <div className="container-fluid box order-1 order-sm-2 border-2 p-3 rounded-md">
+    <>
+        <div className="container-fluid box order-1 order-sm-2">
             {post &&
             <>
                 {/* track */}
@@ -171,6 +206,7 @@ export default function PostComponent() {
                                             <li className='hover:bg-gray-100 p-2' type="button" data-bs-toggle="modal" data-bs-target="#delete_post_modal">
                                                 <button className='flex items-center gap-2 text-red-700'><BsTrash />Elimina</button>
                                             </li>
+                                                {/* modale elimina */}
                                                 <div class="modal fade" id="delete_post_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content p-3">
@@ -188,14 +224,13 @@ export default function PostComponent() {
                                         </ul>
                                     </div>
                                 </Collapse>
-
                             </div>
                         </>
                         }
                         <p className='font-bold text-lg sm:text-xl md:text-2xl'>{track?.title}</p>
                         <div className='mt-1 text-sm sm:text-base md:text-xl'>
                             <p className='truncate'><Link to={'/artist/'+track?.artist?.id}>{track?.artist?.name}</Link></p>
-                            <p className='truncate'><Link to={'/artist/'+track?.album?.id}>{track?.album?.title}</Link></p>
+                            <p className='truncate'><Link to={'/album/'+track?.album?.id}>{track?.album?.title}</Link></p>
                         </div>
                     </div>
                 </div>
@@ -211,45 +246,34 @@ export default function PostComponent() {
                     <p className='text-gray-700 overflow-hidden max-w-full overflow-ellipsis'>
                         {post?.text}
                     </p>
-                    <p className='text-gray-400 text-sm mt-2'>{date}</p>
+                    {/* date */}
+                    <p className='date text-sm mt-2'>{date}</p>
                     </div>
                 </div>
 
                 {/* icons */}
                 <div className="row p-0 flex justify-between items-center text-center">
                     {/* like */}
-                    {user?.id != loggedUser?.id &&
                     <div className="col flex flex-col items-center justify-center">
-                        {like ?
-                        <button className='btn text-2xl hover:text-gray-700 text-red-800' onClick={likePost}>
-                        <PiHeartFill />
+                        <button className={`btn post-icon  ${user?.id != loggedUser?.id ? 'like-icon' : 'text-gray-400 noHover'}`} onClick={likePost}>
+                        
+                        {like ?<PiHeartFill />:<PiHeartBold />}
                         </button>
-                        :
-                        <button className='btn text-2xl hover:text-red-800' onClick={likePost}>
-                        <PiHeartBold />
-                        </button>            
-                        }
-                        <p>{post?.likes?.length}</p>
+                        <p>{likes?.length}</p>
                     </div>
-                    }
-                    <div className="col flex flex-col items-center justify-center">
-                            {comments?.some(c => c.user.id == loggedUser.id) ?
-                            <button className='btn text-2xl text-yellow-500 hover:text-gray-500'>
-                                <PiChatFill />
-                            </button>
-                            :
-                            <button className='btn text-2xl hover:text-yellow-500'>
-                                <PiChatBold />
-                            </button>
-                            }
-                            <p>{comments?.length}</p>
+                    {/* comment */}
+                    <div className="col flex flex-col items-center justify-center"> 
+                        <button className='btn post-icon comment-icon'>
+                            {comments?.some(c => c?.user?.id == loggedUser.id) ?<PiChatFill />:<PiChatBold /> }
+                        </button>
+                        <p>{comments?.length}</p>
                     </div>
+                    {/* save */}
                     <div className="col flex flex-col items-center justify-center">
-                        {loggedUser?.saved_posts?.some(p => p.id == post.id) ?
-                            <button className='btn text-2xl hover:text-gray-800 text-sky-600' onClick={savePost}><PiPushPinFill /></button>
-                            :
-                            <button className='btn text-2xl hover:text-sky-600' onClick={savePost}><PiPushPinBold /></button>
-                        }
+
+                        <button className='btn post-icon pin-icon' onClick={savePost}>
+                            {savedPost ?<PiPushPinFill />:<PiPushPinBold />}
+                        </button>
                     </div>
                 </div>
             </>
@@ -257,7 +281,7 @@ export default function PostComponent() {
         </div>
 
         {/* comments */}
-        <div className="container-fluid shadow-lg box rounded-lg my-3 p-2">
+        <div className="container-fluid my-3 p-2">
             <div className="row">
                 <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className='flex items-center gap-3 relative'>
                     <input 
@@ -283,13 +307,13 @@ export default function PostComponent() {
                 comments.map((c) => (
                     <div key={c.id} className="row my-2 rounded-md p-2 bg-gray-100 items-center">
                         <div className='col'>
-                            <Link to={`/profile/user/${c.user?.id}`} className='flex items-center gap-2 mb-2 max-w-max hover:text-gray-400'>
+                            <Link to={`/profile/user/${c.user?.id}`} className='flex items-center gap-2 mb-2 max-w-max'>
                                 <div className="profile_img overflow-hidden flex justify-center items-center rounded-full h-6 w-6">
                                 <img src={c.user?.profile_img} alt="profile image" className='object-cover h-full w-full'/>
                                 </div>
-                                <p className='font-semibold text-sm'>{c.user?.username}</p>
+                                <p className='font-semibold text-sm text-gray-800 hover:text-gray-400'>{c.user?.username}</p>
                             </Link>
-                            <p>{c.comment}</p>
+                            <p className='text-gray-800'>{c.comment}</p>
                             <p className="col text-gray-400 text-sm">{formattedDate(c.created_at)}</p>
                         </div>
                         <div className="col-2">
@@ -322,8 +346,6 @@ export default function PostComponent() {
                 }
             </div>
         </div>
-    </div>
+    </>
   )
 }
-
-

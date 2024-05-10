@@ -17,27 +17,35 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="mb-3 mx-2 rounded-xl sticky-bottom bottom-1 text-sm md:text-lg md:top-20  md:h-96 md:max-w-max">
+    <nav className="nav-bar mb-3 mx-2 rounded-xl sticky-bottom bottom-1 text-sm md:text-lg md:top-20  md:h-96 md:max-w-max">
       <div className="container-fluid p-3 flex justify-center md:max-w-max h-100">
         <div className="flex md:flex-col gap-2 justify-between items-center text-xl w-80 md:w-auto md:my-auto md:h-full">
           <div>
-            <Link to={'/'}  onClick={() => setCurrentPageHandler('home')}  className={currentPage === 'home' ? 'text-gray-900' : ''} >
-              <FaHouseChimney />
+            <Link to={'/'}  onClick={() => setCurrentPageHandler('home')} >
+              <button className={`nav-icon ${currentPage === 'home' ? 'nav-icon-selected' : ''}`}>
+                <FaHouseChimney />
+              </button>
             </Link>
           </div>
           <div>
-            <Link to={'/search/users'}  onClick={() => setCurrentPageHandler('search')}  className={currentPage === 'search' ? 'text-gray-900' : ''}>
-              <FaSearch />
+            <Link to={'/search/users'}  onClick={() => setCurrentPageHandler('search')} >
+              <button className={`nav-icon ${currentPage === 'search' ? 'nav-icon-selected' : ''}`}>
+                <FaSearch />
+              </button>
             </Link>
           </div>
           <div>
-            <Link to={'/new/post'}  onClick={() => setCurrentPageHandler('newPost')}  className={currentPage === 'newPost' ? 'text-gray-900' : ''}>
-              <FaPlusSquare />
+            <Link to={'/new/post'}  onClick={() => setCurrentPageHandler('newPost')} >
+              <button className={`nav-icon ${currentPage === 'newPost' ? 'nav-icon-selected' : ''}`}>
+                <FaPlusSquare />
+              </button>
             </Link>
           </div>
           <div>
-            <Link to={`/profile/user/${loggedUser.id}`}  onClick={() => setCurrentPageHandler('profile')}  className={currentPage === 'profile' ? 'text-gray-900' : ''}>
-              <FaUserCircle />
+            <Link to={`/profile/user/${loggedUser.id}`}  onClick={() => setCurrentPageHandler('profile')} >
+              <button className={`nav-icon ${currentPage === 'profile' ? 'nav-icon-selected' : ''}`}>
+                <FaUserCircle />
+              </button>
             </Link>
           </div>
         </div>

@@ -25,6 +25,10 @@ export const SET_COMMENTS = 'SET_COMMENTS';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
 
+export const SET_LIKES = 'SET_LIKES';
+export const ADD_LIKE = 'ADD_LIKE';
+export const DELETE_LIKE = 'DELETE_LIKE';
+
 // likes
 export const ADD_LIKE_TO_POST = 'ADD_LIKE_TO_POST';
 export const REMOVE_LIKE_FROM_POST = 'REMOVE_LIKE_FROM_POST';

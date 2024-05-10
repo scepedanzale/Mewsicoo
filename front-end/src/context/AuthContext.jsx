@@ -3,7 +3,6 @@ import {server} from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { SET_LOGGED } from '../redux/actions/actions';
-//import { setLogged, setLoggedUserFollowers, setLoggedUserFollowings, setPosts, updateBirthDay, updateEmail, updateInfo } from '../redux/actions/actions';
 
 const AuthContext = createContext();
 
@@ -23,13 +22,7 @@ export function AuthProvider({children}) {
         const { data } = await server.get('api/user-auth');
         setUser(data);
         dispatch({type: SET_LOGGED, payload: data})
-
-        /* dispatch(updateInfo({id: data.id, biography: data.biography, name: data.name, profile_img: data.profile_img, username: data.username}))
-        dispatch(updateBirthDay(data.birth_day))
-        dispatch(updateEmail(data.email))
-        dispatch(setPosts(data.posts))
-        dispatch(setLoggedUserFollowers(data.followers))
-        dispatch(setLoggedUserFollowings(data.followings)) */
+        console.log(data)
       } catch (error) {
         console.error("Error fetching user:", error);
       }

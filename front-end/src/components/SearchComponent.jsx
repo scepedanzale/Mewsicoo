@@ -27,6 +27,7 @@ export default function SearchComponent() {
         searchUser()
         searchTrack()
     }
+    /* cerca utenti */
     const searchUser = () => {
         server('/api/user?query='+searchParam)
             .then(response => {
@@ -35,6 +36,7 @@ export default function SearchComponent() {
             })
             .catch(e => console.error(e))
     }
+    /* cerca canzoni */
     const searchTrack = () => {
         axios(urlSearch+searchParam, {
                 headers: {
@@ -51,6 +53,7 @@ export default function SearchComponent() {
         searchPost()
     }, [tracks])
 
+    /* cerca post in base alla canzone */
     const searchPost = () => {
         const idArray = []
         if(tracks){
@@ -76,8 +79,8 @@ export default function SearchComponent() {
 
 
   return (
-    <div className="container-fluid h-100 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
-        <div className="container-fluid shadow-lg box rounded-lg p-2">
+    <>
+        <div className="container-fluid shadow-lg box search-form rounded-lg p-2">
             <div className="row">
                 <form onSubmit={(e) => { e.preventDefault(); search(); }} className='flex items-center gap-3 relative'>
                     <input 
@@ -100,17 +103,17 @@ export default function SearchComponent() {
             </div>
             <div className="row p-2 justify-between">
                 <div className="col flex justify-center">
-                    <Link to='/search/users' className={` text-white btn btn-sm w-100 ${element === 'users' ? 'active' : 'main-color-btn'}`}>
+                    <Link to='/search/users' className={` text-white btn btn-sm w-100 ${element === 'users' ? 'active' : ''}`}>
                         Users 
                     </Link>
                 </div>
                 <div className="col flex justify-center">
-                    <Link to='/search/posts' className={` text-white btn btn-sm w-100 ${element === 'posts' ? 'active' : 'main-color-btn'}`}>
+                    <Link to='/search/posts' className={` text-white btn btn-sm w-100 ${element === 'posts' ? 'active' : ''}`}>
                         Posts 
                     </Link>
                 </div>
                 <div className="col flex justify-center">
-                    <Link to='/search/tracks' className={` text-white btn btn-sm w-100 ${element === 'tracks' ? 'active' : 'main-color-btn'}`}>
+                    <Link to='/search/tracks' className={` text-white btn btn-sm w-100 ${element === 'tracks' ? 'active' : ''}`}>
                         Songs 
                     </Link>
                 </div>
@@ -124,9 +127,9 @@ export default function SearchComponent() {
                             <UserRowComponent user={user}/>
                         ))
                         : 
-                        <p className='text-white'>Nessun utente trovato</p>
+                        <p>Nessun utente trovato</p>
                     :
-                    <p className='text-white'>Cerca un utente</p>
+                    <p>Cerca un utente</p>
                 :
                 ''
                 }
@@ -136,9 +139,9 @@ export default function SearchComponent() {
                         posts.map((p)=>(
                             <SinglePostComponent key={p.id} post={p} user={p.user}/>
                         ))
-                    : <p className='text-white'>Nessun post trovato</p>
+                    : <p>Nessun post trovato</p>
                     :
-                    <p className='text-white'>Cerca un post</p>
+                    <p>Cerca un post</p>
                 :
                 ''
                 }
@@ -151,13 +154,13 @@ export default function SearchComponent() {
                             </div>
                         ))
                         : 
-                        <p className='text-white'>Nessuna canzone trovata</p>
+                        <p>Nessuna canzone trovata</p>
                     :
-                    <p className='text-white'>Cerca una canzone</p>
+                    <p>Cerca una canzone</p>
                 :
                 ''
                 }
             </div>
-    </div>
+    </>
   )
 }

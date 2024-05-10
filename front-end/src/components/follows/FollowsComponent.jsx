@@ -20,6 +20,7 @@ export default function FollowsComponent() {
 
     const [searchParam, setSearchParam] = useState('')
 
+    /* chiamata user */
     useEffect(()=>{
         server(`api/user/${id}`)
         .then(response => {
@@ -27,7 +28,7 @@ export default function FollowsComponent() {
         })
     }, [id])
     
-
+    /* ricerca followers - followings */
     useEffect(()=>{
         if(searchParam){
             if(follows === 'followers'){
@@ -52,8 +53,8 @@ export default function FollowsComponent() {
     
   return (
     <>
-        <div className="container-fluid md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
             <div className="container-fluid box rounded-lg p-2">
+                {/* search */}
                 <div className="row">
                     <form action="" className='flex items-center gap-3 relative'>
                         <input 
@@ -71,42 +72,43 @@ export default function FollowsComponent() {
                         </button>
                     </form>
                 </div>
+                {/* buttons */}
                 <div className="row p-2">
                     <div className="col-6 flex justify-center">
-                        <Link to={`/user/${id}/follows/followers`} className='main-color-btn text-white btn btn-sm w-100'>
-                            {/*  <span className='font-bold'>{user?.followers.length}</span> */} Followers 
-                        </Link>
+                        <Link to={`/user/${id}/follows/followers`} className={`btn btn-sm w-100 ${follows === 'followers' ? 'colored-btn' : 'empty-btn'}`}>Followers </Link>
                     </div>
                     <div className="col-6 flex justify-center">
-                        <Link to={`/user/${id}/follows/followings`} className='main-color-btn text-white btn btn-sm w-100'>
-                            {/* <span className='font-bold'>{user?.followings.length}</span> */} Followings 
-                        </Link>
+                        <Link to={`/user/${id}/follows/followings`} className={`btn btn-sm w-100 ${follows === 'followings' ? 'colored-btn' : 'empty-btn'}`}>Followings </Link>
                     </div>
                 </div>
             </div>
             <div className="container-fluid py-5 ">
                 {follows === 'followers' && 
                 <>
-                    {profileUser.username === loggedUser.username ?
-                    <h1 className='font-bold text-white text-2xl mb-3'>I tuoi followers</h1>
-                    :
-                    <h1 className='font-bold text-white text-2xl mb-3'>I followers di {profileUser.username}</h1>
-                    }
+                    <h2 className='font-bold text-2xl mb-3'>
+                        {profileUser.username === loggedUser.username ? 
+                        <>I tuoi followers</>
+                        : 
+                        <>I followers di {profileUser.username}</>
+                        }
+                    </h2>
+                                        
                     <FollowersComponent followers={followers}/>
                 </>
                 }
                 {follows === 'followings' && 
                 <>
-                    {profileUser.username === loggedUser.username ?
-                    <h1 className='font-bold text-white text-2xl mb-3'>I tuoi seguiti</h1>
-                    :
-                    <h1 className='font-bold text-white text-2xl mb-3'>I seguiti di {profileUser.username}</h1>
-                    }
+                    <h2 className='font-bold text-2xl mb-3'>
+                        {profileUser.username === loggedUser.username ? 
+                        <>I tuoi seguiti</>
+                        : 
+                        <>I seguiti di {profileUser.username}</>
+                        }
+                    </h2>
                     <FollowingsComponent followings={followings}/>
                 </>
                 }
             </div>
-         </div>
     </>
   )
 }

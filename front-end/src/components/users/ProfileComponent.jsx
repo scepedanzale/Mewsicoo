@@ -25,7 +25,6 @@ export default function ProfileComponent() {
             server(`api/user/${id}`)
             .then(response => {
                 dispatch({type: SET_OTHER_USER, payload: response.data[0]})
-                console.log(response.data)
             })
         }
     }, [id])
@@ -48,14 +47,6 @@ export default function ProfileComponent() {
         dispatch({type: ADD_FOLLOWING, payload: profileUser})  // aggiungo a me un seguito
         dispatch({type: ADD_FOLLOWER, payload: loggedUser})  //aggiungo un follower altro utente
     }
-    
-    useEffect(()=>{
-        console.log(profileUser)
-        console.log(loggedUser)
-        console.log(otherUser)
-        console.log(id)
-    }, [profileUser, id, loggedUser, otherUser])
-
 
     // ordine discentente posts
     useEffect(()=>{
@@ -68,8 +59,8 @@ export default function ProfileComponent() {
 
     return (
         profileUser?.name &&
-        <div className="container-fluid h-100 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
-            <div className="container-fluid box shadow-lg order-1 order-sm-2 border-2 p-3 rounded-md">
+        <>
+            <div className="container-fluid box shadow-lg profile-container">
                 
                 {/* info */}
                <div className="row relative flex justify-center items-center">
@@ -83,7 +74,7 @@ export default function ProfileComponent() {
                         <p>{profileUser?.name}</p>
                         {profileUser?.username === loggedUser.username ?
                         <>
-                            <Link to={'/account/edit'} className='main-color-btn text-white btn btn-sm mt-3 w-2/3'>modifica </Link>
+                            <Link to={'/account/edit'} className='btn empty-btn btn-sm mt-3 w-2/3'>modifica </Link>
                             <Link to={'/account/settings'} className='absolute top-0 right-2 max-w-max text-gray-500 text-2xl md:text-3xl hover:text-gray-700'>
                                 <LuSettings />
                             </Link>
@@ -91,11 +82,11 @@ export default function ProfileComponent() {
                             :
                             <>
                                 {profileUser?.followers?.some(f => f.username === loggedUser.username) ?
-                                   <button className='btn btn-sm bg-gray-400 hover:bg-gray-500 text-white mt-3 w-2/3' onClick={unfollow}>
+                                   <button className='btn btn-sm empty-btn mt-3 w-2/3' onClick={unfollow}>
                                         unfollow
                                     </button>
                                     : 
-                                    <button className='btn btn-sm main-color-btn mt-3 w-2/3' onClick={follow}>
+                                    <button className='btn btn-sm colored-btn mt-3 w-2/3' onClick={follow}>
                                         follow
                                     </button>
                                 }
@@ -115,17 +106,17 @@ export default function ProfileComponent() {
                 {/* follow e saved*/}
                 <div className="row my-2 mt-4">
                     <div className="col-4 flex justify-center">
-                        <Link to={`/user/${profileUser.id}/follows/followers`} className='main-color-btn text-white btn btn-sm w-100 flex flex-col sm:flex-row justify-center sm:gap-1'>
+                        <Link to={`/user/${profileUser.id}/follows/followers`} className='btn btn-sm colored-btn w-100 flex flex-col sm:flex-row justify-center sm:gap-1'>
                             <span className='font-bold'>{profileUser?.followers?.length}</span> followers 
                         </Link>
                     </div>
                     <div className="col-4 flex justify-center">
-                        <Link to={`/user/${profileUser.id}/follows/followings`} className='main-color-btn text-white btn btn-sm w-100 flex flex-col sm:flex-row justify-center sm:gap-1'>
+                        <Link to={`/user/${profileUser.id}/follows/followings`} className='btn btn-sm colored-btn w-100 flex flex-col sm:flex-row justify-center sm:gap-1'>
                             <span className='font-bold'>{profileUser?.followings?.length}</span> seguiti 
                         </Link>
                     </div>
                     <div className="col-4 flex justify-center">
-                        <Link to={`/user/${profileUser.id}/saved/saved_posts`} state={{profileUser}} className='main-color-btn text-white btn btn-sm w-100 flex flex-col sm:flex-row justify-center sm:gap-1'>
+                        <Link to={`/user/${profileUser.id}/saved/saved_posts`} state={{profileUser}} className='btn btn-sm colored-btn w-100 flex flex-col sm:flex-row justify-center sm:gap-1'>
                             <span className='font-bold'>{profileUser?.saved_posts?.length}</span> salvati 
                         </Link>
                     </div>
@@ -141,6 +132,6 @@ export default function ProfileComponent() {
                 <p className='text-center mt-36 text-xl text-gray-500'>Non ci sono post</p>
                 }
             </div>
-        </div>
+        </>
   )
 }

@@ -12,46 +12,65 @@ export default function HomepageComponent() {
   
   const loggedUser = useSelector(state => state.loggedUser)
   const [followings, setFollowings] = useState([])
-  const users = [loggedUser, ...followings]
-  const posts = descendingOrderPost(users)
+  /* const posts = descendingOrderPost(followings) */
+  const [posts, setPosts] = useState([])
 
-  useEffect(()=>{
-    console.log(loggedUser)
-    console.log(posts)
-    console.log(users)    // inserire i miei post
-  }, [loggedUser, users, posts])
-
-  useEffect(()=>{
+  /* elenco post degli utenti che seguo + i miei */    //  problema: chiamo TUTTI gli utenti e pesa troppo
+  /* useEffect(()=>{
     try{
       server('/api/user')
       .then(response => {
-        setFollowings(response.data.filter(f => f.is_following))
-        console.log(response.data)
+        console.log(response)
+        setFollowings(response.data.filter(f => f.is_following || f.id === loggedUser.id))
       })
     }catch(err){
       console.log(err)
     }
-  },[])
+  }, []) */
 
+  /* useEffect(()=>{    // problema: non aggiorna in tempo reale likes ecc perchè non fa chiamate a db aggiornato
+    if(loggedUser){
+      const users = [loggedUser, ...loggedUser.followings];
+      setFollowings(users);
+    }
+  }, [loggedUser]) */
+
+
+  // chiamata all'utente loggato per avere i post dei followings aggiornati
   useEffect(()=>{
-    console.log(followings)
-  }, [followings])
- 
+    try{
+      server('/api/following-posts/')
+      .then(response => {
+        console.log(response)
+        setPosts(response.data);
+      })
+    }catch(err){
+      console.log(err)
+    }
+  }, [])
+/*   useEffect(()=>{
+    try{
+      server('/api/user/'+loggedUser.id)
+      .then(response => {
+        console.log(response.data[0].followings)
+        const users = [loggedUser, ...response.data[0].followings];
+        setFollowings(users);
+      })
+    }catch(err){
+      console.log(err)
+    }
+  }, []) */
   
   return (
-    <div className='container mx-auto p-3 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5'>
-      {postLoading && 
-        <div className="loader mx-auto mb-5"></div>
-      }
-      {postLoading && 
-        <div className="loader mx-auto mb-5"></div>
-      }
-      {posts.length>0 ? posts.map((p)=>(
-        <SinglePostComponent key={p.post.id} post={p.post} user={p.user} className="shadow-lg"/>
+    <>
+      {postLoading && <div className="loader mx-auto mb-5"></div>}
+            
+      {posts?.length>0 ? posts.map((p)=>(
+        <SinglePostComponent key={p.id} post={p} user={p.user} className="shadow-lg"/>
       ))
         :
           <p>Non ci sono post da visualizzare...</p>
       }
-    </div>
+    </>
   )
 }

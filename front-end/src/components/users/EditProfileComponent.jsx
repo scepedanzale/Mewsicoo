@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FiEdit } from "react-icons/fi";
 import { FaCheck } from "react-icons/fa";
 import { server } from '../../api/axios'
 import useAuthContext from '../../context/AuthContext'
-//import { updateInfo } from '../../redux/actions/actions';
 import { Alert } from 'react-bootstrap';
 import { UPDATE_BIOGRAPHY, UPDATE_NAME, UPDATE_PROFILE_IMG, UPDATE_USERNAME } from '../../redux/actions/actions';
 
 export default function EditProfileComponent() {
-
     const dispatch = useDispatch();
     const navigate = useNavigate()
 
-    const {user, csrf} = useAuthContext()
+    const {csrf} = useAuthContext()
     const loggedUser = useSelector(state => state.loggedUser)
 
     const [errors, setErrors] = useState([])
@@ -37,7 +35,6 @@ export default function EditProfileComponent() {
               dispatch({type: UPDATE_USERNAME, payload: data.username})
               dispatch({type: UPDATE_BIOGRAPHY, payload: data.biography})
               dispatch({type: UPDATE_PROFILE_IMG, payload: data.profile_img})
-              console.log(data.name)
               setAlert(true)
           }
         }catch(e){
@@ -51,10 +48,9 @@ export default function EditProfileComponent() {
         }
     }
 
-
   return (
-    <div className="container-fluid h-100 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5">
-        <div className="container-fluid shadow-lg box order-1 order-sm-2 border-2 p-3 rounded-md">
+    <>
+        <div className="container-fluid p-3 edit-profile">
             {alert && 
             <Alert variant='success' className='flex items-center gap-2'  onClose={() => setAlert(false)} dismissible>
                 <FaCheck className='text-success text-lg'/>Profilo modificato
@@ -146,11 +142,11 @@ export default function EditProfileComponent() {
             </div>
 
             <div className="mt-10 w-full flex justify-center gap-3">
-                <button type='submit' className='text-neutral-100 p-2 rounded-md w-1/2 bg-gray-400 text-white' onClick={navigate(-1)}>Torna indietro</button>
-                <button type='submit' className='text-neutral-100 p-2 rounded-md w-1/2 main-color-btn'>Salva</button>
+                <button type='submit' className='btn empty-btn w-1/2' onClick={()=>navigate(-1)}>Torna indietro</button>
+                <button type='submit' className='btn colored-btn w-1/2'>Salva</button>
             </div>
           </form>
         </div>
-    </div>
+    </>
   )
 }

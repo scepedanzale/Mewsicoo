@@ -39,10 +39,10 @@ export default function RegisterPage() {
     }
 
   return (
-    <div className="container-fluid">
+    <div className="auth-page">
       <div className="sm:px-20 md:px-40 lg:px-64 xl:px-96">
-        <div className='w-full text-center my-20'>
-          <h2 className="font-semibold text-6xl text-gray-900">Mewsikoo</h2>
+        <div className='w-full text-center'>
+          <h2>Registrati</h2>
         </div>
 
         <div className='box border-2 rounded-xl p-6'>
@@ -142,13 +142,13 @@ export default function RegisterPage() {
             </div>
 
             <div className="mt-10 w-full flex justify-center">
-                <button type='submit' className='text-neutral-100 p-2 rounded-md w-1/2 main-color-btn'>Registrati</button>
+                <button type='submit' className='btn text-neutral-100 w-1/2'>Registrati</button>
             </div>
           </form>
           <div className='mt-8 text-gray-500 mx-auto max-w-max'>
               Hai già un account?
             <Link to={'/login'}>
-              <span className='text-lg main-color font-bold'> Accedi</span> 
+              <span className='text-lg'> Accedi</span> 
             </Link>
           </div>
         </div>

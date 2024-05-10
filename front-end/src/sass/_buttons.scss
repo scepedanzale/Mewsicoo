@@ -2,14 +2,56 @@
 button{
     border: 0 !important;
 }
+.btn{
+    border-radius: 0.5em;
+}
 
-.active{
-    background-color: $main-color-hover !important;
+/* ----- MAIN COLORS ----- */
+
+.colored-btn{
+    background-color: $main-color;
+    color: $white !important;
+    &:hover{
+        background-color: $main-color-hover;
+    }
+}
+.empty-btn{
+    background-color: $white;
+    border: 1px solid $main-color !important;
+    color: $main-color !important;
+    &:hover{
+        background-color: rgb(232, 232, 232);
+    }
+}
+
+/* ----- ICONS ----- */
+
+.post-icon{
+    font-size: 1.3em;
+}
+.like-icon{
+    color: rgb(143, 13, 13);
+    &:hover{
+        color: rgb(114, 9, 9);
+    }
+}
+.comment-icon{
+    color: rgb(209, 151, 13);
+    &:hover{
+        color: rgb(175, 126, 10);
+    }
+}
+.pin-icon{
+    color: rgb(54, 104, 137);
+    &:hover{
+        color: rgb(40, 81, 108);
+    }
 }
 
 
 
-/* player track */
+
+/* ----- PLAYER TRACK ----- */
 
 // track cover
 .cover {

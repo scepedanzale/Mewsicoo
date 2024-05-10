@@ -1,40 +1,126 @@
-@import '_variables';
-@import '_buttons';
 @import '_colors';
+@import '_buttons';
 @import '_animations';
+@import '_navbar';
 
+/* ----- GENERAL ----- */
 html, #root, body{
-    min-height: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 body{
     user-select: none;
     background-color: $bg-color;
 }
 
-
 h2{
-    color: white !important;
+    color: rgb(87, 87, 87) !important;
 }
 
 label{
     color: rgb(95, 93, 93) !important;
-}
-nav{
-    z-index: 500;
-    color: white;
-    background-color: $main-color;
-    max-height: 70%;
-    a{
-        &:hover{
-            color: $bg-color;
-        }
-    }
 }
 
 .noHover{
     pointer-events: none;
 }
 
+p{
+    color: rgb(157, 157, 157);
+}
+.date{
+    color: rgb(149, 149, 149) !important;
+}
+
+/* contenitore del contenuto */
+.outlet-div{
+    height: 93%;
+}
+.outlet-div::-webkit-scrollbar{
+    background-color: rgba(29, 20, 20, 0);
+    visibility: hidden;
+    border-radius: 0.5em;
+}
+
+/* modals */
+.modal{
+    margin-top: 15em;
+}
+
+/* box  */
+.box{
+    background-color: $white;
+
+    border-radius: 0.5em;
+    padding: 1em;
+    p{
+        color: rgb(87, 87, 87);
+    }
+}
+
+
+/* ----- SEARCH ----- */
+.search-form{
+    background-color: $main-color;
+    .btn{
+        background-color: $white;
+        color: $text-color !important;
+        border: 0;
+        &:hover{
+            background-color: rgb(232, 232, 232);
+        }
+    }
+    .active{
+        background-color: rgb(221, 222, 223) !important;
+    }
+}
+
+
+
+
+
+// ------ USER ------
+
+/* auth */
+.auth-page{
+    background-color: $main-color;
+    height: 100%;
+    padding-top: 3em;
+    h2{
+        margin-bottom: 1em;
+        font-size: 3em;
+        font-weight: bold;
+        color: white !important;
+    }
+    .btn{
+        border: 1px solid $main-color !important;
+        color: $main-color;
+        &:hover{
+            background-color: $main-color;
+            color: $white;
+        }
+    }
+    a{
+        color: $main-color;
+        font-weight: bold;
+        &:hover{
+            color: $main-color-hover;
+        }
+    }
+}
+
+/* profile page */
+.profile-container{
+
+    .edit-profile{
+        background-color: $white;
+        border: 1px solid $main-color;
+        color: $main-color;
+        &:hover{
+            background-color: rgb(221, 222, 223);
+        }
+    }
+}
 
 /* profile img */
 .profile_img{
@@ -45,14 +131,13 @@ nav{
 
     }
 }
-
 .icon_edit{
     cursor: pointer;
     font-size: 2em;
     position: absolute;
     top: 45%;
     z-index: 70;
-    color: white;
+    color: $white;
     text-shadow: 2px 2px 10px black;
     &:hover{
         + .edit_profile_img{
@@ -71,13 +156,36 @@ nav{
 
 
 
-.box{
-    background-color: $box-color;
-    p{
-        color: rgb(87, 87, 87);
+// ------ POST ------
+
+/*  edit post */
+.edit-post{
+    .back{
+        background-color: $white;
+        border: 1px solid $main-color !important;
+        color: $main-color !important;
+        &:hover{
+            background-color: rgb(232, 232, 232);
+        }
+    }
+    .save{
+        background-color: $main-color;
+        color: $white !important;
+        &:hover{
+            background-color: $main-color-hover;
+        }
     }
 }
 
-p{
-    color: rgb(157, 157, 157);
+/* new post */
+.new-post-track{
+    &:hover{
+        border: 1px solid $main-color;
+    }
+    .choose-row{
+        &:hover{
+            border-bottom: 1px solid $main-color;
+            color: $main-color;
+        }
+    }
 }

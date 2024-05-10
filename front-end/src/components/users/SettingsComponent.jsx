@@ -54,7 +54,6 @@ export default function SettingsComponent() {
                 setShowAlert(true)
             }
         } catch (e) {
-            if(e.response.status == 422)
             if(e.response)
               setErrors(e.response.data.error)
         }
@@ -99,23 +98,24 @@ export default function SettingsComponent() {
       }
 
   return (
-    <div className="container-fluid h-100 md:w-5/6 lg:w-2/3 xl:w-1/2 2xl:w-2/5 h-100">
+    <div className='box'>
         {showAlert && 
             <Alert variant='success' className='flex items-center gap-2'  onClose={() => setShowAlert(false)} dismissible>
                 <FaCheck className='text-success text-lg'/>{alertMsg}
             </Alert>}
-        <div className="container-fluid box shadow-lg order-1 order-sm-2 border-2 p-3 rounded-md h-100">
-            <h1 className='font-bold text-2xl mb-3'>Impostazioni account</h1>
-            <div className="row mb-4">
-                <p className='font-bold text-xl text-gray-500'>Informazioni personali</p>
+        <div className="container-fluid">
+            <h2 className='font-bold text-xl mb-3'>Impostazioni account</h2>
+
+            <div className="row mb-4 border-1 p-1 rounded-md">
+                <p className='font-bold text-lg text-gray-500'>Informazioni personali</p>
                 <div className='mt-1 ml-2'>
                     {/* data di nascita */}
-                    <p type="button" data-bs-toggle="modal" data-bs-target="#birth_day_modal" className='max-w-max hover:font-semibold'>Data di nascita</p>
+                    <p type="button" data-bs-toggle="modal" data-bs-target="#birth_day_modal" className='max-w-max'>Data di nascita</p>
                     <div class="modal fade" id="birth_day_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cambia data di nascita</h1>
+                                    <p class="modal-title fs-5" id="exampleModalLabel">Cambia data di nascita</p>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -135,8 +135,8 @@ export default function SettingsComponent() {
                                             {errorAge && <div className='text-red-500 text-xs mt-1'>{errorAge}</div>}
                                         </div>
                                         <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                                        <button type="submit" class="btn main-color-btn" data-bs-dismiss="modal" aria-label="Close">Modifica</button>
+                                        <button type="button" class="btn empty-btn" data-bs-dismiss="modal">Chiudi</button>
+                                        <button type="submit" class="btn colored-btn" data-bs-dismiss="modal" aria-label="Close">Modifica</button>
                                     </div>
                                     </form>
                                 </div>
@@ -144,12 +144,12 @@ export default function SettingsComponent() {
                         </div>
                     </div>
                     {/* email */}
-                    <p type="button" data-bs-toggle="modal" data-bs-target="#email_modal" className='max-w-max hover:font-semibold'>Email</p>
+                    <p type="button" data-bs-toggle="modal" data-bs-target="#email_modal" className='max-w-max'>Email</p>
                     <div class="modal fade" id="email_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cambia email</h1>
+                                    <p class="modal-title fs-5" id="exampleModalLabel">Cambia email</p>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -170,8 +170,8 @@ export default function SettingsComponent() {
 
                                         </div>
                                         <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                                        <button type="submit" class="btn main-color-btn" data-bs-dismiss="modal" aria-label="Close">Modifica</button>
+                                        <button type="button" class="btn empty-btn" data-bs-dismiss="modal">Chiudi</button>
+                                        <button type="submit" class="btn colored-btn" data-bs-dismiss="modal" aria-label="Close">Modifica</button>
                                     </div>
                                     </form>
                                 </div>
@@ -181,15 +181,15 @@ export default function SettingsComponent() {
                 </div>
             </div>
             {/* password */}
-            <div className="row mb-4">
-                <p className='font-bold text-xl text-gray-500'>Sicurezza</p>
+            <div className="row mb-4 border-1 p-1 rounded-md">
+                <p className='font-bold text-lg text-gray-500'>Sicurezza</p> {/* ------------------ sicurezza --------------------- */}
                 <div className='mt-1 ml-2'>
-                    <p type="button" data-bs-toggle="modal" data-bs-target="#password_modal" className='max-w-max hover:font-semibold'>Modifica password</p>
+                    <p type="button" data-bs-toggle="modal" data-bs-target="#password_modal" className='max-w-max'>Modifica password</p>
                     <div class="modal fade" id="password_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cambia password</h1>
+                                    <p class="modal-title fs-5" id="exampleModalLabel">Cambia password</p>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -207,6 +207,7 @@ export default function SettingsComponent() {
                                                 onChange={(e)=>setOldPassword(e.target.value)}
                                                 minLength="8"
                                                 required
+                                                autofocus
                                                 className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-grey-600 "/>
                                             </div>
                                             {errors.includes('vecchia password') && <div className='text-red-500 text-xs mt-1'>{errors}</div>}
@@ -243,8 +244,8 @@ export default function SettingsComponent() {
                                             {errors.includes('nuova password') && <div className='text-red-500 text-xs mt-1'>{errors}</div>}
                                         </div>
                                         <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                                        <button type="submit" class="btn main-color-btn" data-bs-dismiss="modal" aria-label="Close">Modifica</button>
+                                        <button type="button" class="btn empty-btn" data-bs-dismiss="modal">Chiudi</button>
+                                        <button type="submit" class="btn colored-btn" data-bs-dismiss="modal" aria-label="Close">Modifica</button>
                                     </div>
                                     </form>
                                 </div>

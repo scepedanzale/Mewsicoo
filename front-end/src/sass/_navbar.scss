@@ -1,0 +1,41 @@
+
+nav{
+    z-index: 500;
+    color: $text-color;
+}
+
+/* topbar */
+.top-bar{
+    background-color: $white;
+    border-bottom: 3px solid $main-color !important;
+}
+
+.top-nav-icon{
+    color: $main-color;
+    padding: 0.4em;
+    border-radius: 0.5em;
+    border: 1px solid $main-color !important;
+    box-shadow: 0 0 0.5em 0.2em rgba(215, 215, 215, 0.538) inset;
+    &:hover{
+        background-color: #5f819935;
+    }
+}
+
+/* navbar */
+.nav-bar{
+    background-color: $main-color;
+    margin-top: 1em;
+}
+.nav-icon{
+    padding: 0.3em;
+    font-size: 1.2em;
+    border-radius: 0.5em;
+    color: $white;
+    border: 1px solid $main-color !important;
+    &:hover{
+        border: 1px solid $white !important;
+    }
+}
+.nav-icon-selected{
+    color: rgb(8, 42, 53);
+}

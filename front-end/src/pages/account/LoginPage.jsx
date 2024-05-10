@@ -17,10 +17,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="container-fluid">
+    <div className="auth-page">
       <div className="sm:px-20 md:px-40 lg:px-64 xl:px-96">
-        <div className='w-full text-center my-20'>
-          <h2 className="font-semibold text-6xl text-gray-900">Mewsikoo</h2>
+        <div className='w-full text-center'>
+          <h2>Accedi</h2>
         </div>
 
         <div className='box border-2 rounded-xl p-6'>
@@ -66,18 +66,18 @@ export default function LoginPage() {
               <div className='w-full flex justify-between'>
                 <div className='text-red-500 text-xs mt-1'>{errors.password && errors.password}</div>
                 <Link to={'/forgot-password'}>
-                  <span className='main-color text-sm'>Hai dimenticato la password?</span> 
+                  <span className='text-sm font-normal'>Hai dimenticato la password?</span> 
                 </Link>
               </div>
             </div>
             <div className="mt-10 w-full flex justify-center">
-                <button type='submit' className='main-color-btn text-neutral-100 p-2 rounded-md w-1/2'>Accedi</button>
+                <button type='submit' className='btn text-neutral-100 p-2 w-1/2'>Accedi</button>
             </div>
           </form>
           <div className='text-lg mt-8 text-gray-500 mx-auto max-w-max'>
               Non sei ancora registrato?
             <Link to={'/register'}>
-              <span className='main-color tracking-wider font-bold'> Iscriviti</span> 
+              <span className='tracking-wider font-bold'> Iscriviti</span> 
             </Link>
           </div>
         </div>

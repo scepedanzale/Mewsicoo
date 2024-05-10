@@ -12,14 +12,17 @@ const initialstate = {
     },
     loggedUser:{},
     otherUser:{},
-    comments: []
+    posts: {
+        comments: [],
+        likes: []
+    }
 }
 
 const bigReducer = combineReducers({
     music : musicReducer,
     loggedUser : loggedUserReducer,
     otherUser : otherUserReducer,
-    comments: postsReducer
+    posts: postsReducer
 })
 
 export const store = createStore(bigReducer, initialstate);

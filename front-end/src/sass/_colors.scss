@@ -1,24 +1,10 @@
+$bg-color: #e6e6e6;
 
-/* colore principale */
+$white: #ffffff;
+$text-color: rgb(41, 43, 45);
 
-// testo
-.main-color{
-    color: $main-color !important;
-}
-.main-color:hover{
-    color: $main-color-hover !important;
-}
-
-// sfondo
-.main-color-bg{
-    background-color: $main-color !important;
-}
-
-// bottoni
-.main-color-btn{
-    background-color: $main-color !important;
-    color: white !important;
-}
-.main-color-btn:hover{
-    background-color: $main-color-hover !important;
-}
+/* 
+    colore principale bottoni, navbar... e colore hover
+*/
+$main-color: rgb(23, 94, 118);
+$main-color-hover: rgb(18, 78, 98);
