@@ -59,10 +59,6 @@ export function AuthProvider({children}) {
       .then(()=>{
         setUser(null)
         dispatch({type: SET_LOGGED, payload: {}})
-        /* dispatch(updateInfo({}))
-        dispatch(setPosts([]))
-        dispatch(setLoggedUserFollowers([]))
-        dispatch(setLoggedUserFollowings([])) */
         navigate('/')
       })
     }
@@ -72,10 +68,6 @@ export function AuthProvider({children}) {
       .then(()=>{
         setUser(null)
         dispatch({type: SET_LOGGED, payload: {}})
-       /*  dispatch(updateInfo({}))
-        dispatch(setPosts([]))
-        dispatch(setLoggedUserFollowers([]))
-        dispatch(setLoggedUserFollowings([])) */
         navigate('/')
       })
     }

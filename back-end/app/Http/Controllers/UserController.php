@@ -34,8 +34,8 @@ class UserController extends Controller
         $posts = Post::whereIn('user_id', $followingIds)
                     ->with('user', 'likes', 'comments.user')
                     ->orderBy('created_at', 'desc')
-                    ->offset($request->input('offset', 0))
-                    ->limit($request->input('limit', 10))
+                    ->offset($request->input('offset'))
+                    ->limit($request->input('limit'))
                     ->get();
 
         return $posts;

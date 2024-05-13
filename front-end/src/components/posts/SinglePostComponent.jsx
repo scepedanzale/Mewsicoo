@@ -121,9 +121,9 @@ export default function SinglePostComponent({post, user}) {
         <div className='h-100 col-12 col-sm-4 col-lg-3 flex flex-col justify-center relative rounded-md'>
           <SingleTrackComponent track={track} isLoading={isLoading} post_id={post.id}/>
           {/* artist - album */}
-          <div className="order-1 order-sm-2 text-center sm:text-sm md:text-base mt-sm-2 mb-2 text-gray-500">
-            <Link to={'/artist/'+track.artist?.id} className='hover:font-semibold'>{track.artist?.name} - </Link>
-            <Link to={'/album/'+track.album?.id} className='hover:font-semibold'>{track.album?.title}</Link>
+          <div className="order-1 order-sm-2 flex flex-col justify-center text-center sm:text-sm md:text-base mt-sm-2 mb-2 text-gray-500">
+            <Link to={'/artist/'+track.artist?.id} className='hover:font-semibold fs-5'>{track.artist?.name}</Link>
+            <Link to={'/album/'+track.album?.id} className='hover:font-semibold text-gray-400 text-truncate block '>{track.album?.title}</Link>
           </div>
         </div>
       )}

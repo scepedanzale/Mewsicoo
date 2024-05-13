@@ -16,22 +16,24 @@ Route::resource('/user', UserController::class);
 Route::get('/user-auth', [UserController::class, 'user_auth']);
 Route::post('/change-password', [UserController::class, 'change_password']);
 
-/* follows */
-Route::get('/user/follow/{userId}', [UserController::class, 'follow']);
-Route::get('/user/unfollow/{userId}', [UserController::class, 'unfollow']);
-Route::get('/user/is_following/{followerId}', [UserController::class, 'isFollowing']);
-Route::get('/following-posts', [UserController::class, 'getFollowingPosts']);
+Route::middleware(['auth'])->group(function () {
+    /* follows */
+    Route::get('/user/follow/{userId}', [UserController::class, 'follow']);
+    Route::get('/user/unfollow/{userId}', [UserController::class, 'unfollow']);
+    Route::get('/user/is_following/{followerId}', [UserController::class, 'isFollowing']);
+    Route::get('/following-posts', [UserController::class, 'getFollowingPosts']);
 
-/* post */
-Route::resource('/post', PostController::class);
+    /* post */
+    Route::resource('/post', PostController::class);
 
-/* likes */
-Route::resource('/like', LikeController::class);
-Route::post('/like/delete', [LikeController::class, 'removeLike']);
+    /* likes */
+    Route::resource('/like', LikeController::class);
+    Route::post('/like/delete', [LikeController::class, 'removeLike']);
 
-/* commenti */
-Route::resource('/comment', CommentController::class);
+    /* commenti */
+    Route::resource('/comment', CommentController::class);
 
-/* salvataggio post */
-Route::resource('/saved_post', SavedPostController::class);
-Route::post('/saved_post/delete', [SavedPostController::class, 'removeSavedPost']);
+    /* salvataggio post */
+    Route::resource('/saved_post', SavedPostController::class);
+    Route::post('/saved_post/delete', [SavedPostController::class, 'removeSavedPost']);
+});

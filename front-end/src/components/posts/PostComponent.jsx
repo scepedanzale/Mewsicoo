@@ -317,7 +317,7 @@ export default function PostComponent() {
                             <p className="col text-gray-400 text-sm">{formattedDate(c.created_at)}</p>
                         </div>
                         <div className="col-2">
-                            {c.user_id == loggedUser.id &&
+                            {(c.user_id == loggedUser.id || user?.id == loggedUser.id) &&
                             <>
                                 <button data-bs-toggle="modal" data-bs-target="#delete_comment_modal" className='text-lg hover:text-red-700'>
                                     <BsTrash />

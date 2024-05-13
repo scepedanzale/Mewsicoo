@@ -5,6 +5,8 @@ import SinglePostComponent from '../posts/SinglePostComponent'
 export default function SavedPostsComponent({user}) {
   const loggedUser = useSelector(state => state.loggedUser)
 
+  console.log(user)
+
   return (
     user?.id == loggedUser?.id ? 
       loggedUser?.saved_posts?.length>0 ? loggedUser.saved_posts.map((p)=>(

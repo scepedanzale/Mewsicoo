@@ -38,13 +38,14 @@ export default function ArtistComponent() {
                 <div className="col m-3">
                     <div className='mb-3'>
                         <h1 className='text-2xl font-bold'>{artist?.name}</h1>
+                        <p className='text-secondary'>Album: {artist?.nb_album}</p>
                     </div>
                 </div>
             </div>
                         
             {/* albums */}
             <div className="container-fluid p-0">
-                <h2 className='font-bold text-3xl mb-2'>Discografia</h2>
+                <h2 className='font-bold text-3xl my-4'>Discografia</h2>
                 { tracklist?.length>0 ?
                     tracklist.map(t => (
                         !arrayAlbum.includes(t.album.id) && arrayAlbum.push(t?.album?.id) &&

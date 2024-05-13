@@ -16,6 +16,7 @@ export default function AlbumComponent() {
             axios(urlAlbum+id)
             .then(response => {
                 setAlbum(response.data)
+                console.log(response.data)
             })
         }
     }, [id])
@@ -34,6 +35,9 @@ export default function AlbumComponent() {
                         <p className='date'>{formattedDate(album?.release_date)}</p>
                     </div>
                     <div className='text-gray-400 text-sm border-t-2 pt-1'>
+                        <p>Genere: {album?.genres?.data.map((g)=>(
+                            <span>{g.name}</span>
+                        ))}</p>
                         <p>{album?.nb_tracks} brani</p>
                         <p>{albumDuration(album.duration)}</p>
                     </div>
